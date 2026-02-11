@@ -1,22 +1,114 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next'
+import './globals.css'
 import PageTransition from '@/app/components/PageTransition'
 import CustomCursor from '@/app/components/CustomCursor'
-import Nav from "@/app/components/Nav";
+import Nav from '@/app/components/Nav'
+import { getSiteUrl, siteConfig, withSiteUrl } from '@/lib/site'
+
+const siteUrl = getSiteUrl()
 
 export const metadata: Metadata = {
-  title: "Lemonadeccc",
-  description: "My venture into the world of frontend development",
-};
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  applicationName: siteConfig.shortName,
+  authors: [{ name: siteConfig.authorName, url: siteConfig.authorUrl }],
+  creator: siteConfig.authorName,
+  publisher: siteConfig.authorName,
+  keywords: [
+    'frontend development',
+    'web animation',
+    'gsap',
+    'react',
+    'nextjs blog',
+    'ai',
+    'deployment',
+  ],
+  alternates: {
+    types: {
+      'application/rss+xml': withSiteUrl('/rss.xml'),
+    },
+  },
+  openGraph: {
+    type: 'website',
+    title: siteConfig.name,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+    url: siteUrl,
+    locale: 'en_US',
+    images: [
+      {
+        url: withSiteUrl('/posts/img1.jpg'),
+        width: 1200,
+        height: 630,
+        alt: `${siteConfig.name} cover`,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteConfig.name,
+    description: siteConfig.description,
+    creator: siteConfig.creatorHandle,
+    images: [withSiteUrl('/posts/img1.jpg')],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  icons: {
+    icon: '/favicon.svg',
+  },
+}
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteConfig.name,
+  description: siteConfig.description,
+  url: siteUrl,
+  inLanguage: 'en-US',
+  publisher: {
+    '@type': 'Person',
+    name: siteConfig.authorName,
+    url: siteConfig.authorUrl,
+  },
+}
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: siteConfig.authorName,
+  url: siteConfig.authorUrl,
+  sameAs: [siteConfig.authorUrl, 'https://x.com/Lemonadecccc'],
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en">
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         <CustomCursor />
         <div className="h-screen flex flex-col overflow-hidden">
           <Nav />
@@ -30,5 +122,5 @@ export default function RootLayout({
         </div>
       </body>
     </html>
-  );
+  )
 }

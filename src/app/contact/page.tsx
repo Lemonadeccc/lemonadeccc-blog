@@ -1,4 +1,6 @@
 import Image from 'next/image'
+import type { Metadata } from 'next'
+import { siteConfig } from '@/lib/site'
 
 type ContactItem = {
   label: string
@@ -46,6 +48,20 @@ const friendLinks: FriendLink[] = friendSeeds.map((seed, index) => ({
   avatar: avatarPool[index % avatarPool.length],
   description: 'Example friend link (fake)',
 }))
+
+export const metadata: Metadata = {
+  title: 'Contact',
+  description: `Contact ${siteConfig.authorName} via GitHub or X.`,
+  alternates: {
+    canonical: '/contact',
+  },
+  openGraph: {
+    title: `Contact | ${siteConfig.name}`,
+    description: `Contact ${siteConfig.authorName} via GitHub or X.`,
+    url: '/contact',
+    type: 'website',
+  },
+}
 
 export default function ContactPage() {
   return (

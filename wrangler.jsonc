@@ -17,6 +17,9 @@
 	},
 	"observability": {
 		"enabled": true
+	},
+	"vars": {
+		"NEXT_PUBLIC_SITE_URL": "https://lemonadec.cc"
 	}
 	/**
 	 * Smart Placement

@@ -19,6 +19,14 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+### SEO/GEO URL
+
+Set the public site URL so metadata, RSS, sitemap, robots, and `llms.txt` all point to the correct domain:
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
+```
+
 ## Preview
 
 Preview the application locally on the Cloudflare runtime:
