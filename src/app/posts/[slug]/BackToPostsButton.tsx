@@ -4,6 +4,12 @@ import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+type BackToPostsButtonProps = {
+  postsHref: string
+  backToPostsLabel: string
+  backToTopLabel: string
+}
+
 const transition = {
   duration: 0.55,
   ease: [0.22, 1, 0.36, 1] as const,
@@ -12,7 +18,11 @@ const transition = {
 const baseClassName =
   'back-to-posts-btn inline-flex items-center justify-center px-4 py-2 text-[16px] uppercase tracking-[0.08em] text-white'
 
-export default function BackToPostsButton() {
+export default function BackToPostsButton({
+  postsHref,
+  backToPostsLabel,
+  backToTopLabel,
+}: BackToPostsButtonProps) {
   const anchorRef = useRef<HTMLDivElement | null>(null)
   const [showFloating, setShowFloating] = useState(false)
   const buttonClassName = `${baseClassName} back-action group min-w-[180px]`
@@ -63,8 +73,8 @@ export default function BackToPostsButton() {
             exit={{ opacity: 0, x: 26 }}
             transition={transition}
           >
-            <Link href="/posts" className={`${buttonClassName} pointer-events-auto`} data-cursor-fast>
-              <span className="hover-wipe">Back To Posts</span>
+            <Link href={postsHref} className={`${buttonClassName} pointer-events-auto`} data-cursor-fast>
+              <span className="hover-wipe">{backToPostsLabel}</span>
             </Link>
             <button
               type="button"
@@ -72,7 +82,7 @@ export default function BackToPostsButton() {
               className={`${buttonClassName} pointer-events-auto`}
               data-cursor-fast
             >
-              <span className="hover-wipe">Back To Top</span>
+              <span className="hover-wipe">{backToTopLabel}</span>
             </button>
           </motion.div>
         )}

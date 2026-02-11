@@ -20,11 +20,6 @@ const contactItems: ContactItem[] = [
     href: 'https://github.com/Lemonadeccc',
   },
   {
-    label: 'Email',
-    value: 'zwjhb12@163.com',
-    href: 'mailto:zwjhb12@163.com',
-  },
-  {
     label: 'X',
     value: '@Lemonadecccc',
     href: 'https://x.com/Lemonadecccc',
@@ -33,17 +28,6 @@ const contactItems: ContactItem[] = [
 
 const friendSeeds = [
   { name: 'Mango Orbit', github: 'https://github.com/mango-orbit-example' },
-  { name: 'Pixel Harbor', github: 'https://github.com/pixel-harbor-dev' },
-  { name: 'Nova Script', github: 'https://github.com/nova-script-lab' },
-  { name: 'Echo Forge', github: 'https://github.com/echo-forge-studio' },
-  { name: 'Cobalt River', github: 'https://github.com/cobalt-river-code' },
-  { name: 'Amber Pulse', github: 'https://github.com/amber-pulse-works' },
-  { name: 'Luna Grid', github: 'https://github.com/luna-grid-tools' },
-  { name: 'Vertex Maple', github: 'https://github.com/vertex-maple' },
-  { name: 'Prism Drift', github: 'https://github.com/prism-drift' },
-  { name: 'Iron Nest', github: 'https://github.com/iron-nest-dev' },
-  { name: 'Delta Pine', github: 'https://github.com/delta-pine-labs' },
-  { name: 'Nebula Tape', github: 'https://github.com/nebula-tape' },
 ] as const
 
 const avatarPool = [

@@ -1,13 +1,13 @@
 ---
-title: Example MDX
-type: Article
-project: Motion Sequencing Patterns
+title: MDX 资源示例
+type: 文章
+project: 动效编排模式
 date: 2026-02-01
-summary: MDX resource patterns with practical examples for images, video, audio, embeds, and code highlighting.
+summary: 一份可直接复用的 MDX 资源模板，包含图片、视频、音频、嵌入与代码高亮示例。
 ---
 
-This post collects practical MDX resource patterns you can paste directly.
-All local files should live under the `public` directory so they can be referenced as `/path/to/file`.
+这篇文章整理了可直接复制的 MDX 资源模板。
+本地文件建议统一放在 `public` 目录下，并通过 `/path/to/file` 进行引用。
 
 ## 1) Local Image (Markdown)
 
@@ -26,13 +26,13 @@ All local files should live under the `public` directory so they can be referenc
 
 ## 4) Clickable Image
 
-[![Click to open full image](/posts/img3.jpg)](/posts/img3.jpg)
+[![Click to open full image](/posts/img2.jpg)](/posts/img2.jpg)
 
 ## 5) Local Video (MP4/WebM)
 
-<video controls playsInline preload="metadata" poster="/posts/img4.jpg">
-  <source src="/videos/demo.mp4" type="video/mp4" />
-  <source src="/videos/demo.webm" type="video/webm" />
+<video controls playsInline preload="metadata" poster="/posts/img2.jpg">
+  <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4" />
+  <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm" type="video/webm" />
   Your browser does not support the video tag.
 </video>
 
@@ -50,15 +50,15 @@ All local files should live under the `public` directory so they can be referenc
 ## 7) Audio
 
 <audio controls preload="metadata">
-  <source src="/audio/demo.mp3" type="audio/mpeg" />
-  <source src="/audio/demo.ogg" type="audio/ogg" />
+  <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3" type="audio/mpeg" />
+  <source src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Example.ogg" type="audio/ogg" />
   Your browser does not support the audio element.
 </audio>
 
 ## 8) Download/File Link
 
-- [Download PDF](/docs/gsap-motion-timing.pdf)
-- [Download ZIP Assets](/downloads/gsap-motion-assets.zip)
+- [Download PDF](https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf)
+- [Download ZIP Assets](https://github.com/github/gitignore/archive/refs/heads/main.zip)
 
 ## 9) Code Block (TypeScript)
 

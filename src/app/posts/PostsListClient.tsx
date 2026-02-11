@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { gsap } from 'gsap'
+import { type PostLocale, withPostLocale } from '@/lib/postLocale'
 
 export type PostListEntry = {
   slug: string
@@ -14,10 +15,22 @@ export type PostListEntry = {
 }
 
 type PostsListClientProps = {
+  locale: PostLocale
+  title: string
+  languageLabel: string
+  englishLabel: string
+  chineseLabel: string
   posts: PostListEntry[]
 }
 
-export default function PostsListClient({ posts }: PostsListClientProps) {
+export default function PostsListClient({
+  locale,
+  title,
+  languageLabel,
+  englishLabel,
+  chineseLabel,
+  posts,
+}: PostsListClientProps) {
   const listRef = useRef<HTMLDivElement | null>(null)
   const postRefs = useRef<(HTMLAnchorElement | null)[]>([])
   const lineTransition = { duration: 2, ease: [0.33, 1, 0.68, 1] as const }
@@ -171,16 +184,33 @@ export default function PostsListClient({ posts }: PostsListClientProps) {
   return (
     <section className="w-full flex-1 py-5 md:py-10 bg-bg text-text">
       <div className="app-container px-10">
-        <h1 className="text-[30px] md:text-[36px] uppercase tracking-[0.08em] font-medium mb-8 md:mb-10">
-          Posts
-        </h1>
+        <div className="mb-4 flex items-center justify-between gap-4 md:mb-6">
+          <h1 className="text-[30px] md:text-[36px] uppercase tracking-[0.08em] font-medium">{title}</h1>
+          <div className="flex items-center gap-2 text-[12px] uppercase tracking-[0.08em] text-text-secondary md:text-[13px]">
+            <span>{languageLabel}</span>
+            <Link
+              href={withPostLocale('/posts', 'en')}
+              className={`border px-2 py-1 transition-colors ${locale === 'en' ? 'border-white text-white' : 'border-white/35 text-text-secondary hover:border-white hover:text-white'
+                }`}
+            >
+              {englishLabel}
+            </Link>
+            <Link
+              href={withPostLocale('/posts', 'zh')}
+              className={`border px-2 py-1 transition-colors ${locale === 'zh' ? 'border-white text-white' : 'border-white/35 text-text-secondary hover:border-white hover:text-white'
+                }`}
+            >
+              {chineseLabel}
+            </Link>
+          </div>
+        </div>
       </div>
 
       <div ref={listRef} className="app-container w-full">
         {posts.map((post, index) => (
           <Link
             key={post.slug}
-            href={`/posts/${post.slug}`}
+            href={withPostLocale(`/posts/${post.slug}`, locale)}
             ref={(element) => {
               postRefs.current[index] = element
             }}
