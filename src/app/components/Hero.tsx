@@ -11,6 +11,25 @@ const Hero = () => {
           A collection of the best resources for learning development from the Internet,
           handle-picked and created by <a className="font-extrabold hover-wipe inline-block" href="https://github.com/Lemonadeccc" target="_blank" rel="noreferrer noopener">Lemonadeccc</a>
           Learning and sharing some articles about AI, animation, and deployment.
+          <br />
+          If you like my project or ideas, you can subscribe to my{' '}
+          <a
+            href="/rss.xml"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="hover-wipe inline-block font-extrabold text-white"
+          >
+            RSS feed
+          </a>
+          {' '}or{' '}
+          <a
+            href="/rss-zh.xml"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="hover-wipe inline-block font-extrabold text-white"
+          >
+            RSS feed (zh-CN)
+          </a>
         </div>
       </div>
     </div >
