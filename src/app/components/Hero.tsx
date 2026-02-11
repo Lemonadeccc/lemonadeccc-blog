@@ -8,8 +8,8 @@ const Hero = () => {
           Lemon&apos;s learning Library.
         </div>
         <div className="mx-15 pl-5 w-fit max-w-full flex flex-col items-start text-[48px] border-l-2 border-l-white gap-2 leading-[1.4]">
-          a collection of the best resources for learning development from the Internet,
-          handle-picked and created by <a className="font-semibold hover-wipe inline-block" href="https://github.com/Lemonadeccc" target="_blank" rel="noreferrer noopener">Lemonadeccc</a>
+          A collection of the best resources for learning development from the Internet,
+          handle-picked and created by <a className="font-extrabold hover-wipe inline-block" href="https://github.com/Lemonadeccc" target="_blank" rel="noreferrer noopener">Lemonadeccc</a>
           Learning and sharing some articles about AI, animation, and deployment.
         </div>
       </div>

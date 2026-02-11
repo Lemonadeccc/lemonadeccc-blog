@@ -18,13 +18,15 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <CustomCursor />
-        <div className="min-h-screen flex flex-col">
+        <div className="h-screen flex flex-col overflow-hidden">
           <Nav />
-          <PageTransition>
-            <main className="flex-1 flex flex-col">
-              {children}
-            </main>
-          </PageTransition>
+          <div id="page-scroll-root" className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+            <PageTransition>
+              <main className="flex min-h-full flex-col">
+                {children}
+              </main>
+            </PageTransition>
+          </div>
         </div>
       </body>
     </html>

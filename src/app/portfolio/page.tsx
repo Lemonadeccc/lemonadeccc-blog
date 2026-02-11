@@ -11,6 +11,7 @@ type PortfolioItem = {
   href: string
 }
 
+// TODO 
 const items: PortfolioItem[] = [
   {
     left: 'condev',
@@ -92,54 +93,58 @@ export default function PortfolioPage() {
   }
 
   return (
-    <section className="w-full flex-1 py-5 md:py-10">
-      <div className="app-container  px-10">
-        <h1 className="text-[30px] md:text-[36px] uppercase tracking-[0.08em] font-medium mb-8 md:mb-10">
-          Featured Work
-        </h1>
-      </div>
+    <section className="w-full flex-1 min-h-0 bg-bg text-text lg:h-full lg:overflow-hidden">
+      <div className="app-container h-full py-5 md:py-8 lg:py-6">
+        <div className="flex h-full min-h-0 flex-col">
+          <div className="shrink-0 px-10">
+            <h1 className="text-[30px] md:text-[36px] uppercase tracking-[0.08em] font-medium mb-8 md:mb-10 lg:mb-6">
+              Featured Work
+            </h1>
+          </div>
 
-      <div className="app-container w-full">
-        {items.map((item, index) => (
-          <a
-            key={`${item.left}-${item.right}`}
-            href={item.href}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="project-link group relative flex items-center justify-center gap-2.5 pt-3 pb-4 md:pt-2 md:pb-3 text-[36px] md:text-[80px] leading-[1.12] md:leading-[1.1] transition-[gap] duration-300 ease-in-out hover:gap-5"
-            onMouseEnter={() => handleMouseEnter(index)}
-          >
-            {index === 0 && (
-              <motion.div
-                className="absolute left-0 top-0 h-px w-full bg-white origin-left"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={lineTransition}
-              />
-            )}
-            <motion.div
-              className="absolute left-0 bottom-0 h-px w-full bg-white origin-left"
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={lineTransition}
-            />
-            <span className="portfolio-wipe portfolio-wipe-left flex-[2.5] text-right pb-[0.04em]">
-              {displayWords[index][0]}
-            </span>
-            <div className="relative h-[68px] w-[105px] md:h-[80px] md:w-[125px] min-w-0 overflow-hidden bg-white [flex:0] transition-[flex] duration-1000 ease-[cubic-bezier(0.165,0.84,0.44,1)] group-hover:[flex:0.5]">
-              <Image
-                src={item.image}
-                alt={`${item.left} ${item.right}`}
-                fill
-                sizes="(max-width: 768px) 30vw, 20vw"
-                className="object-cover"
-              />
-            </div>
-            <span className="portfolio-wipe portfolio-wipe-right flex-[2.5] pb-[0.04em]">
-              {displayWords[index][1]}
-            </span>
-          </a>
-        ))}
+          <div className="portfolio-scroll w-full lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
+            {items.map((item, index) => (
+              <a
+                key={`${item.left}-${item.right}`}
+                href={item.href}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="project-link group relative flex items-center justify-center gap-2.5 pt-3 pb-4 md:pt-2 md:pb-3 text-[36px] md:text-[80px] leading-[1.12] md:leading-[1.1] transition-[gap] duration-300 ease-in-out hover:gap-5"
+                onMouseEnter={() => handleMouseEnter(index)}
+              >
+                {index === 0 && (
+                  <motion.div
+                    className="absolute left-0 top-0 h-px w-full bg-white origin-left"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={lineTransition}
+                  />
+                )}
+                <motion.div
+                  className="absolute left-0 bottom-0 h-px w-full bg-white origin-left"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={lineTransition}
+                />
+                <span className="portfolio-wipe portfolio-wipe-left flex-[2.5] text-right pb-[0.04em]">
+                  {displayWords[index][0]}
+                </span>
+                <div className="relative h-[68px] w-[105px] md:h-[80px] md:w-[125px] min-w-0 overflow-hidden bg-white [flex:0] transition-[flex] duration-1000 ease-[cubic-bezier(0.165,0.84,0.44,1)] group-hover:[flex:0.5]">
+                  <Image
+                    src={item.image}
+                    alt={`${item.left} ${item.right}`}
+                    fill
+                    sizes="(max-width: 768px) 30vw, 20vw"
+                    className="object-cover"
+                  />
+                </div>
+                <span className="portfolio-wipe portfolio-wipe-right flex-[2.5] pb-[0.04em]">
+                  {displayWords[index][1]}
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   )

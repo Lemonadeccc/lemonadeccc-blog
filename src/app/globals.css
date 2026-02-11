@@ -30,6 +30,16 @@
     box-sizing: border-box;
   }
 
+  ::selection {
+    background: #ef4444;
+    color: #fff;
+  }
+
+  ::-moz-selection {
+    background: #ef4444;
+    color: #fff;
+  }
+
   body {
     @apply bg-bg text-text;
     cursor: none;
@@ -53,6 +63,79 @@
 @layer utilities {
   .app-container {
     @apply mx-auto;
+  }
+
+  #page-scroll-root {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.52) rgba(255, 255, 255, 0.08);
+    scrollbar-gutter: stable;
+  }
+
+  #page-scroll-root::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  #page-scroll-root::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  #page-scroll-root::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 2px solid #000;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.38) 100%);
+  }
+
+  #page-scroll-root::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.5) 100%);
+  }
+
+  .friend-links-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.5) rgba(255, 255, 255, 0.08);
+    scrollbar-gutter: stable;
+  }
+
+  .friend-links-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .friend-links-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .friend-links-scroll::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 1px solid #000;
+    background: rgba(255, 255, 255, 0.48);
+  }
+
+  .friend-links-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.68);
+  }
+
+  .portfolio-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.5) rgba(255, 255, 255, 0.08);
+    scrollbar-gutter: stable;
+  }
+
+  .portfolio-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .portfolio-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .portfolio-scroll::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 1px solid #000;
+    background: rgba(255, 255, 255, 0.48);
+  }
+
+  .portfolio-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.68);
   }
 
   /* transition */
@@ -83,6 +166,25 @@
 
   .project-link:hover .hover-wipe,
   .project-link:focus-visible .hover-wipe {
+    background-position: 0 0;
+  }
+
+  .back-to-posts-btn,
+  .back-to-posts-btn:hover,
+  .back-to-posts-btn:focus-visible {
+    background-image: none !important;
+    background-clip: border-box;
+    -webkit-background-clip: border-box;
+    -webkit-text-fill-color: #fff;
+    color: #fff;
+  }
+
+  .back-action .hover-wipe {
+    -webkit-text-fill-color: transparent;
+  }
+
+  .back-action:hover .hover-wipe,
+  .back-action:focus-visible .hover-wipe {
     background-position: 0 0;
   }
 
@@ -117,6 +219,85 @@
   .project-link:not(:hover) .portfolio-wipe-left {
     background-position: 100% 0;
     transition-delay: 0.45s;
+  }
+
+  .post-content {
+    max-width: 72ch;
+    font-size: 20px;
+    line-height: 1.75;
+  }
+
+  .post-content>*+* {
+    margin-top: 1.25rem;
+  }
+
+  .post-content h2,
+  .post-content h3 {
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .post-content h2 {
+    font-size: clamp(30px, 4vw, 48px);
+  }
+
+  .post-content h3 {
+    font-size: clamp(24px, 3vw, 36px);
+  }
+
+  .post-content p,
+  .post-content li {
+    color: #d4d4d4;
+  }
+
+  .post-content ul,
+  .post-content ol {
+    margin-left: 1.25rem;
+  }
+
+  .post-content a {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  [data-rehype-pretty-code-fragment] {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #000;
+  }
+
+  [data-rehype-pretty-code-fragment] pre {
+    margin: 0;
+    padding: 1rem 1.25rem;
+    background: transparent !important;
+  }
+
+  [data-rehype-pretty-code-fragment] code {
+    display: grid;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  [data-rehype-pretty-code-fragment] .line {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  [data-rehype-pretty-code-fragment] [data-highlighted-line] {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .post-content :not(pre)>code {
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+    padding: 0.1rem 0.4rem;
+    font-size: 0.88em;
   }
 
   /* hide custom cursor on touch devices */
