@@ -13,6 +13,7 @@ const Nav = () => {
       <div className="app-container flex justify-between p-2.5 text-[48px] leading-none relative overflow-hidden border-0">
         <div className="font-medium p-2.5">
           <Link href="/" className={`${isDark ? 'text-bg' : ''} text-[48px] leading-none hover-wipe`}>
+            Lemonadeccc
           </Link>
         </div>
 

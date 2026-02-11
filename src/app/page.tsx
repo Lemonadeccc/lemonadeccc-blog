@@ -1,15 +1,9 @@
 import Hero from "./components/Hero";
-import Nav from "./components/Nav";
-
-
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col">
-      <div className="flex-none">
-        <Nav />
-      </div>
+    <section className="flex-1 flex flex-col">
       <Hero />
-    </main>
+    </section>
   );
 }

@@ -52,8 +52,7 @@
 
 @layer utilities {
   .app-container {
-    /* @apply mx-auto max-w-[1200px] px-5; */
-    @apply mx-auto px-10;
+    @apply mx-auto;
   }
 
   /* transition */
@@ -80,6 +79,44 @@
   .hover-wipe:hover,
   .hover-wipe:focus-visible {
     background-position: 0 0;
+  }
+
+  .project-link:hover .hover-wipe,
+  .project-link:focus-visible .hover-wipe {
+    background-position: 0 0;
+  }
+
+  .portfolio-wipe {
+    display: inline-block;
+    background-image: linear-gradient(90deg, #ef4444 0%, #ef4444 50%, #fff 50%, #fff 100%);
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    transition: background-position 0.45s ease;
+  }
+
+  .project-link:hover .portfolio-wipe-left,
+  .project-link:focus-visible .portfolio-wipe-left {
+    background-position: 0 0;
+    transition-delay: 0s;
+  }
+
+  .project-link:hover .portfolio-wipe-right,
+  .project-link:focus-visible .portfolio-wipe-right {
+    background-position: 0 0;
+    transition-delay: 0.45s;
+  }
+
+  .project-link:not(:hover) .portfolio-wipe-right {
+    background-position: 100% 0;
+    transition-delay: 0s;
+  }
+
+  .project-link:not(:hover) .portfolio-wipe-left {
+    background-position: 100% 0;
+    transition-delay: 0.45s;
   }
 
   /* hide custom cursor on touch devices */
