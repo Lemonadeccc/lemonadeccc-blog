@@ -1,0 +1,87 @@
+---
+title: Coolify Deployment Practice
+type: Article
+project: Coolify Deployment
+date: 2025-10-01
+summary: A practical self-hosted deployment record with Coolify.
+---
+
+# Deployment Plan Research
+
+### Coolify vs Dokploy
+
+Coolify is an open-source deployment solution built with Laravel and Docker. It has run stably for years, and its deployment workflow is popular among indie developers, so I tried using Coolify for web deployment. Although Dokploy has more overall advantages than Coolify, Coolify currently has relatively weak Cloudflare support, so I chose the long-standing and stable Coolify here.
+
+The detailed practice process is as follows:
+
+I rented a limited-time Netcup 4C8G server. After logging in, I first copied my local macOS public key to the server.
+
+```jsx
+cat ~/.ssh/filename.pub | ssh user@host "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys
+```
+
+Then set permissions on the server.
+
+```jsx
+
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+ls -ld ~/.ssh
+ls -l ~/.ssh/authorized_keys
+```
+
+Configure `sshd`.
+
+```jsx
+vim /etc/ssh/sshd_config
+PermitRootLogin prohibit-password or true
+PubkeyAuthentication yes
+```
+
+Configure and check the firewall rules required by Coolify.
+
+```jsx
+sudo ufw status
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw allow 3000/tcp
+sudo ufw allow 6001/tcp
+sudo ufw allow 6002/tcp
+sudo ufw allow 9000:9100/tcp
+sudo ufw allow 8000/tcp
+sudo ufw enable
+sudo ufw status verbose
+```
+
+Run the Coolify automated installation script.
+
+```jsx
+curl -fsSL https://cdn.coollabs.io/coolify/install.sh | bash
+```
+
+After installation, use your proxy/VPN setup to access port 8000 on the server IP, then configure the Coolify account and permissions.
+
+![image.png](attachment:864d1397-cec5-40c0-8235-b665c7d25281:image.png)
+
+## Actual Deployment
+
+### Create Source
+
+Add the default source, rename it to your project name if needed, then select your private/public repository and add it through the GitHub App.
+
+### Create Project
+
+After creating the deployment project, add resources from the source created in the previous step. For a simple Next.js project, keep the defaults, for example both base directory and public directory as root `/`. For a monorepo project like `condev-ui`, where the deployed web app lives in a subpackage, you can write `nixpacks.toml` to specify commands. Here the `nixpacks.toml` script is:
+
+```jsx
+providers = ["node"][phases.setup];
+nixPkgs = ["nodejs_22", "pnpm"][phases.install];
+cmds = ["pnpm install --frozen-lockfile"][phases.build];
+cmds = ["pnpm exec turbo run build"][start];
+cmd = "pnpm --filter @condev-ui/site start";
+```
+
+Then push it to the repository and click project deploy. After that, you can access the deployed project through the domain. On subsequent pushes, Coolify will deploy automatically.

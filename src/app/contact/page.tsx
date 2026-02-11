@@ -12,6 +12,7 @@ type FriendLink = {
   name: string
   avatar: string
   github: string
+  website?: string
   description: string
 }
 
@@ -29,7 +30,12 @@ const contactItems: ContactItem[] = [
 ]
 
 const friendSeeds = [
-  { name: 'Mango Orbit', github: 'https://github.com/mango-orbit-example' },
+  {
+    name: 'MapleCity1314',
+    github: 'https://github.com/MapleCity1314',
+    website: 'https://icstudio.top/',
+    description: 'Web3 Full-stack Architect specialized in Frontend Infrastructure and Agent Ecosystem.',
+  },
 ] as const
 
 const avatarPool = [
@@ -45,8 +51,9 @@ const avatarPool = [
 const friendLinks: FriendLink[] = friendSeeds.map((seed, index) => ({
   name: seed.name,
   github: seed.github,
+  website: seed.website,
   avatar: avatarPool[index % avatarPool.length],
-  description: 'Example friend link (fake)',
+  description: seed.description,
 }))
 
 export const metadata: Metadata = {
@@ -70,7 +77,7 @@ export default function ContactPage() {
         <div className="flex h-full min-h-0 flex-col">
           <div className="shrink-0">
             <h1 className="text-[30px] md:text-[36px] uppercase tracking-[0.08em] font-medium mb-3">Contact</h1>
-            <p className="max-w-[72ch] text-[16px] md:text-[20px] leading-[1.6] text-text-secondary">
+            <p className="w-full text-[16px] md:text-[20px] leading-[1.6] text-text-secondary md:whitespace-nowrap">
               Reach me through the channels below. Every link opens in a new tab.
             </p>
           </div>
@@ -100,13 +107,13 @@ export default function ContactPage() {
 
             <section className="border-t border-white lg:min-h-0 lg:flex lg:flex-col">
               <h2 className="py-5 text-[16px] uppercase tracking-[0.08em] text-text-secondary lg:shrink-0">Friend Links</h2>
+              <p className="mb-4 w-full text-[13px] leading-[1.6] text-text-secondary md:text-[14px] md:whitespace-nowrap lg:shrink-0">
+                People and developers I follow. Click any card to open the GitHub profile in a new tab.
+              </p>
               <div className="friend-links-scroll flex flex-col gap-4 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
                 {friendLinks.map((friend) => (
-                  <a
+                  <article
                     key={friend.github}
-                    href={friend.github}
-                    target="_blank"
-                    rel="noreferrer noopener"
                     className="group flex items-center gap-4 border border-white/30 bg-transparent p-4 transition-colors duration-300 hover:bg-white/5"
                   >
                     <Image
@@ -114,6 +121,7 @@ export default function ContactPage() {
                       alt={`${friend.name} avatar`}
                       width={64}
                       height={64}
+                      suppressHydrationWarning
                       className="h-16 w-16 rounded-full border border-white/40 object-cover"
                     />
                     <div className="min-w-0">
@@ -121,11 +129,28 @@ export default function ContactPage() {
                       <p className="mt-2 text-[13px] uppercase tracking-[0.08em] text-text-secondary">
                         {friend.description}
                       </p>
-                      <p className="mt-3 text-[14px]">
-                        <span className="hover-wipe">View GitHub</span>
+                      <p className="mt-3 flex items-center gap-3 text-[14px]">
+                        <a
+                          href={friend.github}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="hover-wipe"
+                        >
+                          View GitHub
+                        </a>
+                        {friend.website && (
+                          <a
+                            href={friend.website}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className="hover-wipe"
+                          >
+                            View Website
+                          </a>
+                        )}
                       </p>
                     </div>
-                  </a>
+                  </article>
                 ))}
               </div>
             </section>

@@ -1,0 +1,44 @@
+---
+title: GEN-3D-ASSETS Project
+type: Idea
+project: GEN-3D-ASSETS
+date: 2025-08-08
+summary: Project ideas and implementation planning for GEN-3D-ASSETS.
+---
+
+### Project Repository
+
+https://github.com/Lemonadeccc/GEN-3D-ASSESTS
+
+In practical implementation, I encountered loading issues with `obj` / `fbx` / `gltf`. A Next.js proxy should not be used, and models or textures should not be loaded through `blob`. Other parts also need to consider real user workflows.
+
+### Page Preview
+
+![image.png](attachment:a85d89cd-4651-4a59-9561-695dd0132f5b:image.png)
+
+![image1.png](attachment:cb5e096b-e29c-4968-8b52-e671ad1cbf08:QQ_1756044631250.png)
+
+## Ideas
+
+Mainly using Next.js + R3F + deri? + solidity + Vercel.
+
+## Engineering
+
+1. Technology selection: evaluate contract stacks such as solidity/foundry/harhat. Technically, use Next.js SSR to render 3D models, which I had not used before. For short-term MVP, use CC and other tools for unit tests.
+2. Standardization with `commitlint` / `eslint` / `husky`.
+3. Use GitHub Actions for CI/CD, combine Qodo for PR review and AI-assisted management, use PockeFlow to generate repository docs, and deploy to Vercel according to Next.js and project requirements.
+4. Performance may become tight when loading many 3D models. Optimize by making full use of API request/response loading time, SSR, and Turbopack incremental updates.
+5. Optimize GSAP animations and static assets.
+
+## Business Flow
+
+1. Use `meshy.ai` or other generative APIs for 3D generation.
+   1. Apply for API access; decide whether to use polling or user-configurable strategies during usage.
+   2. Decide where API configuration should be stored and how to keep keys secure from abuse.
+2. Request the API based on prompts. Decide whether to download models before display or show directly. Waiting animations should be polished and interesting. Returned data/models should be selectable, and models should support `autoRotate` during display.
+3. After selection, request contracts to put assets on-chain.
+4. Deployment needs to be coupled with engineering considerations.
+
+## Value
+
+1. Provide NFT-like personal assets: generate personalized non-fungible 3D assets based on user profile traits and prompt preferences.

@@ -14,6 +14,7 @@ const BREATH_BASE = 0.84
 const BREATH_AMP = 0.16
 
 const CustomCursor = () => {
+  const [mounted, setMounted] = useState(false)
   const x = useMotionValue(-100)
   const y = useMotionValue(-100)
   const scale = useMotionValue(1)
@@ -23,6 +24,10 @@ const CustomCursor = () => {
   const spring = { stiffness: 320, damping: 20, mass: 0.4 }
   const smoothX = useSpring(x, spring)
   const smoothY = useSpring(y, spring)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
@@ -45,6 +50,8 @@ const CustomCursor = () => {
     const breath = BREATH_BASE + BREATH_AMP * Math.sin(phase.current)
     scale.set(breath)
   })
+
+  if (!mounted) return null
 
   return (
     <motion.div

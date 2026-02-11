@@ -1,0 +1,44 @@
+---
+title: GEN-3D-ASSETS 项目
+type: 想法
+project: GEN-3D-ASSETS
+date: 2025-08-08
+summary: GEN 3D ASSETS 项目想法和实践规划。
+---
+
+### 项目地址
+
+https://github.com/Lemonadeccc/GEN-3D-ASSESTS
+
+实际应用过程中遇到了obj / fbx / gltf load的问题，不应该使用nextjs代理，也不应该使用blob去load模型或者纹理。其他部分要考虑用户使用逻辑。
+
+### 页面效果
+
+![image.png](attachment:a85d89cd-4651-4a59-9561-695dd0132f5b:image.png)
+
+![image1.png](attachment:cb5e096b-e29c-4968-8b52-e671ad1cbf08:QQ_1756044631250.png)
+
+## 想法
+
+主要使用nextjs + r3f + deri? + solidy + vercel
+
+## 工程
+
+1. 技术选型，solidy/foundry/harhat等其他合约选型，技术上使用没用过的nextjs的ssr渲染3d模型。短期mvp使用cc等其他工具实现单测
+2. commitlint/eslint/husky规范化
+3. CICD使用github actions，配合qodo实现pr审查等使用ai管理，PockeFlow去生成仓库文档，部署上nextjs及项目要求vercel部署
+4. load比较多3D模型的时候性能可能会捉急，如何优化充分利用API请求load返回时间及ssr,tubropack增量更新
+5. gsap动画优化，静态资源优化
+
+## 业务流程
+
+1. 3D生成使用meshy.ai或者其他生成式API去实现
+   1. API 申请，使用时api轮训还是可供选择自配置
+   2. API 配置放在哪里，如何保证key的安全不被打野使用
+2. 根据prompt去请求API，请求后下载模型展示还是直接展示，等待动画需要美化有趣，返回数据及模型可供用户选择，展示时候需要autoRotate。
+3. 选择后请求合约实现链上
+4. 部署需要和工程方面耦合
+
+## 价值
+
+1. 拥有类似nft的个人资产，根据个人画像等资产及prompt喜好生成个性化非同质3D资产

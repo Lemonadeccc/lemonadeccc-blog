@@ -1,0 +1,55 @@
+---
+title: Vibe Practice Summary
+type: Article
+project: Vibe Summary
+date: 2026-01-15
+summary: AI-related practice notes on MCP/Spec/Skills/Midscene.
+---
+
+This post summarizes my experience and lessons from using AI for coding over the past year.
+
+Before DeepSeek's breakout in November-December 2025, I mostly used ChatGPT and through
+
+## MCP
+
+MCP (Model Context Protocol) defines how applications and AI models exchange contextual information. This allows developers to connect different data sources, tools, and capabilities to AI models in a consistent way, similar to how USB-C lets different devices connect through the same interface. The goal of MCP is to create a universal standard that makes AI application development and integration simpler and more unified.
+
+MCP is a product of prompt engineering. More structured context significantly improves model performance. So ecosystem providers usually offer ready-made scenarios that AI can directly use. MCP is also not tied to a specific AI model, and MCP-compatible models can be switched flexibly.
+
+- Previously: every AI app integrating every tool required a separate "private integration" implementation (N×M integration hell).
+- Now: tool providers expose MCP Servers; AI apps implement MCP Clients; everyone interoperates by following the Spec.
+
+Previously, if you wanted AI to "read local files + query databases + call GitHub + automate browsers", it basically meant building a plugin/SDK integration set for every AI client, with high maintenance and migration costs.
+
+MCP standardizes this through a unified protocol: service providers implement MCP Servers; AI apps implement MCP Clients; they interact by protocol.
+
+### Roles
+
+- Host: the product you actually use, such as Claude Desktop or an IDE. The Host manages UX, permissions, and multiple connections.
+- Client: a connection instance created inside the Host; usually "one Server corresponds to one Client connection."
+- Server: a local or remote program that provides capabilities, exposing Tools/Resources/Prompts.
+
+### Three Core Primitives
+
+- Tools: executable functions (for example, "read file", "send request", "query database").
+- Resources: readable contextual data (file content, records, API responses, etc.).
+- Prompts: reusable prompt templates (conversation structure/system prompt/examples).
+
+### Transport
+
+- Common local transport: stdio (Host starts a subprocess and communicates through stdin/stdout).
+- Common remote transport: Streamable HTTP (optional SSE) (`HTTP POST + optional event stream`), supporting common auth methods (`Bearer token / API key / custom header`). OAuth is also officially recommended for token acquisition.
+
+## Spec
+
+The Spec is the "protocol manual" of MCP: it defines handshake behavior, message formats, capability definitions, tool exposure, transport behavior, and more. MCP's data layer is based on JSON-RPC 2.0, and defines lifecycle management, capability negotiation, and the three core primitives: Tools / Resources / Prompts.
+
+Official articles: [**What are skills**](https://support.claude.com/en/articles/12512176-what-are-skills), [**Using skills in Claude**](https://support.claude.com/en/articles/12512180-using-skills-in-claude), and [**How to create custom skills**](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills). A more complete reference: [**Agent Skills - Claude Code Docs**](https://code.claude.com/docs/en/skills#create-a-skill)
+
+You can register a GitHub repository as a Claude Code plugin marketplace entry by running the following command in Claude Code.
+
+## Skills
+
+## Apifox CLI and Skills
+
+## Midscene
