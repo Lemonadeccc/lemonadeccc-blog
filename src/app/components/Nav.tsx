@@ -6,26 +6,25 @@ import { motion } from 'framer-motion'
 
 const Nav = () => {
   const pathname = usePathname()
-  const isDark = pathname === '/thinking'
 
   return (
-    <div className={`${isDark} ? 'bg-text' : ''`}>
+    <div>
       <div className="app-container flex justify-between p-2.5 text-[48px] leading-none relative overflow-hidden border-0">
         <div className="font-medium p-2.5">
-          <Link href="/" className={`${isDark ? 'text-bg' : ''} text-[48px] leading-none hover-wipe`}>
+          <Link href="/" className="text-[48px] leading-none hover-wipe">
             Lemonadeccc
           </Link>
         </div>
 
         <div className="flex gap-2.5 max-md:gap-0">
           <div className="p-2.5 max-md:p-[5px]">
-            <Link href="/portfolio" className={`${isDark ? 'text-bg' : ''} text-[48px] leading-none hover-wipe`}>
+            <Link href="/portfolio" className="text-[48px] leading-none hover-wipe">
               PORTFOLIO
             </Link>
           </div>
 
           <div className="p-2.5 max-md:px-[5px]">
-            <Link href="/thinking" className={`${isDark ? 'text-bg' : ''} text-[48px] leading-none hover-wipe`}>
+            <Link href="/posts" className="text-[48px] leading-none hover-wipe">
               POSTS
             </Link>
           </div>
@@ -35,7 +34,7 @@ const Nav = () => {
               href="https://x.com/Lemonadecccc"
               target="_blank"
               rel="noreferrer noopener"
-              className={`${isDark ? 'text-bg' : ''} text-[48px] leading-none hover-wipe`}
+              className="text-[48px] leading-none hover-wipe"
             >
               CONTACT
             </Link>
