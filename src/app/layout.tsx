@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import PageTransition from '@/app/components/PageTransition'
+import CustomCursor from '@/app/components/CustomCursor'
 
 export const metadata: Metadata = {
   title: "Lemonadeccc",
@@ -15,6 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <CustomCursor />
         <PageTransition>
           {children}
         </PageTransition>

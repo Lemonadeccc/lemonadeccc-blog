@@ -6,10 +6,10 @@
 @source "./src/app/**/*.{js,ts,jsx,tsx,mdx}";
 
 @theme {
-  --color-text: #000;
-  --color-bg: #fff;
-  --color-text-secondary: #666;
-  --color-transition: #000;
+  --color-text: #fff;
+  --color-bg: #000;
+  --color-text-secondary: #aaa;
+  --color-transition: #fff;
 
   --font-pp-neue: "PP Neue Montreal", sans-serif;
 
@@ -19,6 +19,8 @@
   --leading-85: 85%;
   --leading-125: 125%;
 
+  /* 24px white solid circle cursor */
+  --cursor-circle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='8' fill='%23fff'/%3E%3C/svg%3E");
 }
 
 @layer base {
@@ -28,19 +30,30 @@
     box-sizing: border-box;
   }
 
+  body {
+    @apply bg-bg text-text;
+    cursor: none;
+  }
+
   a {
-    @apply no-underline text-text cursor-pointer text-base;
+    @apply no-underline text-text cursor-pointer;
+    cursor: none;
   }
 
   a:hover {
     @apply no-underline;
   }
 
+  button {
+    cursor: none;
+  }
+
 }
 
 @layer utilities {
   .app-container {
-    @apply mx-auto max-w-[1200px] px-5;
+    /* @apply mx-auto max-w-[1200px] px-5; */
+    @apply mx-auto px-10;
   }
 
   /* transition */
@@ -50,5 +63,20 @@
 
   .slide-out {
     @apply fixed top-0 left-0 w-full h-screen bg-transition origin-right;
+  }
+
+  /* hide custom cursor on touch devices */
+  @media (hover: none),
+  (pointer: coarse) {
+
+    body,
+    a,
+    button {
+      cursor: auto;
+    }
+
+    .custom-cursor {
+      display: none;
+    }
   }
 }

@@ -5,10 +5,11 @@ import Nav from "./components/Nav";
 
 export default function Home() {
   return (
-    <>
-      <Nav />
-
+    <main className="min-h-screen flex flex-col">
+      <div className="flex-none">
+        <Nav />
+      </div>
       <Hero />
-    </>
+    </main>
   );
 }
