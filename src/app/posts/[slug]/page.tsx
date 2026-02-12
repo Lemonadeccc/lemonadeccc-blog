@@ -146,8 +146,8 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}
       />
-      <div className="app-container w-full max-w-[1100px] px-6 py-8 md:px-10 md:py-12">
-        <div className="mb-6 flex items-center justify-end gap-2 text-[12px] uppercase tracking-[0.08em] text-text-secondary md:text-[13px]">
+      <div className="app-container w-full max-w-[1100px] px-4 py-8 sm:px-6 md:px-10 md:py-12">
+        <div className="mb-6 flex flex-wrap items-center justify-start gap-2 text-[12px] uppercase tracking-[0.08em] text-text-secondary md:justify-end md:text-[13px]">
           <span>{t('posts.language')}</span>
           <Link
             href={englishHref}
@@ -173,13 +173,13 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
           backToTopLabel={t('postDetail.backToTop')}
         />
 
-        <header className="mb-10 border-b border-white/30 pb-8">
-          <p className="text-[14px] uppercase tracking-[0.08em] text-text-secondary">
+        <header className="mb-8 border-b border-white/30 pb-6 md:mb-10 md:pb-8">
+          <p className="text-[12px] uppercase tracking-[0.08em] text-text-secondary md:text-[14px]">
             {post.type} / {dateFormatter.format(new Date(post.date))}
           </p>
-          <h1 className="mt-4 text-[40px] leading-[1] md:text-[72px]">{post.title}</h1>
+          <h1 className="mt-4 text-[30px] leading-[1.05] sm:text-[36px] md:text-[72px]">{post.title}</h1>
           {post.summary && (
-            <p className="mt-5 max-w-[75ch] text-[18px] leading-[1.7] text-text-secondary">
+            <p className="mt-5 max-w-[75ch] text-[16px] leading-[1.7] text-text-secondary md:text-[18px]">
               {post.summary}
             </p>
           )}

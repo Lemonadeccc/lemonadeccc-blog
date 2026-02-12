@@ -16,7 +16,7 @@ const transition = {
 }
 
 const baseClassName =
-  'back-to-posts-btn inline-flex items-center justify-center px-4 py-2 text-[16px] uppercase tracking-[0.08em] text-white'
+  'back-to-posts-btn inline-flex items-center justify-center px-3 py-2 text-[14px] uppercase tracking-[0.08em] text-white md:px-4 md:text-[16px]'
 
 export default function BackToPostsButton({
   postsHref,
@@ -25,7 +25,7 @@ export default function BackToPostsButton({
 }: BackToPostsButtonProps) {
   const anchorRef = useRef<HTMLDivElement | null>(null)
   const [showFloating, setShowFloating] = useState(false)
-  const buttonClassName = `${baseClassName} back-action group min-w-[180px]`
+  const buttonClassName = `${baseClassName} back-action group min-w-0 flex-1 md:min-w-[180px] md:flex-none`
 
   const handleBackToTop = useCallback(() => {
     const scrollRoot = document.getElementById('page-scroll-root')
@@ -67,7 +67,7 @@ export default function BackToPostsButton({
       <AnimatePresence>
         {showFloating && (
           <motion.div
-            className="pointer-events-none fixed right-[max(1rem,calc((100vw-1100px)/4))] bottom-6 z-40 flex flex-col gap-3 md:bottom-auto md:top-[calc(var(--nav-height,0px)+((100vh-var(--nav-height,0px))/2))] md:-translate-y-1/2"
+            className="pointer-events-none fixed inset-x-4 bottom-4 z-40 flex gap-2 md:inset-x-auto md:right-[max(1rem,calc((100vw-1100px)/4))] md:bottom-auto md:top-[calc(var(--nav-height,0px)+((100vh-var(--nav-height,0px))/2))] md:-translate-y-1/2 md:flex-col md:gap-3"
             initial={{ opacity: 0, x: -42 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 26 }}

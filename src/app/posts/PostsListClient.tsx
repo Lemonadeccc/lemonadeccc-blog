@@ -36,6 +36,8 @@ export default function PostsListClient({
   const lineTransition = { duration: 2, ease: [0.33, 1, 0.68, 1] as const }
 
   useEffect(() => {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
+
     const list = listRef.current
     const rows = postRefs.current.filter((row): row is HTMLAnchorElement => row !== null)
 
@@ -182,11 +184,11 @@ export default function PostsListClient({
   }, [posts.length])
 
   return (
-    <section className="w-full flex-1 py-5 md:py-10 bg-bg text-text">
-      <div className="app-container px-10">
-        <div className="mb-4 flex items-center justify-between gap-4 md:mb-6">
+    <section className="w-full flex-1 bg-bg py-5 text-text md:py-10">
+      <div className="app-container px-4 sm:px-8 md:px-10">
+        <div className="mb-4 flex flex-col gap-3 md:mb-6 md:flex-row md:items-center md:justify-between md:gap-4">
           <h1 className="text-[30px] md:text-[36px] uppercase tracking-[0.08em] font-medium">{title}</h1>
-          <div className="flex items-center gap-2 text-[12px] uppercase tracking-[0.08em] text-text-secondary md:text-[13px]">
+          <div className="flex flex-wrap items-center gap-2 text-[12px] uppercase tracking-[0.08em] text-text-secondary md:text-[13px]">
             <span>{languageLabel}</span>
             <Link
               href={withPostLocale('/posts', 'en')}
@@ -234,29 +236,29 @@ export default function PostsListClient({
             />
 
             <div className="post-wrapper relative h-[240px] will-change-transform -translate-y-[160px]">
-              <div className="flex h-20 items-center justify-between gap-4 bg-bg px-4 md:px-6">
-                <h2 className="text-[22px] md:text-[54px] uppercase tracking-[-0.02em] leading-[0.9]">
+              <div className="flex h-20 items-center justify-between gap-3 bg-bg px-3 sm:px-4 md:gap-5 md:px-6">
+                <h2 className="min-w-0 flex-1 truncate text-[16px] sm:text-[22px] md:text-[clamp(28px,4.5vw,54px)] uppercase tracking-[-0.02em] leading-[0.9]">
                   {post.title}
                 </h2>
-                <h2 className="text-[18px] md:text-[54px] uppercase tracking-[-0.02em] leading-[0.9]">
+                <h2 className="ml-2 shrink-0 whitespace-nowrap text-right text-[12px] sm:text-[18px] md:text-[clamp(16px,3.2vw,42px)] uppercase tracking-[-0.02em] leading-[0.9]">
                   {post.type}
                 </h2>
               </div>
 
-              <div className="flex h-20 items-center justify-between gap-4 bg-white px-4 md:px-6 text-black">
-                <h2 className="text-[22px] md:text-[54px] uppercase tracking-[-0.02em] leading-[0.9]">
+              <div className="flex h-20 items-center justify-between gap-3 bg-white px-3 text-black sm:px-4 md:gap-5 md:px-6">
+                <h2 className="min-w-0 flex-1 truncate text-[16px] sm:text-[22px] md:text-[clamp(28px,4.5vw,54px)] uppercase tracking-[-0.02em] leading-[0.9]">
                   {post.project}
                 </h2>
-                <h2 className="text-[18px] md:text-[54px] uppercase tracking-[-0.02em] leading-[0.9]">
+                <h2 className="ml-2 shrink-0 whitespace-nowrap text-right text-[12px] sm:text-[18px] md:text-[clamp(16px,3.2vw,42px)] uppercase tracking-[-0.02em] leading-[0.9]">
                   {post.label}
                 </h2>
               </div>
 
-              <div className="flex h-20 items-center justify-between gap-4 bg-bg px-4 md:px-6">
-                <h2 className="text-[22px] md:text-[54px] uppercase tracking-[-0.02em] leading-[0.9]">
+              <div className="flex h-20 items-center justify-between gap-3 bg-bg px-3 sm:px-4 md:gap-5 md:px-6">
+                <h2 className="min-w-0 flex-1 truncate text-[16px] sm:text-[22px] md:text-[clamp(28px,4.5vw,54px)] uppercase tracking-[-0.02em] leading-[0.9]">
                   {post.title}
                 </h2>
-                <h2 className="text-[18px] md:text-[54px] uppercase tracking-[-0.02em] leading-[0.9]">
+                <h2 className="ml-2 shrink-0 whitespace-nowrap text-right text-[12px] sm:text-[18px] md:text-[clamp(16px,3.2vw,42px)] uppercase tracking-[-0.02em] leading-[0.9]">
                   {post.type}
                 </h2>
               </div>

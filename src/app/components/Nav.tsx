@@ -49,31 +49,37 @@ const Nav = () => {
 
   return (
     <div>
-      <div ref={navRef} className="app-container flex justify-between p-2.5 text-[48px] leading-none relative overflow-hidden border-0">
-        <div className="font-medium p-2.5">
-          <Link href="/" className="text-[48px] leading-none hover-wipe">
+      <div
+        ref={navRef}
+        className="app-container relative overflow-hidden border-0 px-4 py-3 sm:px-6 sm:py-4 md:flex md:items-end md:justify-between md:p-2.5"
+      >
+        <div className="font-medium leading-none md:p-2.5">
+          <Link href="/" className="hover-wipe text-[30px] leading-none sm:text-[34px] md:text-[48px]">
             Lemonadeccc
           </Link>
         </div>
 
-        <div className="flex gap-2.5 max-md:gap-0">
-          <div className="p-2.5 max-md:p-[5px]">
-            <Link href="/portfolio" className="text-[48px] leading-none hover-wipe">
-              PORTFOLIO
-            </Link>
-          </div>
+        <div className="mt-3 grid w-full grid-cols-3 gap-1 sm:gap-2 md:mt-0 md:flex md:w-auto md:items-center md:justify-between md:gap-2.5">
+          <Link
+            href="/portfolio"
+            className="hover-wipe inline-flex min-h-[32px] items-center justify-center px-1 py-1 text-center text-[13px] leading-none sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px]"
+          >
+            PORTFOLIO
+          </Link>
 
-          <div className="p-2.5 max-md:px-[5px]">
-            <Link href="/posts" className="text-[48px] leading-none hover-wipe">
-              POSTS
-            </Link>
-          </div>
+          <Link
+            href="/posts"
+            className="hover-wipe inline-flex min-h-[32px] items-center justify-center px-1 py-1 text-center text-[13px] leading-none sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px]"
+          >
+            POSTS
+          </Link>
 
-          <div className="p-2.5 max-md:px-[5px]">
-            <Link href="/contact" className="text-[48px] leading-none hover-wipe">
-              CONTACT
-            </Link>
-          </div>
+          <Link
+            href="/contact"
+            className="hover-wipe inline-flex min-h-[32px] items-center justify-center px-1 py-1 text-center text-[13px] leading-none sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px]"
+          >
+            CONTACT
+          </Link>
         </div>
 
         <motion.div
