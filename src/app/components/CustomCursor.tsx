@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { motion, useAnimationFrame, useMotionValue, useSpring } from 'framer-motion'
+import { motion, useAnimationFrame, useMotionValue } from 'framer-motion'
 
 const CURSOR_SIZE = 24
 const HALF_SIZE = CURSOR_SIZE / 2
@@ -20,10 +20,6 @@ const CustomCursor = () => {
   const scale = useMotionValue(1)
   const [isInteractive, setIsInteractive] = useState(false)
   const phase = useRef(0) // continuous phase so animation never restarts
-
-  const spring = { stiffness: 320, damping: 20, mass: 0.4 }
-  const smoothX = useSpring(x, spring)
-  const smoothY = useSpring(y, spring)
 
   useEffect(() => {
     setMounted(true)
@@ -56,7 +52,7 @@ const CustomCursor = () => {
   return (
     <motion.div
       className="custom-cursor fixed top-0 left-0 z-[9999] pointer-events-none"
-      style={{ x: smoothX, y: smoothY, scale }}
+      style={{ x, y, scale }}
     >
       <div
         className="rounded-full bg-red-500"
