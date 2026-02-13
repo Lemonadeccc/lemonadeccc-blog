@@ -1,7 +1,8 @@
 import { buildPostRssXml } from '@/lib/rss'
+import { getSiteUrl } from '@/lib/site'
 
-export async function GET(request: Request) {
-  const origin = new URL(request.url).origin
+export async function GET() {
+  const origin = getSiteUrl()
   const xml = await buildPostRssXml({ origin, locale: 'en' })
 
   return new Response(xml, {
