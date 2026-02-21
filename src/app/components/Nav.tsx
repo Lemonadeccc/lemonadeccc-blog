@@ -11,6 +11,10 @@ const PAGE_TRANSITION_DURATION = 1
 
 const Nav = () => {
   const pathname = usePathname()
+  const isHomeActive = pathname === '/'
+  const isPortfolioActive = pathname === '/portfolio' || pathname.startsWith('/portfolio/')
+  const isPostsActive = pathname === '/posts' || pathname.startsWith('/posts/')
+  const isContactActive = pathname === '/contact' || pathname.startsWith('/contact/')
   const navRef = useRef<HTMLDivElement | null>(null)
   const hasAnimatedRef = useRef(false)
   const lineControls = useAnimationControls()
@@ -54,7 +58,11 @@ const Nav = () => {
         className="app-container relative overflow-hidden border-0 px-4 py-3 sm:px-6 sm:py-4 md:flex md:items-end md:justify-between md:p-2.5"
       >
         <div className="font-medium leading-none md:p-2.5">
-          <Link href="/" className="hover-wipe text-[30px] leading-none sm:text-[34px] md:text-[48px]">
+          <Link
+            href="/"
+            className={`hover-wipe text-[30px] leading-none transition-opacity sm:text-[34px] md:text-[48px] ${isHomeActive ? 'opacity-100' : 'opacity-[0.55]'}`}
+            aria-current={isHomeActive ? 'page' : undefined}
+          >
             Lemonadeccc
           </Link>
         </div>
@@ -62,21 +70,24 @@ const Nav = () => {
         <div className="mt-3 grid w-full grid-cols-3 gap-1 sm:gap-2 md:mt-0 md:flex md:w-auto md:items-center md:justify-between md:gap-2.5">
           <Link
             href="/portfolio"
-            className="hover-wipe inline-flex min-h-[32px] items-center justify-center px-1 py-1 text-center text-[13px] leading-none sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px]"
+            className={`hover-wipe inline-flex min-h-[32px] items-center justify-center px-1 py-1 text-center text-[13px] leading-none transition-opacity sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px] ${isPortfolioActive ? 'opacity-100' : 'opacity-[0.55]'}`}
+            aria-current={isPortfolioActive ? 'page' : undefined}
           >
             PORTFOLIO
           </Link>
 
           <Link
             href="/posts"
-            className="hover-wipe inline-flex min-h-[32px] items-center justify-center px-1 py-1 text-center text-[13px] leading-none sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px]"
+            className={`hover-wipe inline-flex min-h-[32px] items-center justify-center px-1 py-1 text-center text-[13px] leading-none transition-opacity sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px] ${isPostsActive ? 'opacity-100' : 'opacity-[0.55]'}`}
+            aria-current={isPostsActive ? 'page' : undefined}
           >
             POSTS
           </Link>
 
           <Link
             href="/contact"
-            className="hover-wipe inline-flex min-h-[32px] items-center justify-center px-1 py-1 text-center text-[13px] leading-none sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px]"
+            className={`hover-wipe inline-flex min-h-[32px] items-center justify-center px-1 py-1 text-center text-[13px] leading-none transition-opacity sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px] ${isContactActive ? 'opacity-100' : 'opacity-[0.55]'}`}
+            aria-current={isContactActive ? 'page' : undefined}
           >
             CONTACT
           </Link>

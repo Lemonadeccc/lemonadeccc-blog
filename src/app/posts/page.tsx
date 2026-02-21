@@ -3,21 +3,27 @@ import PostsListClient from './PostsListClient'
 import { getAllPosts } from '@/lib/posts'
 import { getPostTranslator } from '@/lib/postMessages'
 import { DEFAULT_POST_LOCALE, getPostDateLocale, resolvePostLocale, withPostLocale } from '@/lib/postLocale'
+import { getAllResources } from '@/lib/resources'
 import { siteConfig, withSiteUrl } from '@/lib/site'
 
 type PostsPageProps = {
-  searchParams: Promise<{ lang?: string }>
+  searchParams: Promise<{ lang?: string; view?: string }>
 }
 
 export async function generateMetadata({ searchParams }: PostsPageProps): Promise<Metadata> {
-  const { lang } = await searchParams
+  const { lang, view } = await searchParams
   const locale = resolvePostLocale(lang)
-  const path = withPostLocale('/posts', locale)
+  const isResourcesView = view === 'resources'
+  const path = withPostLocale(isResourcesView ? '/posts?view=resources' : '/posts', locale)
   const isChinese = locale === 'zh'
-  const title = isChinese ? '文章' : 'Posts'
+  const title = isChinese ? (isResourcesView ? '资源' : '文章') : isResourcesView ? 'Resources' : 'Posts'
   const description = isChinese
-    ? `${siteConfig.authorName} 的文章列表，包含 AI、动效与部署。`
-    : `Browse posts by ${siteConfig.authorName} on AI, animation, and deployment.`
+    ? isResourcesView
+      ? `${siteConfig.authorName} 的视频资源集合，支持标签筛选与外链跳转。`
+      : `${siteConfig.authorName} 的文章列表，包含 AI、动效与部署。`
+    : isResourcesView
+      ? `Curated video resources by ${siteConfig.authorName} with tag filtering and external links.`
+      : `Browse posts by ${siteConfig.authorName} on AI, animation, and deployment.`
 
   return {
     title,
@@ -25,8 +31,8 @@ export async function generateMetadata({ searchParams }: PostsPageProps): Promis
     alternates: {
       canonical: path,
       languages: {
-        'en-US': '/posts',
-        'zh-CN': '/posts?lang=zh',
+        'en-US': isResourcesView ? '/posts?view=resources' : '/posts',
+        'zh-CN': isResourcesView ? '/posts?view=resources&lang=zh' : '/posts?lang=zh',
       },
     },
     openGraph: {
@@ -46,8 +52,9 @@ export async function generateMetadata({ searchParams }: PostsPageProps): Promis
 }
 
 export default async function PostsPage({ searchParams }: PostsPageProps) {
-  const { lang } = await searchParams
+  const { lang, view } = await searchParams
   const locale = resolvePostLocale(lang)
+  const initialView = view === 'resources' ? 'resources' : 'posts'
   const t = getPostTranslator(locale)
 
   const dateFormatter = new Intl.DateTimeFormat(getPostDateLocale(locale), {
@@ -56,7 +63,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
     day: '2-digit',
   })
 
-  const posts = await getAllPosts(locale)
+  const [posts, resources] = await Promise.all([getAllPosts(locale), getAllResources(locale)])
   const blogJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Blog',
@@ -85,9 +92,18 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
       <PostsListClient
         locale={locale}
         title={t('posts.title')}
+        initialView={initialView}
+        viewPostsLabel={t('posts.viewPosts')}
+        viewResourcesLabel={t('posts.viewResources')}
         languageLabel={t('posts.language')}
         englishLabel={t('posts.english')}
         chineseLabel={t('posts.chinese')}
+        filterByTagLabel={t('posts.filterByTag')}
+        allTagsLabel={t('posts.allTags')}
+        resourceTypeVideoLabel={t('posts.resourceTypeVideo')}
+        authorLabel={t('posts.authorLabel')}
+        durationLabel={t('posts.durationLabel')}
+        emptyResourcesLabel={t('posts.emptyResources')}
         posts={posts.map((post) => ({
           slug: post.slug,
           title: post.title,
@@ -95,6 +111,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
           project: post.project,
           label: dateFormatter.format(new Date(post.date)),
         }))}
+        resources={resources}
       />
     </>
   )
