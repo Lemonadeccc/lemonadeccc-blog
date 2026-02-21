@@ -1,0 +1,29 @@
+---
+title: openclaw + Feishu Deployment Guide
+type: Article
+project: openclaw + feishu
+date: 2026-02-21
+summary: Server deployment guide for openclaw + Feishu
+---
+
+- zsh: https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH
+- oh-my-zsh: https://ohmyz.sh/
+- System update: apt update
+- System upgrade: apt upgrade
+- openclaw install: https://docs.openclaw.ai/zh-CN/install
+- Feishu: https://docs.openclaw.ai/zh-CN/channels/feishu
+  - Create app: https://open.feishu.cn/app
+    - Enable bot capability
+    - Add permissions in bulk
+  - Install plugin: https://github.com/m1heng/Clawdbot-feishu
+    - openclaw plugins install @m1heng-clawd/feishu
+  - Configure channel: https://docs.openclaw.ai/zh-CN/channels/feishu
+    - openclaw channels add
+    - openclaw gateway restart
+- App settings (developer console):
+  - Event subscriptions (Events and callbacks): subscribe via long connection
+  - Add event: im.message.receive_v1
+- Workspace (mobile / Feature menu - Messages - Workspace)
+- You may need to verify the pairing code: openclaw pairing approve feishu pairing_code
+- VPS:
+  - [Netcup](https://www.netcup.com/en/)

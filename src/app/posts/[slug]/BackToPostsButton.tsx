@@ -62,7 +62,7 @@ export default function BackToPostsButton({
 
   return (
     <>
-      <div ref={anchorRef} className="mb-8 h-px w-full" aria-hidden />
+      <div ref={anchorRef} className="h-px w-full" aria-hidden />
 
       <AnimatePresence>
         {showFloating && (
