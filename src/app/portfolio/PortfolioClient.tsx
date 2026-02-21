@@ -31,6 +31,12 @@ const items: PortfolioItem[] = [
     href: 'https://github.com/Lemonadeccc/lemonadeccc-blog',
   },
   {
+    left: 'pr',
+    right: 'agent',
+    image: '/portfolio/img6.png',
+    href: 'https://pr-agent.condevtools.com/',
+  },
+  {
     left: 'GEN 3D',
     right: 'ASSETS',
     image: '/portfolio/img4.jpg',
