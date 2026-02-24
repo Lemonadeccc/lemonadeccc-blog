@@ -1,0 +1,91 @@
+---
+title: IPv6-Only VPS 无法访问外网的解决记录
+type: 文章
+project: IPv6-Only VPS 网络连通性排障
+date: 2026-02-25
+summary: 记录在 IPv6-only VPS 上无法访问阿里云 Codeup 的排查过程，以及使用 Cloudflare WARP 补齐 IPv4 出站能力的方案。
+---
+
+在部署 [condev-monitor](https://github.com/Lemonadeccc/condev-monitor) 时，我为了节约成本购买了一台便宜 VPS。实际使用后发现它是 `IPv6-only`，这也直接引出了后续的问题：部分仅提供 IPv4 入口的服务无法访问。
+
+最明显的症状是：安装好 Git 后，`clone` 阿里云效 Codeup 私有仓库时报错 `fatal: unable to access ...`。并且访问其他外网资源报错。
+
+## 排查过程
+
+### 1. 先尝试 Git SSH 协议（失败）
+
+我先按常规流程切换到 SSH 协议并配置密钥：
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+cat ~/.ssh/id_rsa.pub
+```
+
+把公钥添加到 Codeup 后继续用 SSH 克隆，依旧失败。说明问题大概率不在账号权限或密钥本身。
+
+### 2. 检查 DNS 和目标站点的 IPv6 支持
+
+```bash
+nslookup codeup.aliyun.com
+dig codeup.aliyun.com AAAA
+host codeup.aliyun.com
+```
+
+检查结果：
+
+- `nslookup` 返回 `A` 记录（IPv4）
+- `dig AAAA` 没有记录（无 IPv6）
+
+结论：`codeup.aliyun.com` 没有可用的 IPv6 入口。  
+因此在 IPv6-only 服务器上，直连会失败。
+
+## 解决方案：给 IPv6-only 服务器补 IPv4 出站能力
+
+我选择 Cloudflare WARP 作为出站代理。它的作用是把服务器的出站流量通过隧道转发，从而访问 IPv4 资源（例如 Codeup、GitHub、Docker Hub）。
+
+这不会改变服务器的入站能力：
+
+- 你原本通过 IPv6 做 SSH 仍然可用
+- 服务器对外提供的 IPv6 服务也不受影响
+
+### 1. 安装并启用 WARP 并 让 Git 走 WARP 代理
+
+```bash
+curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list
+sudo apt update
+sudo apt install -y cloudflare-warp
+
+warp-cli register
+warp-cli set-mode proxy
+warp-cli connect
+```
+
+```bash
+git config --global http.proxy http://127.0.0.1:40000
+```
+
+报错很多，选用一键脚本方案
+
+### 3. 使用一键脚本快速配置双出口
+
+更快得到“IPv6 原生 + IPv4 隧道”双出口，使用 fscarmen 的一键脚本：
+
+```bash
+wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh
+```
+
+## 验证结果
+
+```bash
+curl -4 ip.sb
+curl -6 ip.sb
+```
+
+当你同时拿到 IPv4 与 IPv6 返回结果时，说明当前机器已经具备双出口能力。
+
+## 最终状态
+
+- SSH 继续走原生 IPv6，连接稳定
+- 访问仅 IPv4 的代码托管和镜像源不再受限
+- IPv6-only 服务器可以正常完成日常开发与部署任务

@@ -1,0 +1,91 @@
+---
+title: How I Fixed External Access on an IPv6-Only VPS
+type: Article
+project: IPv6-Only VPS Connectivity Troubleshooting
+date: 2026-02-25
+summary: A troubleshooting record of failing access to Alibaba Cloud Codeup on an IPv6-only VPS, and how Cloudflare WARP was used to add IPv4 outbound capability.
+---
+
+While deploying [condev-monitor](https://github.com/Lemonadeccc/condev-monitor), I bought a low-cost VPS to save money. In actual use, I found it was `IPv6-only`, which directly caused the next issue: services that only provide IPv4 endpoints could not be reached.
+
+The most obvious symptom was this: after installing Git, cloning a private Alibaba Cloud Codeup repository failed with `fatal: unable to access ...`. Accessing other public internet resources also failed.
+
+## Investigation Process
+
+### 1. Tried Git over SSH first (failed)
+
+I first switched to SSH in the usual way and configured keys:
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+cat ~/.ssh/id_rsa.pub
+```
+
+After adding the public key to Codeup, cloning over SSH still failed. This suggested the issue was probably not account permission or key configuration.
+
+### 2. Check DNS and the target service's IPv6 support
+
+```bash
+nslookup codeup.aliyun.com
+dig codeup.aliyun.com AAAA
+host codeup.aliyun.com
+```
+
+Results:
+
+- `nslookup` returned an `A` record (IPv4)
+- `dig AAAA` returned no record (no IPv6)
+
+Conclusion: `codeup.aliyun.com` has no usable IPv6 endpoint.  
+So direct access fails on an IPv6-only server.
+
+## Solution: Add IPv4 outbound capability to an IPv6-only server
+
+I chose Cloudflare WARP as an outbound proxy. It tunnels outbound traffic so the server can access IPv4 resources (for example Codeup, GitHub, and Docker Hub).
+
+This does not change inbound behavior:
+
+- SSH over IPv6 continues to work
+- IPv6 services exposed by the server are not affected
+
+### 1. Install and enable WARP, then route Git through WARP
+
+```bash
+curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list
+sudo apt update
+sudo apt install -y cloudflare-warp
+
+warp-cli register
+warp-cli set-mode proxy
+warp-cli connect
+```
+
+```bash
+git config --global http.proxy http://127.0.0.1:40000
+```
+
+There were many errors, so I switched to the one-click script approach.
+
+### 3. Use a one-click script to quickly set up dual outbound paths
+
+To get "native IPv6 + IPv4 tunnel" outbound paths faster, use fscarmen's one-click script:
+
+```bash
+wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh
+```
+
+## Verification
+
+```bash
+curl -4 ip.sb
+curl -6 ip.sb
+```
+
+If you get both IPv4 and IPv6 results, the server now has dual outbound capability.
+
+## Final Status
+
+- SSH still runs on native IPv6 and remains stable
+- Access to IPv4-only code hosting and registry services is no longer blocked
+- The IPv6-only VPS can now handle normal development and deployment tasks
