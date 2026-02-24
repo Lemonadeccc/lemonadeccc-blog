@@ -31,11 +31,11 @@ const contactItems: ContactItem[] = [
 
 const friendSeeds = [
   {
-    name: 'MapleCity1314',
-    avatar: 'https://avatars.githubusercontent.com/u/193410252?v=4',
-    github: 'https://github.com/MapleCity1314',
-    website: 'https://icstudio.top/',
-    description: 'Web3 Full-stack Architect specialized in Frontend Infrastructure and Agent Ecosystem.',
+    name: '老船长PZ_Jack',
+    avatar: 'https://avatars.githubusercontent.com/u/81006731?v=4',
+    github: 'https://github.com/Panzer-Jack',
+    website: 'https://blog.panzer-jack.cn/',
+    description: 'A Pragmatistic Dreamer.',
   },
   {
     name: 'cos',
@@ -43,6 +43,13 @@ const friendSeeds = [
     github: 'https://github.com/yusixian',
     website: 'https://blog.cosine.ren/',
     description: 'FE / ACG / 手工 / 深色模式强迫症 / INFP / 兴趣广泛养两只猫的老宅女 / remote',
+  },
+  {
+    name: 'MapleCity1314',
+    avatar: 'https://avatars.githubusercontent.com/u/193410252?v=4',
+    github: 'https://github.com/MapleCity1314',
+    website: 'https://icstudio.top/',
+    description: 'Web3 Full-stack Architect specialized in Frontend Infrastructure and Agent Ecosystem.',
   }
 ] as const
 
