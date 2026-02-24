@@ -32,27 +32,25 @@ const contactItems: ContactItem[] = [
 const friendSeeds = [
   {
     name: 'MapleCity1314',
+    avatar: 'https://avatars.githubusercontent.com/u/193410252?v=4',
     github: 'https://github.com/MapleCity1314',
     website: 'https://icstudio.top/',
     description: 'Web3 Full-stack Architect specialized in Frontend Infrastructure and Agent Ecosystem.',
   },
+  {
+    name: 'cos',
+    avatar: 'https://blog.cosine.ren/img/avatar.webp',
+    github: 'https://github.com/yusixian',
+    website: 'https://blog.cosine.ren/',
+    description: 'FE / ACG / 手工 / 深色模式强迫症 / INFP / 兴趣广泛养两只猫的老宅女 / remote',
+  }
 ] as const
 
-const avatarPool = [
-  '/posts/img1.jpg',
-  '/posts/img2.jpg',
-  '/portfolio/img1.jpg',
-  '/portfolio/img2.jpg',
-  '/portfolio/img3.jpg',
-  '/portfolio/img4.jpg',
-  '/portfolio/img5.jpg',
-] as const
-
-const friendLinks: FriendLink[] = friendSeeds.map((seed, index) => ({
+const friendLinks: FriendLink[] = friendSeeds.map((seed) => ({
   name: seed.name,
   github: seed.github,
   website: seed.website,
-  avatar: avatarPool[index % avatarPool.length],
+  avatar: seed.avatar,
   description: seed.description,
 }))
 
@@ -109,9 +107,6 @@ export default function ContactPage() {
             <section className="relative pt-px lg:min-h-0 lg:flex lg:flex-col">
               <div className="reveal-top-line" aria-hidden />
               <h2 className="py-5 text-[16px] uppercase tracking-[0.08em] text-text-secondary lg:shrink-0">Friend Links</h2>
-              <p className="mb-4 w-full text-[13px] leading-[1.6] text-text-secondary md:text-[14px] lg:shrink-0">
-                People and developers I follow. Click any card to open the GitHub profile in a new tab.
-              </p>
               <div className="friend-links-scroll flex flex-col gap-4 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
                 {friendLinks.map((friend) => (
                   <article
