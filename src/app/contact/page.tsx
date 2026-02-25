@@ -31,6 +31,13 @@ const contactItems: ContactItem[] = [
 
 const friendSeeds = [
   {
+    name: '砖吐筷筷',
+    avatar: 'https://avatars.githubusercontent.com/u/74196206?v=4',
+    github: 'https://github.com/ztkuaikuai',
+    website: 'https://blog.kuaikuaitz.top/',
+    description: 'Becoming a Front-End Engineer',
+  },
+  {
     name: '老船长PZ_Jack',
     avatar: 'https://avatars.githubusercontent.com/u/81006731?v=4',
     github: 'https://github.com/Panzer-Jack',
