@@ -1,0 +1,53 @@
+---
+title: Build an Image Hosting Setup with Cloudflare R2 + PicGo
+type: Article
+project: Cloudflare R2 + PicGo Image Hosting Setup
+date: 2026-02-26
+summary: Deploy an R2-based image hosting setup from the Cloudflare dashboard.
+---
+
+Cloudflare R2's free plan includes 10GB per month, which is usually enough for a personal image host.
+
+![free-tier](https://imgbed.lemonadec.cc/2026/02/blog-cloudflare-r2-imgbed-free-tier.png)
+
+### 1. Create an R2 Bucket
+
+1. Open the Cloudflare dashboard and go to `R2 -> Create bucket`.
+2. Enter a bucket name and create it.
+3. Open the bucket, then go to `Settings -> Add custom domain` and enter your domain.
+4. Confirm the setup, and the corresponding DNS record will be generated.
+5. Upload one file manually first to confirm the bucket can read and write normally.
+
+### 2. Create an API Token
+
+Path: `R2 -> Account Details -> Manage API Tokens -> Create token`
+
+1. Set token permission to `Object Read & Write`.
+2. Set scope to `Apply to specific bucket only`.
+3. After creation, save the following:
+- `Access Key ID`
+- `Secret Access Key`
+
+### 3. PicGo Setup
+
+1. Download and install [PicGo](https://github.com/Molunerfinn/PicGo).
+2. Install the `S3` plugin from the PicGo plugin marketplace.
+3. Open `PicGo -> Image Hosting Settings -> Amazon S3` and create a new config.
+
+Parameter mapping:
+
+| PicGo Field | Value |
+| --- | --- |
+| Access Key ID | R2 `Access Key ID` |
+| Secret Access Key | R2 `Secret Access Key` |
+| Bucket | Your bucket name shown in R2 |
+| File Path | `{year}/{month}/{fileName}.{extName}` |
+| Custom Endpoint | The S3 endpoint provided on the R2 page |
+| Reject Unauthorized TLS | `yes` |
+| ACL | `public-read` |
+
+### 4. Upload Verification
+
+1. Select an image in PicGo and upload it.
+2. Confirm the file appears in the corresponding Cloudflare R2 bucket.
+3. Copy the uploaded link in PicGo and open it to test access.
