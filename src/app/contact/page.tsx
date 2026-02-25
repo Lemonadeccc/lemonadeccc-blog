@@ -31,14 +31,14 @@ const contactItems: ContactItem[] = [
 
 const friendSeeds = [
   {
-    name: '砖吐筷筷',
+    name: 'ztkuaikuai',
     avatar: 'https://avatars.githubusercontent.com/u/74196206?v=4',
     github: 'https://github.com/ztkuaikuai',
     website: 'https://blog.kuaikuaitz.top/',
     description: 'Becoming a Front-End Engineer',
   },
   {
-    name: '老船长PZ_Jack',
+    name: 'Panzer-Jack',
     avatar: 'https://avatars.githubusercontent.com/u/81006731?v=4',
     github: 'https://github.com/Panzer-Jack',
     website: 'https://blog.panzer-jack.cn/',
