@@ -1,0 +1,187 @@
+---
+title: Building a Temporary Mail Service with Cloudflare
+type: Article
+project: Cloudflare Worker Temporary Mail
+date: 2026-02-20
+summary: Deploy both backend and frontend for temporary mail using the Cloudflare dashboard (compatibility flags, variable setup, and Pages upload).
+---
+
+Many platforms require email verification. Regular mailbox prefixes are fixed, which makes testing, traffic splitting, or temporary signups for certain sites inconvenient.
+
+- Open-source project: <https://github.com/dreamhunter2333/cloudflare_temp_email>
+- Official docs: <https://temp-mail-docs.awsl.uk>
+
+### Architecture
+
+This temporary mail setup has 4 core parts:
+
+1. `Worker`: handles incoming mail logic, mailbox generation, and backend APIs
+2. `D1`: stores emails and address data
+3. `KV`: stores session and short-lived state
+4. `Email Routing + custom domain`: routes mail sent to `*@your-domain` into the Worker
+
+### Prerequisites
+
+1. A domain already hosted on Cloudflare (for example, `mail.domain.com`)
+2. A Cloudflare account with Workers / D1 / Email Routing permissions
+3. Prepare a usable subdomain dedicated to temporary mail
+4. It is recommended to plan two subdomains in advance:
+- Backend Worker: `api.domain.com`
+- Frontend Pages: `mail.domain.com`
+
+### 1. Create the D1 Database in Cloudflare
+
+Path: `Workers & Pages -> D1 SQL Database -> Create`
+
+1. Set the database name to `temp-mail` (or your own name)
+2. Open the database details page after creation
+3. Open `Console` or `Query`
+4. Copy and execute [docs/schema.sql](https://github.com/dreamhunter2333/cloudflare_temp_email/blob/main/db/schema.sql) from the project
+
+At this point, database initialization is done.
+
+### 2. Deploy the Backend Mail Service
+
+#### 1) Create a new Worker
+
+Path: `Compute (Workers) -> Workers & Pages -> Create -> Worker -> Create Worker`
+
+1. Create a new Worker
+2. Name it and click `Deploy`
+
+#### 2) Set compatibility flags
+
+Path: `Workers & Pages -> Worker -> Settings -> Runtime`
+
+1. Add `nodejs_compat` manually under `Compatibility flags`
+2. Set `Compatibility date` to no earlier than `2024-09-23`
+
+#### 3) Upload backend `worker.js` and deploy
+
+1. Download backend file: <https://github.com/dreamhunter2333/cloudflare_temp_email/releases/latest/download/worker.js>
+2. Go to: `Workers & Pages -> Worker -> Overview -> Edit Code`
+3. Remove the default file
+4. Click `Explorer` on the left, right-click in the file list area -> `Upload`, then upload `worker.js`
+5. Click `Deploy` in the top-right corner
+
+#### 4) Add variables one by one in Variables and Secrets
+
+Path: `Workers & Pages -> Worker -> Settings -> Variables and Secrets`
+
+Configure them one by one.
+
+Start with this minimal runnable set (recommended):
+
+| Variable | Type | Example | Description |
+| --- | --- | --- | --- |
+| `DOMAINS` | JSON | `["api.domain.com"]` | Available domain list, supports multiple domains |
+| `JWT_SECRET` | Text | `your_jwt_secret` | JWT secret, replace with a strong random string |
+| `ADMIN_PASSWORDS` | JSON | `["your_password"]` | Admin password list, configure at least one |
+| `ENABLE_USER_CREATE_EMAIL` | Text | `true` | Allow users to create addresses |
+| `ENABLE_USER_DELETE_EMAIL` | Text | `true` | Allow users to delete emails |
+| `ENABLE_ADDRESS_PASSWORD` | Text | `true` | Enable password login for mailbox addresses |
+
+Common extended variables (optional):
+
+| Variable | Type | Example | Description |
+| --- | --- | --- | --- |
+| `ADMIN_USER_ROLE` | Text | `admin` | Admin role name |
+| `NO_LIMIT_SEND_ROLE` | Text | `admin` | Role with unlimited sending |
+| `ENABLE_AUTO_REPLY` | Text | `false` | Auto-reply switch |
+| `DEFAULT_DOMAINS` | JSON | `["api.domain.com"]` | Default domains available to unauthenticated users |
+| `USER_ROLES` | JSON | See example below | Custom roles and domain permissions |
+
+Copyable variable value examples (to avoid format errors):
+
+```text
+DOMAINS=["api.domain.com"]
+ADMIN_PASSWORDS=["your_password","your_password_two"]
+DEFAULT_DOMAINS=["api.domain.com"]
+USER_ROLES=[
+  {"domains":["api.domain.com"],"prefix":"","role":"vip"},
+  {"domains":["api.domain.com"],"prefix":"","role":"admin"}
+]
+```
+
+Notes:
+1. JSON must use English double quotes `"`, not Chinese quotes.
+2. `DOMAINS`, `ADMIN_PASSWORDS`, and `USER_ROLES` are JSON values, not plain text.
+
+#### 5) Bind D1
+
+Path: `Workers & Pages -> Worker -> Settings -> Bindings -> Add Binding`
+
+1. Select type `D1 Database`
+2. Variable name must be `DB`
+3. Select the D1 created in step 1
+
+#### 6) Bind KV
+
+Create first:
+Path: `Storage & Databases -> KV -> Create Namespace`
+
+Then bind it to the Worker:
+Path: `Workers & Pages -> Worker -> Settings -> Bindings -> Add Binding`
+
+1. Select type `KV Namespace`
+2. Variable name must be `KV`
+3. Select the namespace you just created
+
+#### 7) Configure backend domain (Triggers)
+
+Path: `Workers & Pages -> Worker -> Settings -> Triggers`
+
+Add a custom domain (you can use `*.workers.dev` first, but it is often unstable in Mainland China).
+Set it to `api.domain.com` (replace with your backend domain).
+
+Verify it works:
+1. Open the Worker root URL, it should return `OK`
+2. Open `https://api.domain.com/health_check`, it should return `OK`
+
+### 3. Check DNS Proxy Status
+
+Path: `Websites -> Your Domain -> DNS`
+Confirm the temporary mail subdomain record (A/CNAME) is `Proxied` (orange cloud enabled).
+
+### 4. Email Routing
+
+Emails sent to your subdomain mailbox must be forwarded to this Worker for processing.
+Path: `Email -> Email Routing -> Routing rules -> Add catch-all address`
+
+Configure as follows:
+
+1. Select `Send to Email Worker` for `Destination/Action`
+2. Select the Worker you just deployed
+3. Save and wait for propagation
+
+If this is your first time enabling Email Routing, Cloudflare will ask you to add/confirm MX-related records. Follow the dashboard prompts.
+
+### 5. Build the Frontend Service
+
+Path: `Compute (Workers) -> Workers & Pages -> Create`
+
+1. Select `Pages`
+2. Select `Use direct upload`
+3. In the official frontend generator page, enter your backend Worker URL (without trailing `/`), then generate and download the zip
+4. Go back to Cloudflare Pages and click `Create Pages`
+5. Set project name, upload the downloaded zip, then click `Deploy`
+6. After deployment, open the Pages project and bind a frontend domain under `Custom Domain` (for example `mail.domain.com`)
+
+Frontend generator page: <https://temp-mail-docs.awsl.uk/zh/guide/ui/pages>
+
+If you do not want to use the online generator, you can also download the official frontend package and manually change the backend URL:
+- Frontend zip: <https://github.com/dreamhunter2333/cloudflare_temp_email/releases/latest/download/frontend.zip>
+- Unzip it, modify the default backend URL in `index-*.js`, then repackage and upload
+
+Note:
+`*.workers.dev` is often inaccessible in Mainland China. It is recommended to bind a custom backend domain first, then use that in the frontend generator.
+
+### 6. Verify End-to-End
+
+1. Open the frontend home page, for example `https://mail.domain.com`
+2. Generate a temporary mailbox address
+3. Send a test email to that address from your regular mailbox
+4. Return to the page and confirm it arrives
+5. Open `https://mail.domain.com/admin` and log in with a password from `ADMIN_PASSWORDS` to verify backend status
+
+At this point, the Cloudflare temporary mail setup is ready to use.

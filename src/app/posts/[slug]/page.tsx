@@ -151,17 +151,15 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
           <span>{t('posts.language')}</span>
           <Link
             href={englishHref}
-            className={`border px-2 py-1 transition-colors ${
-              locale === 'en' ? 'border-white text-white' : 'border-white/35 text-text-secondary hover:border-white hover:text-white'
-            }`}
+            className={`border px-2 py-1 transition-colors ${locale === 'en' ? 'border-white text-white' : 'border-white/35 text-text-secondary hover:border-white hover:text-white'
+              }`}
           >
             {t('posts.english')}
           </Link>
           <Link
             href={chineseHref}
-            className={`border px-2 py-1 transition-colors ${
-              locale === 'zh' ? 'border-white text-white' : 'border-white/35 text-text-secondary hover:border-white hover:text-white'
-            }`}
+            className={`border px-2 py-1 transition-colors ${locale === 'zh' ? 'border-white text-white' : 'border-white/35 text-text-secondary hover:border-white hover:text-white'
+              }`}
           >
             {t('posts.chinese')}
           </Link>
@@ -177,7 +175,7 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
           <p className="text-[12px] uppercase tracking-[0.08em] text-text-secondary md:text-[14px]">
             {post.type} / {dateFormatter.format(new Date(post.date))}
           </p>
-          <h1 className="mt-4 text-[30px] leading-[1.05] sm:text-[36px] md:text-[72px]">{post.title}</h1>
+          <h1 className="mt-4 text-[30px] leading-[1.05] sm:text-[36px] md:text-[48px]">{post.title}</h1>
           {post.summary && (
             <p className="mt-5 max-w-[75ch] text-[16px] leading-[1.7] text-text-secondary md:text-[18px]">
               {post.summary}
