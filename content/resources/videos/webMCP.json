@@ -1,0 +1,16 @@
+{
+  "id": "webMCP",
+  "type": "video",
+  "title": {
+    "en": "WebMCP - Why is awesome & How to use it",
+    "zh": "WebMCP - 为什么这么棒，以及如何使用它"
+  },
+  "summary": {
+    "en": "Learn what WebMCP is and how to build one. AI Jason demonstrates both declarative and imperative methods for creating these tools, using HTML attributes and Javascript. Explore building agent-ready websites with contextual MCP tools, making any site usable by AI agents.",
+    "zh": "学习什么是 WebMCP，以及如何构建它。AI Jason 演示了使用 HTML 属性和 Javascript 实现声明式和命令式方法创建这些工具。探索使用上下文 MCP 工具构建可由 AI 代理使用的网站。"
+  },
+  "author": "AI Jason",
+  "duration": "00:11:23",
+  "tags": ["AI", "Developer"],
+  "embedUrl": "https://www.youtube.com/embed/xQAYZBDV5jg"
+}

@@ -1,6 +1,10 @@
 {
   "order": [
     {
+      "id": "webMCP",
+      "file": "videos/webMCP.json"
+    },
+    {
       "id": "cheat-code-for-design-codevolution",
       "file": "videos/cheat-code-for-design-codevolution.json"
     },
