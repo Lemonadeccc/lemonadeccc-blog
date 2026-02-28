@@ -147,7 +147,7 @@ export default function ContactPage() {
                           rel="noreferrer noopener"
                           className="hover-wipe"
                         >
-                          View GitHub
+                          GitHub
                         </a>
                         {friend.website && (
                           <a
@@ -156,7 +156,7 @@ export default function ContactPage() {
                             rel="noreferrer noopener"
                             className="hover-wipe"
                           >
-                            View Website
+                            Website
                           </a>
                         )}
                       </p>
