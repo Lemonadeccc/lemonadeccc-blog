@@ -1,6 +1,7 @@
 {
   "id": "webMCP",
   "type": "video",
+  "provider": "youtube",
   "title": {
     "en": "WebMCP - Why is awesome & How to use it",
     "zh": "WebMCP - 为什么这么棒，以及如何使用它"

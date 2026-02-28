@@ -1,6 +1,8 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { PostLocale } from './postLocale'
+import { type ResourceProvider, getProviderByHostname, isResourceProvider } from './resourcePreconnect'
+import { hasHttpScheme } from './url'
 
 const RESOURCES_ROOT_DIR = path.join(process.cwd(), 'content', 'resources')
 const RESOURCES_INDEX_FILE_PATH = path.join(RESOURCES_ROOT_DIR, 'resources.json')
@@ -30,12 +32,14 @@ type ResourceTag = {
 export type ResourceListItem = {
   id: string
   type: 'video'
+  provider?: ResourceProvider
   title: string
   summary: string
   author: string
   duration: string
   tags: ResourceTag[]
   embedUrl?: string
+  sourceUrl?: string
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> => {
@@ -44,9 +48,70 @@ const isRecord = (value: unknown): value is Record<string, unknown> => {
 
 const toStringValue = (value: unknown) => (typeof value === 'string' ? value.trim() : '')
 
-const isSafeResourceUrl = (value: string) => /^https?:\/\//i.test(value) || value.startsWith('/')
+const isSafeResourceUrl = (value: string) => hasHttpScheme(value) || value.startsWith('/')
 
 const toTagKey = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+
+const normalizeEncodedPathSegment = (value: string) => {
+  try {
+    return encodeURIComponent(decodeURIComponent(value))
+  } catch {
+    return encodeURIComponent(value)
+  }
+}
+
+const isYouTubeShortHost = (hostname: string) => hostname === 'youtu.be' || hostname.endsWith('.youtu.be')
+
+const toSourceUrlFromEmbed = (embedUrl: string, provider?: ResourceProvider) => {
+  let parsed: URL
+  try {
+    parsed = hasHttpScheme(embedUrl) ? new URL(embedUrl) : new URL(embedUrl, 'https://example.com')
+  } catch {
+    return undefined
+  }
+
+  const host = parsed.hostname.toLowerCase()
+  const segments = parsed.pathname.split('/').filter(Boolean)
+  const inferredProvider = provider ?? getProviderByHostname(host)
+
+  if (inferredProvider === 'youtube') {
+    const watchId = parsed.searchParams.get('v')
+    if (watchId) return `https://www.youtube.com/watch?v=${encodeURIComponent(watchId)}`
+
+    if (segments[0] === 'embed' && segments[1]) {
+      return `https://www.youtube.com/watch?v=${normalizeEncodedPathSegment(segments[1])}`
+    }
+
+    if (segments[0] === 'shorts' && segments[1]) {
+      return `https://www.youtube.com/shorts/${normalizeEncodedPathSegment(segments[1])}`
+    }
+
+    const shortId = segments[0]
+    if (isYouTubeShortHost(host) && shortId) {
+      return `https://youtu.be/${normalizeEncodedPathSegment(shortId)}`
+    }
+  }
+
+  if (inferredProvider === 'vimeo') {
+    const vimeoId = segments[0] === 'video' ? segments[1] : segments[0]
+    if (vimeoId) return `https://vimeo.com/${normalizeEncodedPathSegment(vimeoId)}`
+  }
+
+  if (inferredProvider === 'bilibili') {
+    const bvid = parsed.searchParams.get('bvid')
+    if (bvid) return `https://www.bilibili.com/video/${encodeURIComponent(bvid)}`
+
+    const aid = parsed.searchParams.get('aid')
+    if (aid) return `https://www.bilibili.com/video/av${encodeURIComponent(aid)}`
+
+    const videoIndex = segments.findIndex((segment) => segment === 'video')
+    if (videoIndex >= 0 && segments[videoIndex + 1]) {
+      return `https://www.bilibili.com/video/${normalizeEncodedPathSegment(segments[videoIndex + 1])}`
+    }
+  }
+
+  return undefined
+}
 
 const isWithinResourcesRoot = (candidatePath: string) => {
   const root = path.resolve(RESOURCES_ROOT_DIR)
@@ -111,8 +176,14 @@ const normalizeResource = (
   const duration = toStringValue(value.duration) || FALLBACK_DURATION
 
   const id = toStringValue(value.id) || fallbackId || `resource-${index + 1}`
+  const providerCandidate = toStringValue(value.provider).toLowerCase()
+  const provider = isResourceProvider(providerCandidate) ? providerCandidate : undefined
   const embedUrlCandidate = toStringValue(value.embedUrl)
   const embedUrl = embedUrlCandidate && isSafeResourceUrl(embedUrlCandidate) ? embedUrlCandidate : undefined
+  const sourceUrlCandidate = toStringValue(value.sourceUrl)
+  const sourceUrl =
+    (sourceUrlCandidate && isSafeResourceUrl(sourceUrlCandidate) ? sourceUrlCandidate : undefined) ??
+    (embedUrl ? toSourceUrlFromEmbed(embedUrl, provider) : undefined)
 
   const tags = Array.isArray(value.tags)
     ? value.tags
@@ -123,12 +194,14 @@ const normalizeResource = (
   return {
     id,
     type: 'video',
+    provider,
     title,
     summary,
     author,
     duration,
     tags,
     embedUrl,
+    sourceUrl,
   }
 }
 

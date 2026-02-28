@@ -124,6 +124,7 @@ image: /posts/img1.jpg
 {
   "id": "my-video-id",
   "type": "video",
+  "provider": "youtube",
   "title": {
     "en": "English title",
     "zh": "中文标题"
@@ -143,6 +144,25 @@ image: /posts/img1.jpg
 
 - `embedUrl` 需要可嵌入地址（YouTube 建议用 `/embed/VIDEO_ID`）。
 - `resources.json` 中 `order` 的顺序就是页面展示顺序。
+- `provider` 是可选字段，但建议填写。
+
+当前支持的 `provider`：
+
+- `youtube`
+- `vimeo`
+- `bilibili`
+
+`provider` 的作用逻辑：
+
+1. Resources 视图会做路由预取和网络预连接（preconnect）预热。
+2. 如果填写了 `provider`，会优先使用该平台的预连接域名映射。
+3. 如果未填写或值不合法，会回退为根据 `embedUrl` 域名自动识别。
+
+平台映射配置文件：
+
+- `src/lib/resourcePreconnect.ts`
+
+后续如果接入新平台，只需在该文件增加 provider 规则，并在资源 JSON 中填写对应 `provider` 值。
 
 ### 4. 通过 Skill 做中英文转换
 

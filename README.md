@@ -124,6 +124,7 @@ Example video JSON:
 {
   "id": "my-video-id",
   "type": "video",
+  "provider": "youtube",
   "title": {
     "en": "English title",
     "zh": "中文标题"
@@ -143,6 +144,25 @@ Notes:
 
 - Keep `embedUrl` as embeddable URL (for YouTube, use `/embed/VIDEO_ID`).
 - Keep `resources.json` order in the display order you want.
+- `provider` is optional but recommended.
+
+Supported `provider` values:
+
+- `youtube`
+- `vimeo`
+- `bilibili`
+
+How provider is used:
+
+1. Resources view warmup applies route prefetch + network preconnect.
+2. If `provider` is present, warmup uses provider-specific preconnect origins first.
+3. If `provider` is missing or unknown, it falls back to host-based detection from `embedUrl`.
+
+Provider mapping file:
+
+- `src/lib/resourcePreconnect.ts`
+
+If you need another platform, add a new provider rule there and then use that provider value in video JSON.
 
 ### 4. Convert Posts/Resources with Skills
 
