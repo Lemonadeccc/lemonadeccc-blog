@@ -2,14 +2,22 @@ import React from 'react'
 
 const Hero = () => {
   return (
-    <div className="flex-1 flex">
-      <div className="app-container flex-1 py-4 md:py-0">
-        <div className="mx-4 text-[42px] leading-[0.95] sm:mx-8 sm:text-[56px] md:mx-10 md:inline-flex md:w-fit md:text-[128px] md:whitespace-nowrap">
+    <div className="flex h-full min-h-0 flex-1">
+      <div className="app-container flex h-full min-h-0 flex-1 flex-col justify-center py-2 sm:py-3 md:py-0">
+        <div className="mx-4 text-[clamp(32px,9vw,56px)] leading-[0.95] sm:mx-8 md:mx-10 md:inline-flex md:w-fit md:text-[clamp(64px,10vh,120px)] md:whitespace-nowrap">
           Lemon&apos;s learning Library.
         </div>
-        <div className="mx-4 mt-5 w-full max-w-full flex flex-col items-start gap-2 border-l-2 border-l-white pl-4 text-[18px] leading-[1.5] sm:mx-8 sm:text-[22px] md:mx-[3.75rem] md:mt-0 md:w-fit md:pl-5 md:text-[48px] md:leading-[1.4]">
+        <div className="hero-line-draw mx-4 mt-3 w-full max-w-full flex translate-x-[0.08em] flex-col items-start gap-2 pl-4 text-[clamp(15px,4vw,22px)] leading-[1.45] sm:mx-8 md:mx-10 md:mt-2 md:w-fit md:pl-5 md:text-[clamp(22px,4.8vh,48px)] md:leading-[1.35]">
           A collection of the best resources for learning development from the Internet,
-          handle-picked and created by <a className="font-extrabold hover-wipe inline-block" href="https://github.com/Lemonadeccc" target="_blank" rel="noreferrer noopener">Lemonadeccc</a>
+          handle-picked and created by{' '}
+          <a
+            className="font-extrabold hover-wipe inline-block"
+            href="https://github.com/Lemonadeccc"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            Lemonadeccc
+          </a>
           Learning and sharing some articles about AI, animation, and deployment.
           <br />
           If you like my project or ideas, you can subscribe to my{' '}
@@ -21,7 +29,8 @@ const Hero = () => {
           >
             RSS feed
           </a>
-          {' '}or{' '}
+          {' '}
+          or{' '}
           <a
             href="/rss-zh.xml"
             target="_blank"
@@ -32,8 +41,7 @@ const Hero = () => {
           </a>
         </div>
       </div>
-    </div >
-
+    </div>
   )
 }
 
