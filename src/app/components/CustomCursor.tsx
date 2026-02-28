@@ -12,6 +12,8 @@ const FAST_PERIOD = 750  // ms when hovering interactive targets
 // breathing curve values: center 0.84, amplitude 0.16 => range ~[0.68, 1.0]
 const BREATH_BASE = 0.84
 const BREATH_AMP = 0.16
+const INTERACTIVE_SELECTOR =
+  'a, button, input, select, textarea, iframe, [role="button"], [role="link"], [data-cursor-fast]'
 
 const CustomCursor = () => {
   const [mounted, setMounted] = useState(false)
@@ -19,6 +21,7 @@ const CustomCursor = () => {
   const y = useMotionValue(-100)
   const scale = useMotionValue(1)
   const [isInteractive, setIsInteractive] = useState(false)
+  const [isOverIframe, setIsOverIframe] = useState(false)
   const phase = useRef(0) // continuous phase so animation never restarts
 
   useEffect(() => {
@@ -31,8 +34,10 @@ const CustomCursor = () => {
       y.set(e.clientY - HALF_SIZE)
 
       const target = e.target as HTMLElement | null
-      const interactive = target?.closest('a, button, input, select, textarea, [role="button"], [role="link"], [data-cursor-fast]') != null
+      const interactive = target?.closest(INTERACTIVE_SELECTOR) != null
+      const overIframe = target?.closest('iframe') != null
       setIsInteractive(Boolean(interactive))
+      setIsOverIframe(Boolean(overIframe))
     }
 
     window.addEventListener('mousemove', handleMove)
@@ -52,7 +57,7 @@ const CustomCursor = () => {
   return (
     <motion.div
       className="custom-cursor fixed top-0 left-0 z-[9999] pointer-events-none"
-      style={{ x, y, scale }}
+      style={{ x, y, scale, opacity: isOverIframe ? 0 : 1 }}
     >
       <div
         className="rounded-full bg-red-500"

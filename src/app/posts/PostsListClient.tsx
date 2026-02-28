@@ -384,7 +384,7 @@ export default function PostsListClient({
                   <div className="aspect-video w-full bg-black">
                     {resource.embedUrl ? (
                       <iframe
-                        className="h-full w-full border-0"
+                        className="h-full w-full border-0 cursor-auto"
                         src={resource.embedUrl}
                         title={resource.title}
                         loading="lazy"
