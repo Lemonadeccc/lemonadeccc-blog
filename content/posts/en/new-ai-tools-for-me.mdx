@@ -1,0 +1,62 @@
+---
+title: AI Workflow Summary
+type: Article
+project: Summary of My Personal AI Workflow Tools
+date: 2026-03-01
+summary: From wireframing to multi-agent development, this is the AI toolchain and execution workflow I currently use.
+---
+
+Recently, I organized the AI tools and workflows I use most often. The goal is not to chase an all-in-one stack, but to make each stage reach a shippable state faster.
+
+## 1. Design Stage: Clarify Structure First
+
+### 1) Wireframe Sketches
+
+- [wiretext](https://wiretext.app/): Quickly turns page structure into wireframes, suitable for defining information hierarchy early.
+- [mockdown](https://www.mockdown.design/): Uses text to express block-level page layouts, suitable for early-stage discussion.
+
+### 2) UI Wrapping and Variants
+
+- [Pencil](https://www.pencil.dev/): Uses prompts to quickly build editable UI drafts.
+- [variant ai](https://www.variant.ai/): Start with a close design, then refine it with prompts. After exporting `.js`, you can continue editing structure and details with CC or Codex.
+
+## 2. Development Stage: Parallelization Is the Core Gain
+
+### 1) Multi-Agent + Git Worktree
+
+By isolating each task in its own Git worktree and running multiple agents in parallel, context pollution and cross-task interference are significantly reduced.  
+As of now, Claude's official capabilities already cover multi-worktree workflows and part of remote capabilities, so third-party parallel tools have shifted from "must-have" to "optional enhancement."
+
+### 2) Previously Common Options
+
+- [superset](https://github.com/superset-sh/superset): A third-party parallel orchestration tool.
+- [happy](https://github.com/slopus/happy): A third-party open-source CLI wrapper.
+
+
+1. Claude officially now includes multi-worktree workflows.
+2. Cloud remote execution (`claude --remote` / Claude Code on the web) is available once subscribed.
+3. Remote control of local sessions (`claude remote-control`) is currently mainly available on Max, gradually rolling out to Pro, and not yet supported on Team/Enterprise.
+
+Therefore, the Claude ecosystem is now gradually including efficiency enhancers such as `superset` and `happy`.
+
+## 3. Skills Ecosystem: Encoding Methodology into Execution
+
+These are the skills resources I use most often:
+
+- [skills official](https://skills.sh/)
+- [superpowers](https://github.com/obra/superpowers)
+- [claude-mem](https://github.com/thedotmack/claude-mem/tree/main)
+- [react-best-practices](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices)
+
+Among them:
+
+- `superpowers` is more focused on process orchestration, such as automatic planning, phased execution, and completion checks.
+- `claude-mem` focuses on context compression and memory management, suitable for maintaining relevance in long workflows.
+- `react-best-practices` is used during implementation to enforce performance and code quality.
+
+## 4. Reusable Workflow (My Current Version)
+
+1. Build the smallest runnable MVP first and unblock the critical path quickly.
+2. After the MVP passes basic tests, use prompt constraints for robustness, maintainability, and edge-case handling, then do one refactor pass based on readability requirements.
+
+This workflow works well for personal projects: fast in the early stage, controllable quality in the middle stage, and lower maintenance cost later.

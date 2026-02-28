@@ -8,8 +8,8 @@ summary: Deploy both backend and frontend for temporary mail using the Cloudflar
 
 Many platforms require email verification. Regular mailbox prefixes are fixed, which makes testing, traffic splitting, or temporary signups for certain sites inconvenient.
 
-- Open-source project: <https://github.com/dreamhunter2333/cloudflare_temp_email>
-- Official docs: <https://temp-mail-docs.awsl.uk>
+- Open-source project: https://github.com/dreamhunter2333/cloudflare_temp_email
+- Official docs: https://temp-mail-docs.awsl.uk
 
 ### Architecture
 
@@ -58,7 +58,7 @@ Path: `Workers & Pages -> Worker -> Settings -> Runtime`
 
 #### 3) Upload backend `worker.js` and deploy
 
-1. Download backend file: <https://github.com/dreamhunter2333/cloudflare_temp_email/releases/latest/download/worker.js>
+1. Download backend file: https://github.com/dreamhunter2333/cloudflare_temp_email/releases/latest/download/worker.js
 2. Go to: `Workers & Pages -> Worker -> Overview -> Edit Code`
 3. Remove the default file
 4. Click `Explorer` on the left, right-click in the file list area -> `Upload`, then upload `worker.js`
@@ -167,10 +167,10 @@ Path: `Compute (Workers) -> Workers & Pages -> Create`
 5. Set project name, upload the downloaded zip, then click `Deploy`
 6. After deployment, open the Pages project and bind a frontend domain under `Custom Domain` (for example `mail.domain.com`)
 
-Frontend generator page: <https://temp-mail-docs.awsl.uk/zh/guide/ui/pages>
+Frontend generator page: https://temp-mail-docs.awsl.uk/zh/guide/ui/pages
 
 If you do not want to use the online generator, you can also download the official frontend package and manually change the backend URL:
-- Frontend zip: <https://github.com/dreamhunter2333/cloudflare_temp_email/releases/latest/download/frontend.zip>
+- Frontend zip: https://github.com/dreamhunter2333/cloudflare_temp_email/releases/latest/download/frontend.zip
 - Unzip it, modify the default backend URL in `index-*.js`, then repackage and upload
 
 Note:

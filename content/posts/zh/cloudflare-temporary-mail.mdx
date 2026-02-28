@@ -8,8 +8,8 @@ summary: 用 Cloudflare 控制台部署临时邮箱后端与前端页面（兼�
 
 很多平台注册都要邮箱验证。常规邮箱前缀基本固定，想做测试、分流或者临时注册某些网站就很不方便。
 
-- 开源项目：<https://github.com/dreamhunter2333/cloudflare_temp_email>
-- 官方文档：<https://temp-mail-docs.awsl.uk>
+- 开源项目：https://github.com/dreamhunter2333/cloudflare_temp_email
+- 官方文档：https://temp-mail-docs.awsl.uk
 
 ### 方案结构
 
@@ -58,7 +58,7 @@ summary: 用 Cloudflare 控制台部署临时邮箱后端与前端页面（兼�
 
 #### 3) 上传后端 worker.js 并部署
 
-1. 下载后端文件：<https://github.com/dreamhunter2333/cloudflare_temp_email/releases/latest/download/worker.js>
+1. 下载后端文件：https://github.com/dreamhunter2333/cloudflare_temp_email/releases/latest/download/worker.js
 2. 回到路径：`Workers & Pages -> Worker -> Overview -> Edit Code`
 3. 删除默认文件
 4. 左侧点 `Explorer`，在文件列表区域右键 -> `Upload`，上传 `worker.js`
@@ -167,10 +167,10 @@ USER_ROLES=[
 5. 填写项目名，上传刚下载的 zip，点击 `Deploy`
 6. 部署完成后进入该 Pages 项目，点击 `Custom Domain` 绑定前端域名（例如 `mail.domain.com`）
 
-前端生成器页面：<https://temp-mail-docs.awsl.uk/zh/guide/ui/pages>
+前端生成器页面：https://temp-mail-docs.awsl.uk/zh/guide/ui/pages
 
 如果你不想用在线生成器，也可以直接下载官方前端包再手动改后端地址：
-- 前端 zip：<https://github.com/dreamhunter2333/cloudflare_temp_email/releases/latest/download/frontend.zip>
+- 前端 zip：https://github.com/dreamhunter2333/cloudflare_temp_email/releases/latest/download/frontend.zip
 - 解压后修改 `index-*.js` 里默认后端地址为Worker 域名，再重新打包上传
 
 注意：

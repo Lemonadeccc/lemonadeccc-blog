@@ -1,34 +1,62 @@
 ---
-title: MDX 资源示例
+title: 应用 AI 流程总结
 type: 文章
-project: 动效编排模式
-date: 2026-02-01
-summary: 一份可直接复用的 MDX 资源模板，包含图片、视频、音频、嵌入与代码高亮示例。
+project: 自用 AI 流程工具总结
+date: 2026-03-01
+summary: 从线框设计到多 Agent 开发，我当前在用的一套 AI 工具链与落地流程。
 ---
 
-设计工具
-线框设计
-[wiretext](https://wiretext.app/)
-[mockdown](https://www.mockdown.design/)
-软件
-[Pencil](https://www.pencil.dev/)
-随意设计套壳
-[variant ai](https://www.variant.ai/)，选择设计，prompt更改设计后到处.js文件，使用cc或者codex更改
+最近我把自己常用的 AI 工具和工作流梳理了一遍。目标不是追求“全家桶”，而是让每个环节都能更快进入可交付状态。
 
-开发
-多agent加速工具
-将每个任务隔离在自己的 git 工作树中,同时运行多个代理。截止现在 Claude 原生支持了多worktree模式，以及在max订阅里面支持remote模式
-所以替代了
-[superset](https://github.com/superset-sh/superset)
-[happy](https://github.com/slopus/happy)
+## 一、设计阶段：先把结构说清楚
 
-skills集合
-[skills 官方](https://skills.sh/)
-[superpowers](https://github.com/obra/superpowers)
-[claude-mem](https://github.com/thedotmack/claude-mem/tree/main)
-[react-best-practices](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices)
+### 1) 线框草图
 
-看发过程中superpowers的skills实现自动plan等等功能，claude-mem自动压缩上下文，保持上下文的相关性。vibe实现最小功能之后，使用prompt 约束健壮性、可维护性以及应用设计模式后重构
+- [wiretext](https://wiretext.app/)：快速把页面结构写成线框，适合先定信息层级。
+- [mockdown](https://www.mockdown.design/)：用文本表达页面块级布局，适合早期讨论。
+
+### 2) UI 套壳与变体
+
+- [Pencil](https://www.pencil.dev/)：使用 prompt 快速搭建可编辑界面稿。
+- [variant ai](https://www.variant.ai/)：先选接近的设计，再用 prompt 调整。导出 `.js` 后，可继续用 CC 或 Codex 做结构和细节修改。
+
+## 二、开发阶段：并行化是核心增益
+
+### 1) 多 Agent + Git Worktree
+
+将每个任务隔离在独立 Git 工作树中，同时运行多个代理，可以明显减少上下文污染和任务互相干扰。  
+截至目前，Claude 官方能力已经覆盖了多 worktree 与一部分远程能力，第三方并行工具从“必选”变成了“可选增强”。
+
+### 2) 过去常见方案
+
+- [superset](https://github.com/superset-sh/superset)：第三方并行编排工具。
+- [happy](https://github.com/slopus/happy)：第三方开源 CLI 包装器。
 
 
+1. Claude 官方现在包含多 worktree 工作流。
+2. 云端远程运行（`claude --remote` / Claude Code on the web）订阅后都可用。
+3. 远程控制本机会话（`claude remote-control`）当前以 Max 为主，Pro 在逐步开放，Team/Enterprise 暂不支持。
 
+因此， Claude 现在生态内逐渐包含例如 `superset` 和 `happy` 的“效率增强器”。
+
+## 三、Skills 生态：把方法论写进执行层
+
+我常用的 skills 资源：
+
+- [skills 官方](https://skills.sh/)
+- [superpowers](https://github.com/obra/superpowers)
+- [claude-mem](https://github.com/thedotmack/claude-mem/tree/main)
+- [react-best-practices](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices)
+
+其中：
+
+- `superpowers` 更偏流程编排，例如自动 plan、分阶段执行、收尾校验。
+- `claude-mem` 侧重上下文压缩与记忆管理，适合长链路任务保持相关性。
+- `react-best-practices` 用于在实现阶段约束性能和代码质量。
+
+## 四、当前可复用流程（我的版本）
+
+1. 先做最小可运行功能（MVP），尽快打通关键路径。
+2. MVP 基本测试成功后，使用 prompt 约束：健壮性、可维护性、边界处理根据可读性要求做一轮重构。
+
+这套流程对个人项目很实用：前期速度快，中期质量可控，后期维护成本也更低。
