@@ -50,6 +50,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.3,
     },
+    {
+      url: `${siteUrl}/llms-full.txt`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.3,
+    },
   ]
 
   const postRoutes: MetadataRoute.Sitemap = slugs.flatMap((slug) => [

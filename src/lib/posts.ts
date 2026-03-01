@@ -10,6 +10,7 @@ type RawFrontmatter = {
   type?: unknown
   project?: unknown
   date?: unknown
+  updated?: unknown
   summary?: unknown
   image?: unknown
 }
@@ -20,6 +21,7 @@ export type PostListItem = {
   type: string
   project: string
   date: string
+  updated?: string
   summary: string
   image?: string
 }
@@ -69,6 +71,7 @@ const buildPost = (slug: string, source: string): PostDetail => {
   const type = toStringField(data.type, 'Article')
   const project = toStringField(data.project, title)
   const date = toDateField(data.date, '1970-01-01')
+  const updated = data.updated != null ? toDateField(data.updated, date) : undefined
   const summary = toStringField(data.summary, '')
   const image = toOptionalStringField(data.image)
 
@@ -78,6 +81,7 @@ const buildPost = (slug: string, source: string): PostDetail => {
     type,
     project,
     date,
+    updated,
     summary,
     image,
     content: parsed.content,
@@ -147,6 +151,7 @@ export const getAllPosts = async (locale: PostLocale = DEFAULT_POST_LOCALE): Pro
           type: post.type,
           project: post.project,
           date: post.date,
+          updated: post.updated,
           summary: post.summary,
           image: post.image,
         }

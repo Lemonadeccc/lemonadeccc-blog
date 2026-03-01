@@ -50,7 +50,7 @@ export async function generateMetadata({ params, searchParams }: PostDetailPageP
   const publishedTime = toIsoDate(post.date)
 
   return {
-    title: `${post.title} | Lemonadeccc`,
+    title: post.title,
     description,
     alternates: {
       canonical: postPath,
@@ -73,6 +73,7 @@ export async function generateMetadata({ params, searchParams }: PostDetailPageP
         },
       ],
       publishedTime,
+      modifiedTime: post.updated ? toIsoDate(post.updated) : publishedTime,
       authors: [siteConfig.authorName],
     },
     twitter: {
@@ -122,8 +123,8 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.summary || post.project,
-    datePublished: post.date,
-    dateModified: post.date,
+    datePublished: toIsoDate(post.date),
+    dateModified: toIsoDate(post.updated || post.date),
     inLanguage: locale === 'zh' ? 'zh-CN' : 'en-US',
     articleSection: post.type,
     mainEntityOfPage: withSiteUrl(withPostLocale(`/posts/${slug}`, locale)),
@@ -138,6 +139,7 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
       url: siteConfig.authorUrl,
     },
     image: [withSiteUrl(post.image ?? '/posts/img1.jpg')],
+    keywords: [post.type, post.project].filter(Boolean).join(', '),
   }
 
   return (
@@ -173,7 +175,7 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
 
         <header className="mb-8 border-b border-white/30 pb-6 md:mb-10 md:pb-8">
           <p className="text-[12px] uppercase tracking-[0.08em] text-text-secondary md:text-[14px]">
-            {post.type} / {dateFormatter.format(new Date(post.date))}
+            {post.type} / <time dateTime={post.date}>{dateFormatter.format(new Date(post.date))}</time>
           </p>
           <h1 className="mt-4 text-[30px] leading-[1.05] sm:text-[36px] md:text-[48px]">{post.title}</h1>
           {post.summary && (

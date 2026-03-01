@@ -29,7 +29,10 @@ export const metadata: Metadata = {
   ],
   alternates: {
     types: {
-      'application/rss+xml': withSiteUrl('/rss.xml'),
+      'application/rss+xml': [
+        { url: withSiteUrl('/rss.xml'), title: `${siteConfig.name} Posts (EN)` },
+        { url: withSiteUrl('/rss-zh.xml'), title: `${siteConfig.name} 文章 (ZH)` },
+      ],
     },
   },
   openGraph: {

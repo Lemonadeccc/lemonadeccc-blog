@@ -10,6 +10,11 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: '/',
       },
+      // Explicitly welcome AI crawlers — signals intentional openness
+      {
+        userAgent: ['GPTBot', 'ChatGPT-User', 'Google-Extended', 'PerplexityBot', 'ClaudeBot', 'CCBot', 'Amazonbot', 'Bytespider'],
+        allow: '/',
+      },
     ],
     sitemap: [`${siteUrl}/sitemap.xml`],
     host: siteUrl,
