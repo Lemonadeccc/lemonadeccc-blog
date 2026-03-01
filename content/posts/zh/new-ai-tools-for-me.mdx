@@ -3,10 +3,12 @@ title: 应用 AI 流程总结
 type: 文章
 project: 自用 AI 流程工具总结
 date: 2026-03-01
-summary: 从线框设计到多 Agent 开发，我当前在用的一套 AI 工具链与落地流程。
+summary: 从线框设计到多 Agent 提效开发，我当前在用的一套 AI 工具链与落地流程。
 ---
 
-最近我把自己常用的 AI 工具和工作流梳理了一遍。目标不是追求“全家桶”，而是让每个环节都能更快进入可交付状态。
+最近我把自己常用的 AI 工具和工作流重新梳理了一遍。目标不是追求“全家桶”，而是让每个环节都能更快进入可交付状态。
+
+这次我使用了 [ccg-workflow](https://github.com/fengshao1227/ccg-workflow) 多模型协作（Claude + Codex + Gemini）在真实开发中的落地方法。
 
 ## 一、设计阶段：先把结构说清楚
 
@@ -20,26 +22,76 @@ summary: 从线框设计到多 Agent 开发，我当前在用的一套 AI 工具
 - [Pencil](https://www.pencil.dev/)：使用 prompt 快速搭建可编辑界面稿。
 - [variant ai](https://www.variant.ai/)：先选接近的设计，再用 prompt 调整。导出 `.js` 后，可继续用 CC 或 Codex 做结构和细节修改。
 
-## 二、开发阶段：并行化是核心增益
+## 二、开发阶段：并行化 + 隔离是核心增益
 
 ### 1) 多 Agent + Git Worktree
 
-将每个任务隔离在独立 Git 工作树中，同时运行多个代理，可以明显减少上下文污染和任务互相干扰。  
-截至目前，Claude 官方能力已经覆盖了多 worktree 与一部分远程能力，第三方并行工具从“必选”变成了“可选增强”。
+将每个任务隔离在独立 Git 工作树中，同时运行多个代理，可以明显减少上下文污染和任务互相干扰。
+
+我现在的默认做法是：
+
+1. 一个需求拆成 2-4 个相对独立子任务。
+2. 每个子任务分配单独 worktree 和独立会话。
+3. 先合并“可验证的小增量”，再做跨模块收敛。
+
+截至目前，Claude 官方能力已经覆盖了多 worktree 与部分远程能力，第三方并行工具从“必选”变成了“可选增强”。
 
 ### 2) 过去常见方案
 
 - [superset](https://github.com/superset-sh/superset)：第三方并行编排工具。
 - [happy](https://github.com/slopus/happy)：第三方开源 CLI 包装器。
 
+### 3) 现阶段生态判断
 
 1. Claude 官方现在包含多 worktree 工作流。
 2. 云端远程运行（`claude --remote` / Claude Code on the web）订阅后都可用。
 3. 远程控制本机会话（`claude remote-control`）当前以 Max 为主，Pro 在逐步开放，Team/Enterprise 暂不支持。
 
-因此， Claude 现在生态内逐渐包含例如 `superset` 和 `happy` 的“效率增强器”。
+因此，Claude 生态内逐渐吸收了 `superset`、`happy` 这类“效率增强器”的核心能力。
 
-## 三、Skills 生态：把方法论写进执行层
+## 三、CCG Workflow：把多模型协作做成标准流程
+
+`ccg-workflow` 的定位是：由 Claude Code 做编排，把前端任务路由给 Gemini，把后端任务路由给 Codex，然后由 Claude 统一审核与落地 patch。
+
+### 1) 安装与前置要求
+
+```bash
+npx ccg-workflow
+```
+
+- 需要 `Node.js 20+` 。
+- 可选安装 `Codex CLI`（后端处理）与 `Gemini CLI`（前端处理）。
+
+### 2) 命令分层（我常用）
+
+- 全流程：`/ccg:workflow`
+- 规划/执行分离：`/ccg:plan` + `/ccg:execute`
+- 面向任务：`/ccg:frontend`、`/ccg:backend`、`/ccg:debug`、`/ccg:optimize`、`/ccg:review`
+
+对我来说最实用的是“先 plan 再 execute”：
+
+```bash
+/ccg:plan 实现用户认证功能
+/ccg:execute .claude/plan/user-auth.md
+```
+
+这样就算换会话，也能沿着既定计划继续推进。
+
+### 3) 两条进阶路线
+
+- 规范驱动（OPENSEC 封装）：`/ccg:spec-*`
+  - 适合需求复杂、约束多、容易跑偏的任务。
+  - 关键价值：把“自由发挥”压缩为“按约束执行”。
+- 并行实施（Agent Teams）：`/ccg:team-*`
+  - 适合可拆分成 3 个以上独立模块的任务。
+  - 关键价值：通过 `/clear` + 文件状态传递，降低上下文串扰。
+
+### 4) 配置与避坑
+
+- 在 `~/.claude/settings.json` 调整超时参数（README 提供了 `CODEX_TIMEOUT`、`BASH_DEFAULT_TIMEOUT_MS` 等变量）。
+- MCP 侧可按项目复杂度选配：ContextWeaver / ace-tool + Context7 / Playwright / DeepWiki / Exa。
+
+## 四、Skills 
 
 我常用的 skills 资源：
 
@@ -54,9 +106,12 @@ summary: 从线框设计到多 Agent 开发，我当前在用的一套 AI 工具
 - `claude-mem` 侧重上下文压缩与记忆管理，适合长链路任务保持相关性。
 - `react-best-practices` 用于在实现阶段约束性能和代码质量。
 
-## 四、当前可复用流程（我的版本）
+## 五、当前可复用流程（更新版）
 
-1. 先做最小可运行功能（MVP），尽快打通关键路径。
-2. MVP 基本测试成功后，使用 prompt 约束：健壮性、可维护性、边界处理根据可读性要求做一轮重构。
+1. 先用线框工具明确页面结构和信息层级。
+2. 用 UI 生成工具快速得到第一个可编辑稿，避免在视觉细节上过早消耗。
+3. 进入开发后优先做 MVP，任务拆分后按 worktree 并行推进。
+4. 对复杂需求使用 `/ccg:plan` 或 `/ccg:spec-*` 先定约束，再进入实现。
+5. 在合并前做统一 review（`/ccg:review` + 人工抽检），最后做稳态重构（健壮性、可维护性、边界处理）。
 
-这套流程对个人项目很实用：前期速度快，中期质量可控，后期维护成本也更低。
+这套流程对个人项目很实用：前期速度快，中期质量可控，后期维护成本也更低。 先写清楚约束，再让多模型并行执行，最后由统一审查收口。
