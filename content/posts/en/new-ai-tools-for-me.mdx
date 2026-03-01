@@ -1,57 +1,55 @@
 ---
-title: AI Workflow Summary
+title: AI Workflow in Practice
 type: Article
 project: Summary of My Personal AI Workflow Tools
 date: 2026-03-01
-summary: From wireframing to efficient multi-agent development, this is the AI toolchain and execution workflow I currently use.
+summary: From wireframe design to multi-agent accelerated development, this is the AI toolchain and workflow I currently use.
 ---
 
-Recently, I reorganized the AI tools and workflows I use most often. The goal is not to chase an all-in-one stack, but to make each stage reach a shippable state faster.
+I recently refactored my day-to-day AI workflow for real software projects.  
+The objective is not tool maximalism. The objective is to reduce time-to-shippable-output at every stage.
 
-This time, I used [ccg-workflow](https://github.com/fengshao1227/ccg-workflow) to apply a multi-model collaboration approach (Claude + Codex + Gemini) in real development.
+## 1. Design Stage
 
-## 1. Design Stage: Clarify the Structure First
+The design stage has one rule: lock structure before spending cycles on visuals.
 
-### 1) Wireframe Sketches
+### 1) Wireframe Sketches: Align Information Hierarchy First
 
-- [wiretext](https://wiretext.app/): Quickly turns page structure into wireframes, suitable for defining information hierarchy early.
-- [mockdown](https://www.mockdown.design/): Uses text to express block-level page layouts, suitable for early-stage discussion.
+- [wiretext](https://wiretext.app/): Convert page intent into wireframes quickly, then validate information hierarchy.
+- [mockdown](https://www.mockdown.design/): Express block-level layout in plain text for early requirement clarification.
 
-### 2) UI Wrapping and Variants
+### 2) UI Shell and Variants: Get an Editable First Draft Quickly
 
-- [Pencil](https://www.pencil.dev/): Uses prompts to quickly build editable UI drafts.
-- [variant ai](https://www.variant.ai/): Start with a close design, then refine it with prompts. After exporting `.js`, you can continue editing structure and details with CC or Codex.
+- [Pencil](https://www.pencil.dev/): Generate an editable UI draft from prompts.
+- [variant ai](https://www.variant.ai/): Start from a nearby style, then iterate via prompts. After exporting `.js`, continue refinement with Claude Code or Codex.
 
-## 2. Development Stage: Parallelization + Isolation Are Core Gains
+At this point, "good enough to iterate" is the target quality bar.
+
+## 2. Development Stage: Parallelization + Isolation Delivers the Biggest Gains
 
 ### 1) Multi-Agent + Git Worktree
 
-By isolating each task in its own Git worktree and running multiple agents in parallel, context pollution and cross-task interference are significantly reduced.
-
-My default approach now is:
+My baseline execution pattern:
 
 1. Split one requirement into 2-4 relatively independent subtasks.
 2. Assign each subtask its own worktree and session.
 3. Merge small, verifiable increments first, then converge cross-module changes.
 
-As of now, Claude's official capabilities already cover multi-worktree workflows and part of remote capabilities, so third-party parallel tools have shifted from "must-have" to "optional enhancement."
+This setup reduces context bleed and cross-task interference.  
+Trade-off: over-splitting large features into too many worktrees can increase integration overhead.
 
-### 2) Previously Common Solutions
+### 2) Ecosystem Changes
 
-- [superset](https://github.com/superset-sh/superset): A third-party parallel orchestration tool.
-- [happy](https://github.com/slopus/happy): A third-party open-source CLI wrapper.
+I previously used:
 
-### 3) Current Ecosystem View
+- [superset](https://github.com/superset-sh/superset): parallel orchestration tool.
+- [happy](https://github.com/slopus/happy): CLI wrapper.
 
-1. Claude officially now includes multi-worktree workflows.
-2. Cloud remote execution (`claude --remote` / Claude Code on the web) is available once subscribed.
-3. Remote control of local sessions (`claude remote-control`) is currently mainly available on Max, gradually rolling out to Pro, and not yet supported on Team/Enterprise.
+Now that Claude covers multi-worktree workflows and part of remote execution natively, these tools are better treated as optional accelerators, not mandatory infrastructure.
 
-As a result, the Claude ecosystem is gradually absorbing the core capabilities of efficiency enhancers like `superset` and `happy`.
+## 3. CCG Workflow: Turning Multi-Model Collaboration into Process
 
-## 3. CCG Workflow: Turning Multi-Model Collaboration into a Standard Process
-
-`ccg-workflow` is positioned as follows: Claude Code handles orchestration, frontend tasks are routed to Gemini, backend tasks are routed to Codex, and Claude performs unified review and patch landing.
+`ccg-workflow` is the orchestration layer: Claude Code coordinates execution, frontend-heavy tasks are routed to Gemini, backend-heavy tasks to Codex, and Claude handles final review plus patch landing.
 
 ### 1) Installation and Prerequisites
 
@@ -60,58 +58,72 @@ npx ccg-workflow
 ```
 
 - Requires `Node.js 20+`.
-- Optionally install `Codex CLI` (backend handling) and `Gemini CLI` (frontend handling).
+- Optionally install `Codex CLI` (backend-focused) and `Gemini CLI` (frontend-focused).
 
-### 2) Command Layers (What I Use Most)
+### 2) Common Commands
 
 - Full workflow: `/ccg:workflow`
-- Planning/execution split: `/ccg:plan` + `/ccg:execute`
+- Planning + execution split: `/ccg:plan` + `/ccg:execute`
 - Task-oriented: `/ccg:frontend`, `/ccg:backend`, `/ccg:debug`, `/ccg:optimize`, `/ccg:review`
 
-For me, the most practical pattern is "plan first, then execute":
+My preferred flow is plan-first execution:
 
 ```bash
-/ccg:plan 实现用户认证功能
+/ccg:plan implement user authentication
 /ccg:execute .claude/plan/user-auth.md
 ```
 
-This way, even if you switch sessions, you can still continue along the same plan.
+This lowers coordination cost across sessions and keeps implementation aligned with an explicit spec artifact.
 
-### 3) Two Advanced Paths
+### 3) Built-in CCG Capabilities
 
-- Spec-driven (OPENSEC wrapper): `/ccg:spec-*`
-  - Best for tasks with high complexity, many constraints, and high risk of drifting scope.
-  - Core value: compress "free-form generation" into "constraint-based execution."
-- Parallel implementation (Agent Teams): `/ccg:team-*`
-  - Best for tasks that can be split into 3+ independent modules.
-  - Core value: reduce context cross-talk through `/clear` and file-based state passing.
+- Spec-driven (`/ccg:spec-*`):
+  - Best for high-constraint requirements with scope-drift risk.
+  - Value: convert free-form generation into constraint-driven execution.
+- Parallel implementation (`/ccg:team-*`):
+  - Best for work that naturally splits into 3+ independent modules.
+  - Value: reduce context cross-talk via `/clear` plus file-state passing.
 
-### 4) Configuration and Pitfall Avoidance
+### 4) Configuration and Pitfalls
 
-- Tune timeout parameters in `~/.claude/settings.json` (README provides variables such as `CODEX_TIMEOUT` and `BASH_DEFAULT_TIMEOUT_MS`).
-- On the MCP side, choose based on project complexity: ContextWeaver / ace-tool + Context7 / Playwright / DeepWiki / Exa.
+- Tune timeout parameters in `~/.claude/settings.json` (`CODEX_TIMEOUT`, `BASH_DEFAULT_TIMEOUT_MS`, etc.).
+- Select MCP tools by problem complexity: ContextWeaver + Context7 / Playwright / DeepWiki / Exa.
 
-## 4. Skills
+## 4. Skills as Reusable Process
 
-These are the skills resources I use most often:
+Skills are how I turn ad hoc experience into repeatable process. Useful references:
 
 - [skills official](https://skills.sh/)
 - [superpowers](https://github.com/obra/superpowers)
 - [claude-mem](https://github.com/thedotmack/claude-mem/tree/main)
 - [react-best-practices](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices)
 
-Among them:
+Operational roles:
 
-- `superpowers` is more focused on process orchestration, such as automatic planning, phased execution, and completion checks.
-- `claude-mem` focuses on context compression and memory management, suitable for maintaining relevance in long workflows.
-- `react-best-practices` is used during implementation to enforce performance and code quality.
+- `superpowers`: workflow orchestration (planning, staged execution, completion verification).
+- `claude-mem`: context compression and memory management for long-running task chains.
+- `react-best-practices`: implementation-time constraints for performance and code quality.
 
-## 5. Reusable Workflow (Updated)
+## 5. MCP
 
-1. Use wireframing tools first to clarify page structure and information hierarchy.
-2. Use UI generation tools to quickly get the first editable draft and avoid premature over-investment in visual details.
-3. In development, prioritize MVP first, then split tasks and move them in parallel with worktrees.
-4. For complex requirements, use `/ccg:plan` or `/ccg:spec-*` to define constraints before implementation.
-5. Before merging, run unified review (`/ccg:review` + manual spot checks), then do stabilization refactoring (robustness, maintainability, and edge handling).
+Current Lighthouse MCP choice:
 
-This workflow works well for personal projects: fast in the early stage, controllable quality in the middle stage, and lower maintenance cost later.  Write constraints clearly first, then let multiple models execute in parallel, and finally converge through unified review.
+- `@danielsogl/lighthouse-mcp`: full-featured, supports Core Web Vitals, budgets, etc.
+
+Two implementation notes matter in practice:
+
+1. When running Lighthouse, explicitly ask the LLM to test both desktop and mobile. Many automated flows default to mobile only.
+2. Automated Lighthouse scores can differ from manual DevTools runs. Use trend lines and bottleneck location as primary signals, not one-off absolute numbers.
+
+If the site is on Cloudflare and audits hit crawler/access issues, first validate `robots.txt` and caching policy, then purge `robots.txt` cache and re-run.
+
+## 6. Current Reusable End-to-End Workflow
+
+1. Use wireframe tools first to clarify page structure and information hierarchy.
+2. Use UI generation tools to quickly get the first editable draft and avoid over-investing in visual detail too early.
+3. In development, prioritize MVP first, then parallelize independent subtasks with worktrees.
+4. For complex requirements, use `/ccg:plan` or `/ccg:spec-*` to lock constraints before implementation.
+5. Before merging, run unified review (`/ccg:review` + manual spot checks), then do stabilization refactoring (robustness, maintainability, edge handling).
+
+Core principle: define constraints first, execute in parallel, and converge with a single review gate.  
+This keeps early velocity high, mid-stage quality stable, and long-term maintenance predictable.
