@@ -6,49 +6,48 @@ date: 2026-03-01
 summary: 从线框设计到多 Agent 提效开发，我当前在用的一套 AI 工具链与落地流程。
 ---
 
-过去一段时间，我把自己在真实项目里使用 AI 的流程重新整理了一遍。  
-目标很简单：不是追求工具越多越好，而是让每个环节都更快进入“可交付”状态。
+这篇文章不是工具清单，而是我在真实项目里反复迭代后沉淀下来的一套工作方法。  
+流程是先把约束写清楚，再让多模型并行执行，最后通过统一审查收口。
 
 ## 一、设计阶段
 
-设计阶段只做两件事：先定结构，再做视觉。
+设计阶段对齐信息架构，快速产出可迭代初稿。
 
-### 1) 线框草图：先对齐信息层级
+### 1) 线框草图
 
 - [wiretext](https://wiretext.app/)：快速把页面结构写成线框，适合先确认信息层级。
 - [mockdown](https://www.mockdown.design/)：用文本表达页面块级布局，适合早期讨论和需求澄清。
 
-### 2) UI 套壳与变体：快速拿到可编辑初稿
+### 2) UI 套壳与变体
 
 - [Pencil](https://www.pencil.dev/)：通过 prompt 生成可编辑界面稿。
 - [variant ai](https://www.variant.ai/)：先找接近风格，再用 prompt 调整；导出 `.js` 后继续用 Claude Code 或 Codex 做结构细化。
 
-这一步的关键不是“做漂亮”，而是尽快拿到一个可以迭代的版本。
+## 二、开发阶段
 
-## 二、开发阶段：并行化 + 隔离，收益最大
+### 1) 多 Agent + Git Worktree 的基线做法
 
-### 1) 多 Agent + Git Worktree
-
-当前做法：
+我当前面对简单需求拆分：
 
 1. 一个需求拆成 2-4 个相对独立子任务。
 2. 每个子任务绑定独立 worktree 和独立会话。
 3. 先合并可验证的小增量，再做跨模块收敛。
 
-这样做可以明显减少上下文污染和互相干扰，协作稳定性会高很多。但复杂任务分多 worktree 会降低效率。
+这能显著降低上下文污染和任务互扰。  
+但也有边界：任务耦合度过高时，过度拆分 worktree 会放大集成成本。
 
-### 2) 生态变化
+### 2) 第三方工具生态
 
 过去我常用：
 
-- [superset](https://github.com/superset-sh/superset)：并行编排工具。
-- [happy](https://github.com/slopus/happy)：CLI 包装器。
+- [superset](https://github.com/superset-sh/superset)：并行 worktree 编排工具。
+- [happy](https://github.com/slopus/happy)：远程控制 cc。
 
-现在 Claude 官方已经覆盖了多 worktree 和部分远程能力，这类工具更像增强层，而不是唯一入口。
+现在 Claude 官方已经覆盖了多 worktree 和部分远程能力，这类工具更适合作为其他 CLI 增强工具。
 
 ## 三、CCG Workflow：把多模型协作流程化
 
-`ccg-workflow` 的定位是：Claude Code 负责编排，前端任务优先分给 Gemini，后端任务优先分给 Codex，最后由 Claude 统一审核并落地 patch。
+`ccg-workflow` 在我的体系里承担“调度层”角色：Claude Code 负责编排，前端任务优先路由给 Gemini，后端任务优先路由给 Codex，最后由 Claude 统一审核并落地 patch。
 
 ### 1) 安装与前置
 
@@ -72,13 +71,13 @@ npx ccg-workflow
 /ccg:execute .claude/plan/user-auth.md
 ```
 
-能把会话切换带来的损耗降到最低，换窗口也不容易跑偏。
+这种方式可以降低会话切换带来的损耗，并减少实现阶段的目标漂移。
 
-### 3) ccg 内置功能
+### 3) ccg 内置能力
 
 - 规范驱动（`/ccg:spec-*`）：
   - 适合约束多、容易偏题的复杂需求。
-  - 价值是把“自由发挥”收敛成“按约束执行”。
+  - 价值是把“自由生成”收敛为“约束执行”。
 - 并行实施（`/ccg:team-*`）：
   - 适合可拆成 3 个以上独立模块的任务。
   - 价值是通过 `/clear` + 文件状态传递减少上下文串扰。
@@ -97,31 +96,81 @@ npx ccg-workflow
 - [claude-mem](https://github.com/thedotmack/claude-mem/tree/main)
 - [react-best-practices](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices)
 
-对应定位大致是：
+对应定位：
 
 - `superpowers`：流程编排（自动计划、阶段执行、收尾校验）。
 - `claude-mem`：上下文压缩与记忆管理（适合长链路任务）。
 - `react-best-practices`：实现阶段的性能与代码质量约束。
 
-## 五、MCP 
+## 五、MCP 能力拓展
 
-我目前用过 Lighthouse MCP：
+我目前主要使用 Lighthouse MCP：
 
 - `@danielsogl/lighthouse-mcp`：功能完整，支持 Core Web Vitals、budget 等。
 
-实践里有两个注意点：
+实践里有两个高频坑：
 
-1. 跑 Lighthouse 时建议明确要求 LLM “桌面端 + 移动端”都测，很多自动化流程默认只测移动端。
-2. 自动化跑分与手动在浏览器 DevTools 中测出来会有差异，建议把趋势和瓶颈定位作为主要参考，不要只盯单次绝对分数。
+1. 跑 Lighthouse 时要明确要求 LLM 同时测“桌面端 + 移动端”，否则很多自动化流程只测移动端。
+2. 自动化跑分和 DevTools 手动跑分会存在差异，建议以趋势和瓶颈定位为主，不要过度解读单次绝对分数。
 
-如果站点托管在 Cloudflare 且遇到爬虫/审计访问问题，可以先检查 `robots.txt` 和缓存策略，必要时清理 `robots.txt` 的相关缓存再重试。
+如果站点托管在 Cloudflare 且出现爬虫/审计访问异常，先检查 `robots.txt` 与缓存策略，必要时清理 `robots.txt` 相关缓存再重试。
 
-## 六、当前可复用完整流程
+## 六、测试与评审流水线
 
-1. 先用线框工具明确页面结构和信息层级。
-2. 用 UI 生成工具快速拿到首版可编辑稿，避免过早卡在视觉细节。
-3. 开发阶段优先做 MVP，按 worktree 并行推进独立子任务。
+### 1) 在 prompt 中明确三层测试要求
+
+实现完成后我会直接下这种可复用指令：
+
+```text
+请基于当前变更补齐并执行测试，要求：
+1) 单元测试（unit tests）：覆盖核心函数、边界条件、异常路径。
+2) 集成测试（integration tests）：覆盖模块间协作、数据流与接口契约。
+3) 端到端测试（e2e tests）：覆盖关键用户路径（成功流 + 失败流）。
+
+执行要求：
+- 先写测试再修复实现，直到全部通过。
+- 输出每类测试的新增用例清单、执行命令和结果摘要。
+- 标注当前未覆盖风险点和建议补测项。
+```
+
+### 2) 多模型交叉 code review
+
+测试通过后，我会让不同模型分别做 review，重点关注：
+
+1. 潜在 bug 与边界问题。
+2. 可读性与可维护性。
+3. 性能、复杂度与扩展性风险。
+4. 测试覆盖是否与业务风险匹配。
+
+多模型 review 的核心收益是降低单模型盲区。
+
+### 3) 人工 review 
+
+AI review 之后，我会做一轮人工 review，主要确认：
+
+1. 需求是否真正闭环，而不是只满足字面描述。
+2. 改动是否引入潜在回归。
+3. 命名、边界、错误处理是否符合团队约定。
+4. 测试是否覆盖最高风险路径。
+
+人工 review 的作用不是重复 AI 结论，而是做业务上下文判断与最终风险兜底。
+
+### 4) CI 后接 GitHub App 自动审查
+
+PR 提交并通过 CI 后，我会再接一轮 GitHub App 自动审查，常用包括：
+
+- [Coderabbit](https://coderabbit.ai/)
+- [Gemini Code Assist](https://codeassist.google/)
+- [qodo](https://www.qodo.ai/)
+
+我自己也在 vibe 一个面向测试阶段的 [pr-agent](https://github.com/condevtools/pr-agent)，目标是把“测试结果 + 风险点 + review 建议”自动汇总到 PR/Issue，提升评审与决策效率。
+
+## 七、当前可复用的端到端流程
+
+1. 用线框工具明确信息层级和页面结构。
+2. 用 UI 生成工具快速得到可编辑初稿。
+3. 开发阶段以 MVP 为先，按 worktree 并行推进独立子任务。
 4. 复杂需求先用 `/ccg:plan` 或 `/ccg:spec-*` 锁定约束，再进入实现。
-5. 合并前做统一 review（`/ccg:review` + 人工抽检），最后做稳态重构（健壮性、可维护性、边界处理）。
+5. 合并前执行统一 review（`/ccg:review` + 人工抽检），最后做稳态重构（健壮性、可维护性、边界处理）。
 
-这套流程的核心先把约束写清楚，再让多模型并行执行，最后由统一审查收口。前期速度快，中期质量稳，后期维护成本可控。
+这套流程的核心收益是：前期速度快，中期质量稳，后期维护成本可控。
