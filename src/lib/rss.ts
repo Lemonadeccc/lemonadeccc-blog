@@ -47,7 +47,7 @@ export const buildPostRssXml = async ({
     title: feedMeta.title,
     description: feedMeta.description,
     language: feedMeta.language,
-    favicon: `${origin}/favicon.ico`,
+    favicon: `${origin}/favicon.png`,
     updated,
     copyright: `All rights reserved ${new Date().getFullYear()}, ${siteTitle}`,
     feedLinks: {
