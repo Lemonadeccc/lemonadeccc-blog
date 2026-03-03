@@ -355,9 +355,22 @@
   }
 
   .post-content a {
-    color: #fff;
+    color: transparent;
     text-decoration: underline;
     text-underline-offset: 0.2em;
+    text-decoration-color: rgba(255, 255, 255, 0.4);
+    background-image: linear-gradient(90deg, #ef4444 0%, #ef4444 50%, #fff 50%, #fff 100%);
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    transition: background-position 0.4s ease, text-decoration-color 0.4s ease;
+  }
+
+  .post-content a:hover,
+  .post-content a:focus-visible {
+    background-position: 0 0;
+    text-decoration-color: #ef4444;
   }
 
   :where([data-rehype-pretty-code-fragment], [data-rehype-pretty-code-figure]) {

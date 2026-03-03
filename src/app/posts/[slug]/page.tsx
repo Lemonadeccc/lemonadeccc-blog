@@ -12,6 +12,25 @@ import { getPostDateLocale, resolvePostLocale, withPostLocale } from '@/lib/post
 import { siteConfig, withSiteUrl } from '@/lib/site'
 import BackToPostsButton from './BackToPostsButton'
 
+function isExternalUrl(href: string) {
+  return /^https?:\/\/|^\/\//.test(href)
+}
+
+function MDXLink({ href = '', children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+  if (isExternalUrl(href)) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+        {children}
+      </a>
+    )
+  }
+  return (
+    <Link href={href} {...props}>
+      {children}
+    </Link>
+  )
+}
+
 type PostDetailPageProps = {
   params: Promise<{ slug: string }>
   searchParams: Promise<{ lang?: string }>
@@ -102,6 +121,7 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
 
   const { content } = await compileMDX({
     source: post.content,
+    components: { a: MDXLink },
     options: {
       parseFrontmatter: false,
       mdxOptions: {
