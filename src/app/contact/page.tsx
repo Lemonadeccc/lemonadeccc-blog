@@ -29,7 +29,7 @@ const contactItems: ContactItem[] = [
   },
 ]
 
-const friendSeeds = [
+const friendSeeds: FriendLink[] = [
   {
     name: 'ztkuaikuai',
     avatar: 'https://avatars.githubusercontent.com/u/74196206?v=4',
@@ -58,15 +58,7 @@ const friendSeeds = [
     website: 'https://icstudio.top/',
     description: 'Web3 Full-stack Architect specialized in Frontend Infrastructure and Agent Ecosystem.',
   }
-] as const
-
-const friendLinks: FriendLink[] = friendSeeds.map((seed) => ({
-  name: seed.name,
-  github: seed.github,
-  website: seed.website,
-  avatar: seed.avatar,
-  description: seed.description,
-}))
+]
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -122,7 +114,7 @@ export default function ContactPage() {
               <div className="reveal-top-line" aria-hidden />
               <h2 className="py-5 text-[16px] uppercase tracking-[0.08em] text-text-secondary lg:shrink-0">Friend Links</h2>
               <div className="friend-links-scroll flex flex-col gap-4 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
-                {friendLinks.map((friend) => (
+                {friendSeeds.map((friend) => (
                   <article
                     key={friend.github}
                     className="group flex items-center gap-4 border border-white/30 bg-transparent p-4 transition-colors duration-300 hover:bg-white/5"
@@ -132,7 +124,6 @@ export default function ContactPage() {
                       alt={`${friend.name} avatar`}
                       width={64}
                       height={64}
-                      suppressHydrationWarning
                       className="h-16 w-16 rounded-full border border-white/40 object-cover"
                     />
                     <div className="min-w-0">

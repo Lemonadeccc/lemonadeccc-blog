@@ -22,10 +22,12 @@ const CustomCursor = () => {
   const scale = useMotionValue(1)
   const [isInteractive, setIsInteractive] = useState(false)
   const [isOverIframe, setIsOverIframe] = useState(false)
+  const prefersReducedMotion = useRef(false)
   const phase = useRef(0) // continuous phase so animation never restarts
 
   useEffect(() => {
     setMounted(true)
+    prefersReducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   }, [])
 
   useEffect(() => {
@@ -45,6 +47,7 @@ const CustomCursor = () => {
   }, [x, y])
 
   useAnimationFrame((_, delta) => {
+    if (prefersReducedMotion.current) return
     const period = isInteractive ? FAST_PERIOD : SLOW_PERIOD
     const deltaPhase = (delta / period) * Math.PI * 2
     phase.current += deltaPhase
@@ -56,7 +59,7 @@ const CustomCursor = () => {
 
   return (
     <motion.div
-      className="custom-cursor fixed top-0 left-0 z-[9999] pointer-events-none"
+      className="custom-cursor fixed top-0 left-0 z-9999 pointer-events-none"
       style={{ x, y, scale, opacity: isOverIframe ? 0 : 1 }}
     >
       <div

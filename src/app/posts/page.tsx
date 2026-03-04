@@ -87,7 +87,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd).replaceAll('</script>', '<\\/script>') }}
       />
       <PostsListClient
         locale={locale}

@@ -1,13 +1,12 @@
 import { Feed } from 'feed'
 import { getAllPosts } from '@/lib/posts'
 import { DEFAULT_POST_LOCALE, type PostLocale, withPostLocale } from '@/lib/postLocale'
+import { siteConfig } from '@/lib/site'
 
 type BuildPostRssXmlOptions = {
   locale?: PostLocale
   origin: string
 }
-
-const siteTitle = 'Lemonadeccc'
 
 const toSafeDate = (value: string) => {
   const timestamp = Date.parse(value)
@@ -18,16 +17,16 @@ const toSafeDate = (value: string) => {
 const getFeedMeta = (locale: PostLocale) => {
   if (locale === 'zh') {
     return {
-      title: `${siteTitle} 文章`,
-      description: 'Lemonadeccc 的中文文章订阅',
+      title: `${siteConfig.name} 文章`,
+      description: `${siteConfig.name} 的中文文章订阅`,
       language: 'zh-CN',
       rssPath: '/rss-zh.xml',
     }
   }
 
   return {
-    title: `${siteTitle} Posts`,
-    description: 'Subscribe to the latest posts from Lemonadeccc.',
+    title: `${siteConfig.name} Posts`,
+    description: `Subscribe to the latest posts from ${siteConfig.name}.`,
     language: 'en-US',
     rssPath: '/rss.xml',
   }
@@ -49,12 +48,12 @@ export const buildPostRssXml = async ({
     language: feedMeta.language,
     favicon: `${origin}/favicon.png`,
     updated,
-    copyright: `All rights reserved ${new Date().getFullYear()}, ${siteTitle}`,
+    copyright: `All rights reserved ${new Date().getFullYear()}, ${siteConfig.name}`,
     feedLinks: {
       rss2: `${origin}${feedMeta.rssPath}`,
     },
     author: {
-      name: siteTitle,
+      name: siteConfig.name,
     },
   })
 

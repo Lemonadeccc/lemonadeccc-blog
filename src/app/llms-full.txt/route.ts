@@ -1,5 +1,5 @@
 import { getAllPosts, getPostBySlug } from '@/lib/posts'
-import { POST_LOCALES } from '@/lib/postLocale'
+import { POST_LOCALES, withPostLocale } from '@/lib/postLocale'
 import { getSiteUrl, siteConfig } from '@/lib/site'
 
 export async function GET() {
@@ -7,29 +7,34 @@ export async function GET() {
 
   const postSections: string[] = []
 
-  for (const locale of POST_LOCALES) {
-    const posts = await getAllPosts(locale)
+  const localeResults = await Promise.all(
+    POST_LOCALES.map(async (locale) => {
+      const posts = await getAllPosts(locale)
 
-    for (const post of posts) {
-      const detail = await getPostBySlug(post.slug, locale)
-      if (!detail) continue
-
-      postSections.push(
-        [
-          `## ${detail.title}`,
-          '',
-          `- URL: ${siteUrl}/posts/${detail.slug}`,
-          `- Date: ${detail.date}`,
-          `- Language: ${locale}`,
-          `- Type: ${detail.type}`,
-          '',
-          detail.content.trim(),
-          '',
-          '---',
-        ].join('\n'),
+      const details = await Promise.all(
+        posts.map((post) => getPostBySlug(post.slug, locale))
       )
-    }
-  }
+
+      return details
+        .filter((detail): detail is NonNullable<typeof detail> => detail !== null)
+        .map((detail) =>
+          [
+            `## ${detail.title}`,
+            '',
+            `- URL: ${siteUrl}${withPostLocale(`/posts/${detail.slug}`, locale)}`,
+            `- Date: ${detail.date}`,
+            `- Language: ${locale}`,
+            `- Type: ${detail.type}`,
+            '',
+            detail.content.trim(),
+            '',
+            '---',
+          ].join('\n')
+        )
+    })
+  )
+
+  localeResults.forEach((sections) => postSections.push(...sections))
 
   const body = [
     `# ${siteConfig.name} - Full Content`,

@@ -116,6 +116,7 @@ export default function PortfolioClient() {
                 rel="noreferrer noopener"
                 className="project-link group relative flex items-center justify-center gap-1.5 px-2 pt-3 pb-4 text-[24px] leading-[1.1] transition-[gap] duration-300 ease-in-out sm:gap-2.5 sm:text-[30px] md:px-0 md:pt-2 md:pb-3 md:text-[80px] md:leading-[1.1] md:hover:gap-5"
                 onMouseEnter={() => handleMouseEnter(index)}
+                onClick={() => handleMouseEnter(index)}
               >
                 {index === 0 && (
                   <motion.div
@@ -134,7 +135,7 @@ export default function PortfolioClient() {
                 <span className="portfolio-wipe portfolio-wipe-left min-w-0 flex-[2.5] truncate text-right pb-[0.04em] md:overflow-visible md:text-clip">
                   {displayWords[index][0]}
                 </span>
-                <div className="relative h-[44px] w-[70px] sm:h-[56px] sm:w-[90px] md:h-[80px] md:w-[125px] min-w-0 overflow-hidden bg-white [flex:0] transition-[flex] duration-1000 ease-[cubic-bezier(0.165,0.84,0.44,1)] md:group-hover:[flex:0.5]">
+                <div className="relative h-11 w-[70px] sm:h-14 sm:w-[90px] md:h-20 md:w-[125px] min-w-0 overflow-hidden bg-white flex-0 transition-[flex] duration-1000 ease-[cubic-bezier(0.165,0.84,0.44,1)] group-active:flex-[0.5] md:group-hover:flex-[0.5]">
                   <Image
                     src={item.image}
                     alt={`${item.left} ${item.right}`}
