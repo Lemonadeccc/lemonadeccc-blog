@@ -44,3 +44,7 @@ next-env.d.ts
 !.dev.vars.example
 !.env.example
 docs/
+
+# serwist (generated service worker)
+public/sw.js
+public/swe-worker-*.js
