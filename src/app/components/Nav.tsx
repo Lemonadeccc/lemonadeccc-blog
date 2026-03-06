@@ -70,7 +70,7 @@ const Nav = () => {
         <div className="mt-3 grid w-full grid-cols-3 gap-1 sm:gap-2 md:mt-0 md:flex md:w-auto md:items-center md:justify-between md:gap-2.5">
           <Link
             href="/portfolio"
-            className={`hover-wipe inline-flex min-h-[32px] items-center justify-center px-1 py-1 text-center text-[13px] leading-none transition-opacity sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px] ${isPortfolioActive ? 'opacity-100' : 'opacity-[0.55]'}`}
+            className={`hover-wipe inline-flex min-h-8 items-center justify-center px-1 py-1 text-center text-[13px] leading-none transition-opacity sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px] ${isPortfolioActive ? 'opacity-100' : 'opacity-[0.55]'}`}
             aria-current={isPortfolioActive ? 'page' : undefined}
           >
             PORTFOLIO
@@ -78,7 +78,7 @@ const Nav = () => {
 
           <Link
             href="/posts"
-            className={`hover-wipe inline-flex min-h-[32px] items-center justify-center px-1 py-1 text-center text-[13px] leading-none transition-opacity sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px] ${isPostsActive ? 'opacity-100' : 'opacity-[0.55]'}`}
+            className={`hover-wipe inline-flex min-h-8 items-center justify-center px-1 py-1 text-center text-[13px] leading-none transition-opacity sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px] ${isPostsActive ? 'opacity-100' : 'opacity-[0.55]'}`}
             aria-current={isPostsActive ? 'page' : undefined}
           >
             POSTS
@@ -86,7 +86,7 @@ const Nav = () => {
 
           <Link
             href="/contact"
-            className={`hover-wipe inline-flex min-h-[32px] items-center justify-center px-1 py-1 text-center text-[13px] leading-none transition-opacity sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px] ${isContactActive ? 'opacity-100' : 'opacity-[0.55]'}`}
+            className={`hover-wipe inline-flex min-h-8 items-center justify-center px-1 py-1 text-center text-[13px] leading-none transition-opacity sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px] ${isContactActive ? 'opacity-100' : 'opacity-[0.55]'}`}
             aria-current={isContactActive ? 'page' : undefined}
           >
             CONTACT

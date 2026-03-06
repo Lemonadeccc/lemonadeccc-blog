@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypePrettyCode from 'rehype-pretty-code'
+import { getHighlighter } from '@/lib/highlighter'
 import { getAllPostSlugs, getPostBySlug } from '@/lib/posts'
 import { getPostTranslator } from '@/lib/postMessages'
 import { getPostDateLocale, resolvePostLocale, withPostLocale } from '@/lib/postLocale'
@@ -135,7 +136,7 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
         rehypePlugins: [
           rehypeSlug,
           [rehypeAutolinkHeadings, { behavior: 'append' }],
-          [rehypePrettyCode, { theme: 'github-dark', keepBackground: false }],
+          [rehypePrettyCode, { theme: 'github-dark', keepBackground: false, getHighlighter }],
         ],
       },
     },
