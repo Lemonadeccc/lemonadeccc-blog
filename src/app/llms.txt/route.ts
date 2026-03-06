@@ -1,6 +1,8 @@
 import { getAllPostSlugs } from "@/lib/posts";
 import { getSiteUrl, siteConfig } from "@/lib/site";
 
+export const dynamic = 'force-static'
+
 export async function GET() {
   const siteUrl = getSiteUrl();
   const slugs = await getAllPostSlugs();

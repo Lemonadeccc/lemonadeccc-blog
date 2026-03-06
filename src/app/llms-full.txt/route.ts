@@ -2,6 +2,8 @@ import { getAllPosts, getPostBySlug } from '@/lib/posts'
 import { POST_LOCALES, withPostLocale } from '@/lib/postLocale'
 import { getSiteUrl, siteConfig } from '@/lib/site'
 
+export const dynamic = 'force-static'
+
 export async function GET() {
   const siteUrl = getSiteUrl()
 

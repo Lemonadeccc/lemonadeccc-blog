@@ -1,37 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { compileMDX } from 'next-mdx-remote/rsc'
-import remarkGfm from 'remark-gfm'
-import rehypeSlug from 'rehype-slug'
-import rehypeAutolinkHeadings from 'rehype-autolink-headings'
-import rehypeShikiFromHighlighter from '@shikijs/rehype/core'
-import { getHighlighter } from '@/lib/highlighter'
 import { getAllPostSlugs, getPostBySlug } from '@/lib/posts'
 import { getPostTranslator } from '@/lib/postMessages'
 import { getPostDateLocale, resolvePostLocale, withPostLocale } from '@/lib/postLocale'
 import { siteConfig, withSiteUrl } from '@/lib/site'
 import { getDefaultSocialImageUrl } from '@/lib/socialImage'
 import BackToPostsButton from './BackToPostsButton'
-
-function isExternalUrl(href: string) {
-  return /^https?:\/\/|^\/\//.test(href)
-}
-
-function MDXLink({ href = '', children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
-  if (isExternalUrl(href)) {
-    return (
-      <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
-        {children}
-      </a>
-    )
-  }
-  return (
-    <Link href={href} {...props}>
-      {children}
-    </Link>
-  )
-}
 
 type PostDetailPageProps = {
   params: Promise<{ slug: string }>
@@ -43,6 +18,8 @@ const toIsoDate = (value: string) => {
   if (Number.isNaN(timestamp)) return undefined
   return new Date(timestamp).toISOString()
 }
+
+export const dynamicParams = false
 
 export async function generateStaticParams() {
   const slugs = await getAllPostSlugs()
@@ -121,30 +98,6 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
     day: '2-digit',
   })
 
-  const highlighter = await getHighlighter()
-
-  const { content } = await compileMDX({
-    source: post.content,
-    components: {
-      a: MDXLink,
-      img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
-        // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-        <img loading="lazy" decoding="async" {...props} />
-      ),
-    },
-    options: {
-      parseFrontmatter: false,
-      mdxOptions: {
-        remarkPlugins: [remarkGfm],
-        rehypePlugins: [
-          rehypeSlug,
-          [rehypeAutolinkHeadings, { behavior: 'append' }],
-          [rehypeShikiFromHighlighter, highlighter, { themes: { dark: 'github-dark', light: 'github-light' }, defaultColor: false }],
-        ],
-      },
-    },
-  })
-
   const postsHref = withPostLocale('/posts', locale)
   const englishHref = withPostLocale(`/posts/${slug}`, 'en')
   const chineseHref = withPostLocale(`/posts/${slug}`, 'zh')
@@ -215,7 +168,10 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
           )}
         </header>
 
-        <div className="post-content">{content}</div>
+        <div
+          className="post-content"
+          dangerouslySetInnerHTML={{ __html: post.htmlContent }}
+        />
       </div>
     </article>
   )

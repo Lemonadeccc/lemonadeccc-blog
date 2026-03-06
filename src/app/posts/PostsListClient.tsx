@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'motion/react'
 import { gsap } from 'gsap'
-import { type PostLocale, withPostLocale } from '@/lib/postLocale'
+import { type PostLocale, resolvePostLocale, withPostLocale } from '@/lib/postLocale'
 import { type ResourceProvider, getProviderPreconnectOrigins } from '@/lib/resourcePreconnect'
 import { hasHttpScheme } from '@/lib/url'
 
@@ -37,52 +37,55 @@ export type ResourceListEntry = {
   sourceUrl?: string
 }
 
-type PostsListClientProps = {
-  locale: PostLocale
+export type PostsLabels = {
   title: string
-  initialView: PostsPageView
-  viewPostsLabel: string
-  viewResourcesLabel: string
-  languageLabel: string
-  englishLabel: string
-  chineseLabel: string
-  filterByTagLabel: string
-  allTagsLabel: string
-  resourceTypeVideoLabel: string
-  authorLabel: string
-  durationLabel: string
-  emptyResourcesLabel: string
-  posts: PostListEntry[]
-  resources: ResourceListEntry[]
+  viewPosts: string
+  viewResources: string
+  language: string
+  english: string
+  chinese: string
+  filterByTag: string
+  allTags: string
+  resourceTypeVideo: string
+  author: string
+  duration: string
+  emptyResources: string
+}
+
+type PostsListClientProps = {
+  postsEn: PostListEntry[]
+  postsZh: PostListEntry[]
+  resourcesEn: ResourceListEntry[]
+  resourcesZh: ResourceListEntry[]
+  labelsEn: PostsLabels
+  labelsZh: PostsLabels
 }
 
 export default function PostsListClient({
-  locale,
-  title,
-  initialView,
-  viewPostsLabel,
-  viewResourcesLabel,
-  languageLabel,
-  englishLabel,
-  chineseLabel,
-  filterByTagLabel,
-  allTagsLabel,
-  resourceTypeVideoLabel,
-  authorLabel,
-  durationLabel,
-  emptyResourcesLabel,
-  posts,
-  resources,
+  postsEn,
+  postsZh,
+  resourcesEn,
+  resourcesZh,
+  labelsEn,
+  labelsZh,
 }: PostsListClientProps) {
   const listRef = useRef<HTMLDivElement | null>(null)
   const postRefs = useRef<(HTMLAnchorElement | null)[]>([])
   const router = useRouter()
+  const searchParams = useSearchParams()
   const lineTransition = { duration: 2, ease: [0.33, 1, 0.68, 1] as const }
   const [activeTagKey, setActiveTagKey] = useState('all')
   const [optimisticView, setOptimisticView] = useState<PostsPageView | null>(null)
-  const [hasVisitedResources, setHasVisitedResources] = useState(initialView === 'resources')
 
-  const currentView: PostsPageView = optimisticView ?? initialView
+  const locale: PostLocale = resolvePostLocale(searchParams.get('lang'))
+  const urlView: PostsPageView = searchParams.get('view') === 'resources' ? 'resources' : 'posts'
+  const posts = locale === 'zh' ? postsZh : postsEn
+  const resources = locale === 'zh' ? resourcesZh : resourcesEn
+  const labels = locale === 'zh' ? labelsZh : labelsEn
+
+  const [hasVisitedResources, setHasVisitedResources] = useState(urlView === 'resources')
+
+  const currentView: PostsPageView = optimisticView ?? urlView
   const isPostsView = currentView === 'posts'
   const isResourcesView = currentView === 'resources'
   const shouldRenderResourcesPanel = hasVisitedResources || isResourcesView
@@ -91,6 +94,9 @@ export default function PostsListClient({
   const localeSwitchBasePath = isPostsView ? '/posts' : '/posts?view=resources'
   const englishHref = withPostLocale(localeSwitchBasePath, 'en')
   const chineseHref = withPostLocale(localeSwitchBasePath, 'zh')
+  const pageTitle = labels.title
+  const languageLabel = labels.language
+  const authorLabel = labels.author
 
   const tagOptions = useMemo(() => {
     const seen = new Set<string>()
@@ -270,9 +276,9 @@ export default function PostsListClient({
   }, [isPostsView, posts.length])
 
   useEffect(() => {
-    if (optimisticView === initialView) setOptimisticView(null)
-    if (initialView === 'resources') setHasVisitedResources(true)
-  }, [initialView, optimisticView])
+    if (optimisticView === urlView) setOptimisticView(null)
+    if (urlView === 'resources') setHasVisitedResources(true)
+  }, [urlView, optimisticView])
 
   useEffect(() => {
     if (isResourcesView) setHasVisitedResources(true)
@@ -362,21 +368,21 @@ export default function PostsListClient({
     <section className="w-full flex-1 bg-bg py-5 text-text md:py-10">
       <div className="app-container px-4 sm:px-8 md:px-10">
         <div className="mb-4 flex items-center justify-between gap-2 md:mb-6 md:gap-4">
-          <h1 className="sr-only">{title}</h1>
+          <h1 className="sr-only">{pageTitle}</h1>
           <div className="flex min-w-0 items-center gap-2 whitespace-nowrap sm:gap-3 md:gap-4">
             <Link
               href={postsViewHref}
               onClick={() => setOptimisticView('posts')}
               className={`hover-wipe inline-flex items-center justify-center text-[17px] font-medium uppercase tracking-[0.06em] transition-opacity sm:text-[22px] md:text-[36px] ${isPostsView ? 'opacity-100' : 'opacity-[0.55]'}`}
             >
-              {viewPostsLabel}
+              {labels.viewPosts}
             </Link>
             <Link
               href={resourcesViewHref}
               onClick={() => setOptimisticView('resources')}
               className={`hover-wipe inline-flex items-center justify-center text-[17px] font-medium uppercase tracking-[0.06em] transition-opacity sm:text-[22px] md:text-[36px] ${isResourcesView ? 'opacity-100' : 'opacity-[0.55]'}`}
             >
-              {viewResourcesLabel}
+              {labels.viewResources}
             </Link>
           </div>
 
@@ -386,17 +392,17 @@ export default function PostsListClient({
               href={englishHref}
               className={`border px-2 py-1 transition-colors ${locale === 'en' ? 'border-text text-text' : 'border-[var(--theme-border)] text-text-secondary hover:border-text hover:text-text'}`}
             >
-              {englishLabel}
+              {labels.english}
             </Link>
             <Link
               href={chineseHref}
               className={`border px-2 py-1 transition-colors ${locale === 'zh' ? 'border-text text-text' : 'border-[var(--theme-border)] text-text-secondary hover:border-text hover:text-text'}`}
             >
-              {chineseLabel}
+              {labels.chinese}
             </Link>
           </div>
         </div>
-      </div>
+      </div >
 
       <div ref={listRef} className={`app-container w-full ${isPostsView ? '' : 'hidden'}`}>
         {posts.map((post, index) => (
@@ -477,100 +483,103 @@ export default function PostsListClient({
         ))}
       </div>
 
-      {shouldRenderResourcesPanel && (
-        <div className={`app-container px-4 sm:px-8 md:px-10 ${isResourcesView ? '' : 'hidden'}`}>
-          <div className="mb-4 flex flex-wrap items-center gap-2 text-[12px] uppercase tracking-[0.08em] text-text-secondary md:text-[13px]">
-            <span>{filterByTagLabel}</span>
-            <button
-              type="button"
-              onClick={() => setActiveTagKey('all')}
-              className={`border px-2 py-1 transition-colors ${activeTagKey === 'all' ? 'border-text text-text' : 'border-[var(--theme-border)] text-text-secondary hover:border-text hover:text-text'}`}
-            >
-              {allTagsLabel}
-            </button>
-            {tagOptions.map((tag) => (
+      {
+        shouldRenderResourcesPanel && (
+          <div className={`app-container px-4 sm:px-8 md:px-10 ${isResourcesView ? '' : 'hidden'}`}>
+            <div className="mb-4 flex flex-wrap items-center gap-2 text-[12px] uppercase tracking-[0.08em] text-text-secondary md:text-[13px]">
+              <span>{labels.filterByTag}</span>
               <button
-                key={tag.key}
                 type="button"
-                onClick={() => setActiveTagKey(tag.key)}
-                className={`border px-2 py-1 transition-colors ${activeTagKey === tag.key ? 'border-text text-text' : 'border-[var(--theme-border)] text-text-secondary hover:border-text hover:text-text'}`}
+                onClick={() => setActiveTagKey('all')}
+                className={`border px-2 py-1 transition-colors ${activeTagKey === 'all' ? 'border-text text-text' : 'border-[var(--theme-border)] text-text-secondary hover:border-text hover:text-text'}`}
               >
-                {tag.label}
+                {labels.allTags}
               </button>
-            ))}
-          </div>
-
-          {filteredResources.length === 0 ? (
-            <p className="border border-[var(--theme-border)] px-4 py-5 text-[14px] text-text-secondary">{emptyResourcesLabel}</p>
-          ) : (
-            <div className="grid gap-4 pb-1 md:grid-cols-2 xl:grid-cols-3">
-              {filteredResources.map((resource) => (
-                <article key={resource.id} className="mx-auto w-full max-w-[680px] overflow-hidden border border-[var(--theme-border)] bg-bg md:max-w-none">
-                  <div className="aspect-video w-full bg-[var(--theme-code-bg)]">
-                    {resource.embedUrl ? (
-                      <iframe
-                        className="h-full w-full border-0 cursor-auto"
-                        src={resource.embedUrl}
-                        title={resource.title}
-                        loading="lazy"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        allowFullScreen
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center text-[12px] uppercase tracking-[0.08em] text-text-secondary">
-                        {resourceTypeVideoLabel}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="space-y-2.5 p-3.5 sm:p-4 md:space-y-3 md:p-5">
-                    <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.08em] sm:text-[11px]">
-                      <span className="border border-text px-2 py-1 text-text">{resourceTypeVideoLabel}</span>
-                      {resource.tags.map((tag) => (
-                        <span key={`${resource.id}-${tag.key}`} className="border border-[var(--theme-border)] px-2 py-1 text-text-secondary">
-                          {tag.label}
-                        </span>
-                      ))}
-                    </div>
-
-                    {resource.sourceUrl ? (
-                      <h2 className="text-[16px] leading-tight sm:truncate sm:text-[18px]">
-                        <a
-                          href={resource.sourceUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover-wipe transition-opacity opacity-[0.72] hover:opacity-100 focus-visible:opacity-100"
-                          title={resource.title}
-                        >
-                          {resource.title}
-                        </a>
-                      </h2>
-                    ) : (
-                      <h2 className="text-[16px] leading-tight sm:truncate sm:text-[18px]" title={resource.title}>
-                        {resource.title}
-                      </h2>
-                    )}
-
-                    <div className="flex flex-col items-start gap-1.5 text-[11px] uppercase tracking-[0.08em] text-text-secondary sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:text-[12px]">
-                      <span className="min-w-0 flex-1 truncate" title={`${authorLabel}: ${resource.author}`}>
-                        {authorLabel}: {resource.author}
-                      </span>
-                      <span className="shrink-0">{durationLabel}: {resource.duration}</span>
-                    </div>
-
-                    {resource.summary && (
-                      <p className="text-[13px] leading-[1.65] text-text-secondary sm:truncate sm:text-[14px]" title={resource.summary}>
-                        {resource.summary}
-                      </p>
-                    )}
-                  </div>
-                </article>
+              {tagOptions.map((tag) => (
+                <button
+                  key={tag.key}
+                  type="button"
+                  onClick={() => setActiveTagKey(tag.key)}
+                  className={`border px-2 py-1 transition-colors ${activeTagKey === tag.key ? 'border-text text-text' : 'border-[var(--theme-border)] text-text-secondary hover:border-text hover:text-text'}`}
+                >
+                  {tag.label}
+                </button>
               ))}
             </div>
-          )}
-        </div>
-      )}
-    </section>
+
+            {filteredResources.length === 0 ? (
+              <p className="border border-[var(--theme-border)] px-4 py-5 text-[14px] text-text-secondary">{labels.emptyResources}</p>
+            ) : (
+              <div className="grid gap-4 pb-1 md:grid-cols-2 xl:grid-cols-3">
+                {filteredResources.map((resource) => (
+                  <article key={resource.id} className="mx-auto w-full max-w-[680px] overflow-hidden border border-[var(--theme-border)] bg-bg md:max-w-none">
+                    <div className="aspect-video w-full bg-[var(--theme-code-bg)]">
+                      {resource.embedUrl ? (
+                        <iframe
+                          className="h-full w-full border-0 cursor-auto"
+                          src={resource.embedUrl}
+                          title={resource.title}
+                          loading="lazy"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          referrerPolicy="strict-origin-when-cross-origin"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center text-[12px] uppercase tracking-[0.08em] text-text-secondary">
+                          {labels.resourceTypeVideo}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="space-y-2.5 p-3.5 sm:p-4 md:space-y-3 md:p-5">
+                      <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.08em] sm:text-[11px]">
+                        <span className="border border-text px-2 py-1 text-text">{labels.resourceTypeVideo}</span>
+                        {resource.tags.map((tag) => (
+                          <span key={`${resource.id}-${tag.key}`} className="border border-[var(--theme-border)] px-2 py-1 text-text-secondary">
+                            {tag.label}
+                          </span>
+                        ))}
+                      </div>
+
+                      {resource.sourceUrl ? (
+                        <h2 className="text-[16px] leading-tight sm:truncate sm:text-[18px]">
+                          <a
+                            href={resource.sourceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover-wipe transition-opacity opacity-[0.72] hover:opacity-100 focus-visible:opacity-100"
+                            title={resource.title}
+                          >
+                            {resource.title}
+                          </a>
+                        </h2>
+                      ) : (
+                        <h2 className="text-[16px] leading-tight sm:truncate sm:text-[18px]" title={resource.title}>
+                          {resource.title}
+                        </h2>
+                      )}
+
+                      <div className="flex flex-col items-start gap-1.5 text-[11px] uppercase tracking-[0.08em] text-text-secondary sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:text-[12px]">
+                        <span className="min-w-0 flex-1 truncate" title={`${authorLabel}: ${resource.author}`}>
+                          {authorLabel}: {resource.author}
+                        </span>
+                        <span className="shrink-0">{labels.duration}: {resource.duration}</span>
+                      </div>
+
+                      {resource.summary && (
+                        <p className="text-[13px] leading-[1.65] text-text-secondary sm:truncate sm:text-[14px]" title={resource.summary}>
+                          {resource.summary}
+                        </p>
+                      )}
+                    </div>
+                  </article >
+                ))
+                }
+              </div >
+            )
+            }
+          </div >
+        )}
+    </section >
   )
 }

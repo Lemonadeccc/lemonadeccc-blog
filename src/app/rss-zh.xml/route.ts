@@ -1,6 +1,8 @@
 import { buildPostRssXml } from '@/lib/rss'
 import { getSiteUrl } from '@/lib/site'
 
+export const dynamic = 'force-static'
+
 export async function GET() {
   const origin = getSiteUrl()
   const xml = await buildPostRssXml({ origin, locale: 'zh' })
