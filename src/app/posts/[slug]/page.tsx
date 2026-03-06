@@ -121,7 +121,13 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
 
   const { content } = await compileMDX({
     source: post.content,
-    components: { a: MDXLink },
+    components: {
+      a: MDXLink,
+      img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
+        // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+        <img loading="lazy" decoding="async" {...props} />
+      ),
+    },
     options: {
       parseFrontmatter: false,
       mdxOptions: {

@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 import './globals.css'
-import PageTransition from '@/app/components/PageTransition'
-import CustomCursor from '@/app/components/CustomCursor'
 import Nav from '@/app/components/Nav'
 import { getSiteUrl, siteConfig, withSiteUrl } from '@/lib/site'
+
+const PageTransition = dynamic(() => import('@/app/components/PageTransition'))
+const CustomCursor = dynamic(() => import('@/app/components/CustomCursor'))
 
 const siteUrl = getSiteUrl()
 
@@ -104,6 +106,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://imgbed.lemonadec.cc" />
+        <link rel="dns-prefetch" href="https://imgbed.lemonadec.cc" />
+      </head>
       <body>
         <script
           type="application/ld+json"

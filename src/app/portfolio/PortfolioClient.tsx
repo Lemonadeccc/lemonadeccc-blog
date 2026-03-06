@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { motion } from 'motion/react'
 
 type PortfolioItem = {
@@ -61,40 +61,48 @@ const randomWord = (length: number) => {
 }
 
 export default function PortfolioClient() {
-  const [displayWords, setDisplayWords] = useState<[string, string][]>(
-    items.map((item) => [item.left, item.right]),
-  )
   const animating = useRef<Set<number>>(new Set())
+  const textRefs = useRef<Map<number, { left: HTMLSpanElement | null; right: HTMLSpanElement | null }>>(new Map())
   const lineTransition = { duration: 2, ease: [0.33, 1, 0.68, 1] as const }
 
   const handleMouseEnter = (index: number) => {
     if (animating.current.has(index)) return
-
     animating.current.add(index)
+
     const original = items[index]
+    const entry = textRefs.current.get(index)
+    const leftEl = entry?.left
+    const rightEl = entry?.right
+    if (!leftEl || !rightEl) { animating.current.delete(index); return }
+
+    // Lock widths and clip overflow to prevent layout shift during scramble
+    leftEl.style.width = `${leftEl.offsetWidth}px`
+    leftEl.style.overflow = 'hidden'
+    rightEl.style.width = `${rightEl.offsetWidth}px`
+    rightEl.style.overflow = 'hidden'
+
     let shuffles = 0
     const maxShuffles = 10
-    const intervalDuration = 50
 
-    const timer = window.setInterval(() => {
+    const step = () => {
       if (shuffles >= maxShuffles) {
-        window.clearInterval(timer)
-        setDisplayWords((prev) =>
-          prev.map((pair, i) => (i === index ? [original.left, original.right] : pair)),
-        )
+        leftEl.textContent = original.left
+        rightEl.textContent = original.right
+        leftEl.style.width = ''
+        leftEl.style.overflow = ''
+        rightEl.style.width = ''
+        rightEl.style.overflow = ''
         animating.current.delete(index)
         return
       }
 
-      setDisplayWords((prev) =>
-        prev.map((pair, i) =>
-          i === index
-            ? [randomWord(original.left.length), randomWord(original.right.length)]
-            : pair,
-        ),
-      )
-      shuffles += 1
-    }, intervalDuration)
+      leftEl.textContent = randomWord(original.left.length)
+      rightEl.textContent = randomWord(original.right.length)
+      shuffles++
+      setTimeout(step, 50)
+    }
+
+    step()
   }
 
   return (
@@ -114,7 +122,7 @@ export default function PortfolioClient() {
                 href={item.href}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="project-link group relative flex items-center justify-center gap-1.5 px-2 pt-3 pb-4 text-[24px] leading-[1.1] transition-[gap] duration-300 ease-in-out sm:gap-2.5 sm:text-[30px] md:px-0 md:pt-2 md:pb-3 md:text-[80px] md:leading-[1.1] md:hover:gap-5"
+                className="project-link group relative flex items-center justify-center gap-1.5 px-2 pt-3 pb-4 text-[24px] leading-[1.1] sm:gap-2.5 sm:text-[30px] md:px-0 md:pt-2 md:pb-3 md:text-[80px] md:leading-[1.1] md:hover:gap-5"
                 onMouseEnter={() => handleMouseEnter(index)}
                 onClick={() => handleMouseEnter(index)}
               >
@@ -132,20 +140,35 @@ export default function PortfolioClient() {
                   animate={{ scaleX: 1 }}
                   transition={lineTransition}
                 />
-                <span className="portfolio-wipe portfolio-wipe-left min-w-0 flex-[2.5] truncate text-right pb-[0.04em] md:overflow-visible md:text-clip">
-                  {displayWords[index][0]}
+                <span
+                  ref={(el) => {
+                    const entry = textRefs.current.get(index) ?? { left: null, right: null }
+                    entry.left = el
+                    textRefs.current.set(index, entry)
+                  }}
+                  className="portfolio-wipe portfolio-wipe-left min-w-0 flex-[2.5] truncate text-right pb-[0.04em] md:overflow-visible md:text-clip"
+                >
+                  {item.left}
                 </span>
-                <div className="relative h-11 w-[70px] sm:h-14 sm:w-[90px] md:h-20 md:w-[125px] min-w-0 overflow-hidden bg-white flex-0 transition-[flex] duration-1000 ease-[cubic-bezier(0.165,0.84,0.44,1)] group-active:flex-[0.5] md:group-hover:flex-[0.5]">
+                <div className="relative h-11 w-[70px] sm:h-14 sm:w-[90px] md:h-20 md:w-[125px] min-w-0 overflow-hidden bg-white flex-0 transition-[flex] duration-300 ease-[cubic-bezier(0.165,0.84,0.44,1)] group-active:flex-[0.5] md:group-hover:flex-[0.5]">
                   <Image
                     src={item.image}
                     alt={`${item.left} ${item.right}`}
                     fill
                     sizes="(max-width: 768px) 30vw, 20vw"
                     className="object-cover"
+                    priority={index === 0}
                   />
                 </div>
-                <span className="portfolio-wipe portfolio-wipe-right min-w-0 flex-[2.5] truncate pb-[0.04em] md:overflow-visible md:text-clip">
-                  {displayWords[index][1]}
+                <span
+                  ref={(el) => {
+                    const entry = textRefs.current.get(index) ?? { left: null, right: null }
+                    entry.right = el
+                    textRefs.current.set(index, entry)
+                  }}
+                  className="portfolio-wipe portfolio-wipe-right min-w-0 flex-[2.5] truncate pb-[0.04em] md:overflow-visible md:text-clip"
+                >
+                  {item.right}
                 </span>
               </a>
             ))}

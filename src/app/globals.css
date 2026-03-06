@@ -11,8 +11,6 @@
   --color-text-secondary: #aaa;
   --color-transition: #fff;
 
-  --font-pp-neue: "PP Neue Montreal", sans-serif;
-
   --text-section-title: 64px;
   --text-section-h2: 32px;
 
@@ -272,6 +270,11 @@
     max-width: 72ch;
     font-size: clamp(16px, 2.8vw, 20px);
     line-height: 1.75;
+  }
+
+  .post-content img {
+    max-width: 100%;
+    height: auto;
   }
 
   .post-content>*+* {

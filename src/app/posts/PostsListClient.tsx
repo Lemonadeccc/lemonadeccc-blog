@@ -134,17 +134,23 @@ export default function PostsListClient({
     let ticking = false
 
     const updateRows = () => {
-      if (activeRow) {
-        const rect = activeRow.getBoundingClientRect()
+      // Phase 1: Batch all DOM reads to avoid layout thrashing
+      const activeRect = activeRow ? activeRow.getBoundingClientRect() : null
+      const rowRects: (DOMRect | null)[] = rows.map((row) =>
+        row === activeRow ? null : row.getBoundingClientRect(),
+      )
+
+      // Phase 2: Process logic and batch all writes
+      if (activeRow && activeRect) {
         const isStillOver =
-          lastMousePosition.x >= rect.left &&
-          lastMousePosition.x <= rect.right &&
-          lastMousePosition.y >= rect.top &&
-          lastMousePosition.y <= rect.bottom
+          lastMousePosition.x >= activeRect.left &&
+          lastMousePosition.x <= activeRect.right &&
+          lastMousePosition.y >= activeRect.top &&
+          lastMousePosition.y <= activeRect.bottom
 
         if (!isStillOver) {
           const wrapper = activeRow.querySelector<HTMLElement>('.post-wrapper')
-          const leavingFromTop = lastMousePosition.y < rect.top + rect.height / 2
+          const leavingFromTop = lastMousePosition.y < activeRect.top + activeRect.height / 2
 
           if (wrapper) {
             const nextPosition = leavingFromTop ? POSITIONS.TOP : POSITIONS.BOTTOM
@@ -160,17 +166,18 @@ export default function PostsListClient({
         }
       }
 
-      rows.forEach((row) => {
-        if (row === activeRow) return
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i]
+        const rect = rowRects[i]
+        if (row === activeRow || !rect) continue
 
-        const rect = row.getBoundingClientRect()
         const isMouseOver =
           lastMousePosition.x >= rect.left &&
           lastMousePosition.x <= rect.right &&
           lastMousePosition.y >= rect.top &&
           lastMousePosition.y <= rect.bottom
 
-        if (!isMouseOver) return
+        if (!isMouseOver) continue
 
         const wrapper = row.querySelector<HTMLElement>('.post-wrapper')
         if (wrapper) {
@@ -183,7 +190,8 @@ export default function PostsListClient({
         }
 
         activeRow = row
-      })
+        break
+      }
 
       ticking = false
     }
