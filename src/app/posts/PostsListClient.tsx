@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { gsap } from 'gsap'
 import { type PostLocale, withPostLocale } from '@/lib/postLocale'
 import { type ResourceProvider, getProviderPreconnectOrigins } from '@/lib/resourcePreconnect'
@@ -340,7 +340,7 @@ export default function PostsListClient({
         ensureHeadLink(`preconnect-${origin}`, 'preconnect', origin)
       })
 
-      if (seenEmbeds.size < prefetchDocumentLimit) {
+      if (hasVisitedResources && seenEmbeds.size < prefetchDocumentLimit) {
         const embedUrl = parsed.toString()
         if (!seenEmbeds.has(embedUrl)) {
           seenEmbeds.add(embedUrl)
@@ -348,7 +348,7 @@ export default function PostsListClient({
         }
       }
     })
-  }, [isPostsView, resources, resourcesViewHref, router])
+  }, [isPostsView, hasVisitedResources, resources, resourcesViewHref, router])
 
   return (
     <section className="w-full flex-1 bg-bg py-5 text-text md:py-10">
@@ -475,72 +475,70 @@ export default function PostsListClient({
           {filteredResources.length === 0 ? (
             <p className="border border-white/30 px-4 py-5 text-[14px] text-text-secondary">{emptyResourcesLabel}</p>
           ) : (
-            <div className="portfolio-scroll max-h-[68vh] overflow-y-auto pr-1 sm:max-h-[70vh] md:max-h-[72vh]">
-              <div className="grid gap-4 pb-1 md:grid-cols-2 xl:grid-cols-3">
-                {filteredResources.map((resource) => (
-                  <article key={resource.id} className="mx-auto w-full max-w-[680px] overflow-hidden border border-white/30 bg-bg md:max-w-none">
-                    <div className="aspect-video w-full bg-black">
-                      {resource.embedUrl ? (
-                        <iframe
-                          className="h-full w-full border-0 cursor-auto"
-                          src={resource.embedUrl}
-                          title={resource.title}
-                          loading="lazy"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          referrerPolicy="strict-origin-when-cross-origin"
-                          allowFullScreen
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center text-[12px] uppercase tracking-[0.08em] text-text-secondary">
-                          {resourceTypeVideoLabel}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="space-y-2.5 p-3.5 sm:p-4 md:space-y-3 md:p-5">
-                      <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.08em] sm:text-[11px]">
-                        <span className="border border-white px-2 py-1 text-white">{resourceTypeVideoLabel}</span>
-                        {resource.tags.map((tag) => (
-                          <span key={`${resource.id}-${tag.key}`} className="border border-white/35 px-2 py-1 text-text-secondary">
-                            {tag.label}
-                          </span>
-                        ))}
+            <div className="grid gap-4 pb-1 md:grid-cols-2 xl:grid-cols-3">
+              {filteredResources.map((resource) => (
+                <article key={resource.id} className="mx-auto w-full max-w-[680px] overflow-hidden border border-white/30 bg-bg md:max-w-none">
+                  <div className="aspect-video w-full bg-black">
+                    {resource.embedUrl ? (
+                      <iframe
+                        className="h-full w-full border-0 cursor-auto"
+                        src={resource.embedUrl}
+                        title={resource.title}
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center text-[12px] uppercase tracking-[0.08em] text-text-secondary">
+                        {resourceTypeVideoLabel}
                       </div>
+                    )}
+                  </div>
 
-                      {resource.sourceUrl ? (
-                        <h2 className="truncate text-[16px] leading-tight sm:text-[18px]">
-                          <a
-                            href={resource.sourceUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover-wipe transition-opacity opacity-[0.72] hover:opacity-100 focus-visible:opacity-100"
-                            title={resource.title}
-                          >
-                            {resource.title}
-                          </a>
-                        </h2>
-                      ) : (
-                        <h2 className="truncate text-[16px] leading-tight sm:text-[18px]" title={resource.title}>
-                          {resource.title}
-                        </h2>
-                      )}
-
-                      <div className="flex items-center justify-between gap-4 text-[11px] uppercase tracking-[0.08em] text-text-secondary sm:text-[12px]">
-                        <span className="min-w-0 flex-1 truncate" title={`${authorLabel}: ${resource.author}`}>
-                          {authorLabel}: {resource.author}
+                  <div className="space-y-2.5 p-3.5 sm:p-4 md:space-y-3 md:p-5">
+                    <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.08em] sm:text-[11px]">
+                      <span className="border border-white px-2 py-1 text-white">{resourceTypeVideoLabel}</span>
+                      {resource.tags.map((tag) => (
+                        <span key={`${resource.id}-${tag.key}`} className="border border-white/35 px-2 py-1 text-text-secondary">
+                          {tag.label}
                         </span>
-                        <span className="shrink-0">{durationLabel}: {resource.duration}</span>
-                      </div>
-
-                      {resource.summary && (
-                        <p className="truncate text-[13px] leading-[1.65] text-text-secondary sm:text-[14px]" title={resource.summary}>
-                          {resource.summary}
-                        </p>
-                      )}
+                      ))}
                     </div>
-                  </article>
-                ))}
-              </div>
+
+                    {resource.sourceUrl ? (
+                      <h2 className="truncate text-[16px] leading-tight sm:text-[18px]">
+                        <a
+                          href={resource.sourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover-wipe transition-opacity opacity-[0.72] hover:opacity-100 focus-visible:opacity-100"
+                          title={resource.title}
+                        >
+                          {resource.title}
+                        </a>
+                      </h2>
+                    ) : (
+                      <h2 className="truncate text-[16px] leading-tight sm:text-[18px]" title={resource.title}>
+                        {resource.title}
+                      </h2>
+                    )}
+
+                    <div className="flex items-center justify-between gap-4 text-[11px] uppercase tracking-[0.08em] text-text-secondary sm:text-[12px]">
+                      <span className="min-w-0 flex-1 truncate" title={`${authorLabel}: ${resource.author}`}>
+                        {authorLabel}: {resource.author}
+                      </span>
+                      <span className="shrink-0">{durationLabel}: {resource.duration}</span>
+                    </div>
+
+                    {resource.summary && (
+                      <p className="truncate text-[13px] leading-[1.65] text-text-secondary sm:text-[14px]" title={resource.summary}>
+                        {resource.summary}
+                      </p>
+                    )}
+                  </div>
+                </article>
+              ))}
             </div>
           )}
         </div>

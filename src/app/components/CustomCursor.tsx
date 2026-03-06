@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { motion, useAnimationFrame, useMotionValue } from 'framer-motion'
+import { motion, useAnimationFrame, useMotionValue } from 'motion/react'
 
 const CURSOR_SIZE = 24
 const HALF_SIZE = CURSOR_SIZE / 2
