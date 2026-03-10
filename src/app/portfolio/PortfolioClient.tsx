@@ -13,6 +13,12 @@ type PortfolioItem = {
 
 const items: PortfolioItem[] = [
   {
+    left: 'pr-agent',
+    right: 'vibe(4h)',
+    image: '/portfolio/img6.jpeg',
+    href: 'https://pr-agent.condevtools.com/',
+  },
+  {
     left: 'condev',
     right: 'ui',
     image: '/portfolio/img1.jpg',
@@ -29,12 +35,6 @@ const items: PortfolioItem[] = [
     right: 'blog',
     image: '/portfolio/img3.jpg',
     href: 'https://github.com/Lemonadeccc/lemonadeccc-blog',
-  },
-  {
-    left: 'pr',
-    right: 'agent',
-    image: '/portfolio/img6.png',
-    href: 'https://pr-agent.condevtools.com/',
   },
   {
     left: 'GEN 3D',
