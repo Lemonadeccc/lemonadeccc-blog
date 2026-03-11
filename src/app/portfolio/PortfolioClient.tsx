@@ -15,7 +15,7 @@ const items: PortfolioItem[] = [
   {
     left: 'pr-agent',
     right: 'vibe(4h)',
-    image: '/portfolio/img6.jpeg',
+    image: '/portfolio/img6.webp',
     href: 'https://pr-agent.condevtools.com/',
   },
   {
