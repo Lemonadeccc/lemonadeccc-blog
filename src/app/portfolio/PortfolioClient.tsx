@@ -15,7 +15,7 @@ const items: PortfolioItem[] = [
   {
     left: 'pr-agent',
     right: 'vibe(4h)',
-    image: '/portfolio/img6.webp',
+    image: '/portfolio/img6.png',
     href: 'https://pr-agent.condevtools.com/',
   },
   {
@@ -155,7 +155,7 @@ export default function PortfolioClient() {
                     src={item.image}
                     alt={`${item.left} ${item.right}`}
                     fill
-                    sizes="(max-width: 768px) 30vw, 20vw"
+                    sizes="(max-width: 640px) 70px, (max-width: 768px) 90px, 125px"
                     className="object-cover"
                     priority={index === 0}
                   />
