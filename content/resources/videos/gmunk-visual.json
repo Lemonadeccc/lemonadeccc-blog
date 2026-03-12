@@ -1,0 +1,17 @@
+{
+  "id": "gmunk-visual",
+  "type": "video",
+  "provider": "youtube",
+  "title": {
+    "en": "TRON: ARES — GMUNK Computer Vision Reel 4K",
+    "zh": "TRON：ARES — GMUNK 计算机视觉 reel 4K"
+  },
+  "summary": {
+    "en": "Computer vision and HUD systems designed by GMUNK Studio for TRON: Ares.",
+    "zh": "GMUNK Studio 为 TRON: Ares 设计的计算机视觉和 HUD 系统。"
+  },
+  "author": "Bradley G Munkowitz",
+  "duration": "00:01:44",
+  "tags": ["Design", "Art"],
+  "embedUrl": "https://www.youtube.com/embed/ZCurZKMSwyU"
+}

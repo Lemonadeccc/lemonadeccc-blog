@@ -384,13 +384,13 @@ export default function PostsListClient({
             <span>{languageLabel}</span>
             <Link
               href={englishHref}
-              className={`border px-2 py-1 transition-colors ${locale === 'en' ? 'border-white text-white' : 'border-white/35 text-text-secondary hover:border-white hover:text-white'}`}
+              className={`border px-2 py-1 transition-colors ${locale === 'en' ? 'border-text text-text' : 'border-[var(--theme-border)] text-text-secondary hover:border-text hover:text-text'}`}
             >
               {englishLabel}
             </Link>
             <Link
               href={chineseHref}
-              className={`border px-2 py-1 transition-colors ${locale === 'zh' ? 'border-white text-white' : 'border-white/35 text-text-secondary hover:border-white hover:text-white'}`}
+              className={`border px-2 py-1 transition-colors ${locale === 'zh' ? 'border-text text-text' : 'border-[var(--theme-border)] text-text-secondary hover:border-text hover:text-text'}`}
             >
               {chineseLabel}
             </Link>
@@ -411,7 +411,7 @@ export default function PostsListClient({
           >
             {index === 0 && (
               <motion.div
-                className="pointer-events-none absolute left-0 top-0 z-10 h-px w-full bg-white origin-left"
+                className="pointer-events-none absolute left-0 top-0 z-10 h-px w-full bg-text origin-left"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={lineTransition}
@@ -419,7 +419,7 @@ export default function PostsListClient({
             )}
 
             <motion.div
-              className="pointer-events-none absolute left-0 bottom-0 z-10 h-px w-full bg-white origin-left"
+              className="pointer-events-none absolute left-0 bottom-0 z-10 h-px w-full bg-text origin-left"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={lineTransition}
@@ -435,7 +435,7 @@ export default function PostsListClient({
                 </h2>
               </div>
 
-              <div className="flex h-20 items-center justify-between gap-3 bg-white px-3 text-black sm:px-4 md:gap-5 md:px-6">
+              <div className="flex h-20 items-center justify-between gap-3 bg-surface-inverse px-3 text-text-inverse sm:px-4 md:gap-5 md:px-6">
                 <span className="min-w-0 flex-1 truncate text-[16px] sm:text-[22px] md:text-[clamp(28px,4.5vw,54px)] uppercase tracking-[-0.02em] leading-[0.9]">
                   {post.project}
                 </span>
@@ -464,7 +464,7 @@ export default function PostsListClient({
             <button
               type="button"
               onClick={() => setActiveTagKey('all')}
-              className={`border px-2 py-1 transition-colors ${activeTagKey === 'all' ? 'border-white text-white' : 'border-white/35 text-text-secondary hover:border-white hover:text-white'}`}
+              className={`border px-2 py-1 transition-colors ${activeTagKey === 'all' ? 'border-text text-text' : 'border-[var(--theme-border)] text-text-secondary hover:border-text hover:text-text'}`}
             >
               {allTagsLabel}
             </button>
@@ -473,7 +473,7 @@ export default function PostsListClient({
                 key={tag.key}
                 type="button"
                 onClick={() => setActiveTagKey(tag.key)}
-                className={`border px-2 py-1 transition-colors ${activeTagKey === tag.key ? 'border-white text-white' : 'border-white/35 text-text-secondary hover:border-white hover:text-white'}`}
+                className={`border px-2 py-1 transition-colors ${activeTagKey === tag.key ? 'border-text text-text' : 'border-[var(--theme-border)] text-text-secondary hover:border-text hover:text-text'}`}
               >
                 {tag.label}
               </button>
@@ -481,12 +481,12 @@ export default function PostsListClient({
           </div>
 
           {filteredResources.length === 0 ? (
-            <p className="border border-white/30 px-4 py-5 text-[14px] text-text-secondary">{emptyResourcesLabel}</p>
+            <p className="border border-[var(--theme-border)] px-4 py-5 text-[14px] text-text-secondary">{emptyResourcesLabel}</p>
           ) : (
             <div className="grid gap-4 pb-1 md:grid-cols-2 xl:grid-cols-3">
               {filteredResources.map((resource) => (
-                <article key={resource.id} className="mx-auto w-full max-w-[680px] overflow-hidden border border-white/30 bg-bg md:max-w-none">
-                  <div className="aspect-video w-full bg-black">
+                <article key={resource.id} className="mx-auto w-full max-w-[680px] overflow-hidden border border-[var(--theme-border)] bg-bg md:max-w-none">
+                  <div className="aspect-video w-full bg-[var(--theme-code-bg)]">
                     {resource.embedUrl ? (
                       <iframe
                         className="h-full w-full border-0 cursor-auto"
@@ -506,9 +506,9 @@ export default function PostsListClient({
 
                   <div className="space-y-2.5 p-3.5 sm:p-4 md:space-y-3 md:p-5">
                     <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.08em] sm:text-[11px]">
-                      <span className="border border-white px-2 py-1 text-white">{resourceTypeVideoLabel}</span>
+                      <span className="border border-text px-2 py-1 text-text">{resourceTypeVideoLabel}</span>
                       {resource.tags.map((tag) => (
-                        <span key={`${resource.id}-${tag.key}`} className="border border-white/35 px-2 py-1 text-text-secondary">
+                        <span key={`${resource.id}-${tag.key}`} className="border border-[var(--theme-border)] px-2 py-1 text-text-secondary">
                           {tag.label}
                         </span>
                       ))}

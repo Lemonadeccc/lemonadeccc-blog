@@ -16,7 +16,7 @@ const transition = {
 }
 
 const baseClassName =
-  'back-to-posts-btn inline-flex items-center justify-center px-3 py-2 text-[14px] uppercase tracking-[0.08em] text-white md:px-4 md:text-[16px]'
+  'back-to-posts-btn inline-flex items-center justify-center px-3 py-2 text-[14px] uppercase tracking-[0.08em] text-text md:px-4 md:text-[16px]'
 
 export default function BackToPostsButton({
   postsHref,

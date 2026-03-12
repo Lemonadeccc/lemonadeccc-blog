@@ -14,7 +14,7 @@ export default function OfflinePage() {
       </p>
       <Link
         href="/"
-        className="mt-8 rounded-lg bg-white px-6 py-3 text-sm font-medium text-black transition-opacity hover:opacity-80"
+        className="mt-8 rounded-lg bg-surface-inverse px-6 py-3 text-sm font-medium text-text-inverse transition-opacity hover:opacity-80"
       >
         Go to Home
       </Link>

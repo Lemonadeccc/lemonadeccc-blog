@@ -1,7 +1,8 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
 import './globals.css'
 import Nav from '@/app/components/Nav'
+import ThemeProvider from '@/app/components/ThemeProvider'
 import { getSiteUrl, siteConfig, withSiteUrl } from '@/lib/site'
 
 const PageTransition = dynamic(() => import('@/app/components/PageTransition'))
@@ -99,37 +100,46 @@ const personJsonLd = {
   sameAs: [siteConfig.authorUrl, 'https://x.com/Lemonadecccc'],
 }
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F5F5F5' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+  ],
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://imgbed.lemonadec.cc" />
         <link rel="dns-prefetch" href="https://imgbed.lemonadec.cc" />
       </head>
       <body>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd).replaceAll('</script>', '<\\/script>') }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replaceAll('</script>', '<\\/script>') }}
-        />
-        <CustomCursor />
-        <div className="h-screen flex flex-col overflow-hidden">
-          <Nav />
-          <div id="page-scroll-root" className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
-            <PageTransition>
-              <main className="flex min-h-full flex-col">
-                {children}
-              </main>
-            </PageTransition>
+        <ThemeProvider>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd).replaceAll('</script>', '<\\/script>') }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replaceAll('</script>', '<\\/script>') }}
+          />
+          <CustomCursor />
+          <div className="h-screen flex flex-col overflow-hidden">
+            <Nav />
+            <div id="page-scroll-root" className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+              <PageTransition>
+                <main className="flex min-h-full flex-col">
+                  {children}
+                </main>
+              </PageTransition>
+            </div>
           </div>
-        </div>
+        </ThemeProvider>
       </body>
     </html>
   )

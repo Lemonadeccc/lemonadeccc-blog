@@ -23,7 +23,7 @@ export async function generateMetadata({ searchParams }: PostsPageProps): Promis
       : `${siteConfig.authorName} 的文章列表，包含 AI、动效与部署。`
     : isResourcesView
       ? `Curated video resources by ${siteConfig.authorName} with tag filtering and external links.`
-      : `Browse posts by ${siteConfig.authorName} on AI, animation, and deployment.`
+      : `Browse posts by ${siteConfig.authorName} on AI, development.`
 
   return {
     title,

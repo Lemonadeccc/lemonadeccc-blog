@@ -59,7 +59,7 @@ const CustomCursor = () => {
 
   return (
     <motion.div
-      className="custom-cursor fixed top-0 left-0 z-9999 pointer-events-none"
+      className="custom-cursor fixed top-0 left-0 pointer-events-none"
       style={{ x, y, scale, opacity: isOverIframe ? 0 : 1 }}
     >
       <div

@@ -18,14 +18,14 @@ const Hero = () => {
           >
             Lemonadeccc
           </a>
-          Learning and sharing some articles about AI, animation, and deployment.
+          Learning and sharing some articles about AI, development.
           <br />
           If you like my project or ideas, you can subscribe to my{' '}
           <a
             href="/rss.xml"
             target="_blank"
             rel="noreferrer noopener"
-            className="hover-wipe inline-block font-extrabold text-white"
+            className="hover-wipe inline-block font-extrabold text-text"
           >
             RSS feed
           </a>
@@ -35,7 +35,7 @@ const Hero = () => {
             href="/rss-zh.xml"
             target="_blank"
             rel="noreferrer noopener"
-            className="hover-wipe inline-block font-extrabold text-white"
+            className="hover-wipe inline-block font-extrabold text-text"
           >
             RSS feed (zh-CN)
           </a>

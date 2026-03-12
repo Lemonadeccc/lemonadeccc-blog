@@ -90,14 +90,14 @@ export default function ContactPage() {
             <section className="relative pt-px">
               <div className="reveal-top-line" aria-hidden />
               <h2 className="py-5 text-[16px] uppercase tracking-[0.08em] text-text-secondary">Contacts</h2>
-              <div className="border-b border-white/30">
+              <div className="border-b border-[var(--theme-border)]">
                 {contactItems.map((item) => (
                   <a
                     key={item.label}
                     href={item.href}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="group flex flex-col items-start gap-2 border-t border-white/30 py-4 md:flex-row md:items-center md:justify-between md:gap-5 md:py-5"
+                    className="group flex flex-col items-start gap-2 border-t border-[var(--theme-border)] py-4 md:flex-row md:items-center md:justify-between md:gap-5 md:py-5"
                   >
                     <span className="text-[13px] md:text-[14px] uppercase tracking-[0.08em] text-text-secondary">
                       {item.label}
@@ -117,14 +117,14 @@ export default function ContactPage() {
                 {friendSeeds.map((friend) => (
                   <article
                     key={friend.github}
-                    className="group flex items-center gap-4 border border-white/30 bg-transparent p-4 transition-colors duration-300 hover:bg-white/5"
+                    className="group flex items-center gap-4 border border-[var(--theme-border)] bg-transparent p-4 transition-colors duration-300 hover:bg-[var(--theme-surface-hover)]"
                   >
                     <Image
                       src={friend.avatar}
                       alt={`${friend.name} avatar`}
                       width={64}
                       height={64}
-                      className="h-16 w-16 rounded-full border border-white/40 object-cover"
+                      className="h-16 w-16 rounded-full border border-[var(--theme-border)] object-cover"
                     />
                     <div className="min-w-0">
                       <p className="text-[20px] leading-none uppercase">{friend.name}</p>

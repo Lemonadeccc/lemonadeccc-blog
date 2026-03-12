@@ -2,7 +2,7 @@ import { createHighlighterCore } from 'shiki/core'
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 
 const highlighterPromise = createHighlighterCore({
-  themes: [import('shiki/themes/github-dark.mjs')],
+  themes: [import('shiki/themes/github-dark.mjs'), import('shiki/themes/github-light.mjs')],
   langs: [
     import('shiki/langs/typescript.mjs'),
     import('shiki/langs/javascript.mjs'),

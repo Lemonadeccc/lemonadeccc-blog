@@ -138,7 +138,7 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
         rehypePlugins: [
           rehypeSlug,
           [rehypeAutolinkHeadings, { behavior: 'append' }],
-          [rehypeShikiFromHighlighter, highlighter, { theme: 'github-dark' }],
+          [rehypeShikiFromHighlighter, highlighter, { themes: { dark: 'github-dark', light: 'github-light' }, defaultColor: false }],
         ],
       },
     },
@@ -182,14 +182,14 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
           <span>{t('posts.language')}</span>
           <Link
             href={englishHref}
-            className={`border px-2 py-1 transition-colors ${locale === 'en' ? 'border-white text-white' : 'border-white/35 text-text-secondary hover:border-white hover:text-white'
+            className={`border px-2 py-1 transition-colors ${locale === 'en' ? 'border-text text-text' : 'border-[var(--theme-border)] text-text-secondary hover:border-text hover:text-text'
               }`}
           >
             {t('posts.english')}
           </Link>
           <Link
             href={chineseHref}
-            className={`border px-2 py-1 transition-colors ${locale === 'zh' ? 'border-white text-white' : 'border-white/35 text-text-secondary hover:border-white hover:text-white'
+            className={`border px-2 py-1 transition-colors ${locale === 'zh' ? 'border-text text-text' : 'border-[var(--theme-border)] text-text-secondary hover:border-text hover:text-text'
               }`}
           >
             {t('posts.chinese')}
@@ -202,7 +202,7 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
           backToTopLabel={t('postDetail.backToTop')}
         />
 
-        <header className="mb-8 border-b border-white/30 pb-6 md:mb-10 md:pb-8">
+        <header className="mb-8 border-b border-[var(--theme-border)] pb-6 md:mb-10 md:pb-8">
           <p className="text-[12px] uppercase tracking-[0.08em] text-text-secondary md:text-[14px]">
             {post.type} / <time dateTime={post.date}>{dateFormatter.format(new Date(post.date))}</time>
           </p>

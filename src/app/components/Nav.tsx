@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, useAnimationControls } from 'motion/react'
 import { useEffect, useRef } from 'react'
+import ThemeToggle from './ThemeToggle'
 
 const NAV_LINE_DURATION = 2
 const NAV_LINE_EASE = [0.33, 1, 0.68, 1] as const
@@ -67,7 +68,7 @@ const Nav = () => {
           </Link>
         </div>
 
-        <div className="mt-3 grid w-full grid-cols-3 gap-1 sm:gap-2 md:mt-0 md:flex md:w-auto md:items-center md:justify-between md:gap-2.5">
+        <div className="mt-3 grid w-full grid-cols-4 gap-1 sm:gap-2 md:mt-0 md:flex md:w-auto md:items-center md:justify-between md:gap-2.5">
           <Link
             href="/portfolio"
             className={`hover-wipe inline-flex min-h-8 items-center justify-center px-1 py-1 text-center text-[13px] leading-none transition-opacity sm:text-[16px] md:min-h-0 md:p-2.5 md:text-[48px] ${isPortfolioActive ? 'opacity-100' : 'opacity-[0.55]'}`}
@@ -91,10 +92,14 @@ const Nav = () => {
           >
             CONTACT
           </Link>
+
+          <div className="inline-flex items-center justify-center md:p-2.5">
+            <ThemeToggle />
+          </div>
         </div>
 
         <motion.div
-          className="absolute left-0 bottom-0 h-px w-full bg-white origin-left"
+          className="absolute left-0 bottom-0 h-px w-full bg-text origin-left"
           initial={{ scaleX: 0 }}
           animate={lineControls}
         />

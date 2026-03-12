@@ -1,6 +1,10 @@
 {
   "order": [
     {
+      "id": "gmunk-visual",
+      "file": "videos/gmunk-visual.json"
+    },
+    {
       "id": "webMCP",
       "file": "videos/webMCP.json"
     },
