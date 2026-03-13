@@ -2,6 +2,7 @@ export const siteConfig = {
   name: "Lemonadeccc",
   shortName: "Lemonadeccc",
   description: "A frontend learning library with posts on AI, development.",
+  displayDomain: "lemonadec.cc",
   authorName: "Lemonadeccc",
   authorUrl: "https://github.com/Lemonadeccc",
   creatorHandle: "@Lemonadecccc",

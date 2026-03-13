@@ -3,7 +3,9 @@ import Hero from './components/Hero'
 import { siteConfig } from '@/lib/site'
 
 export const metadata: Metadata = {
-  title: 'Home',
+  title: {
+    absolute: `Home | ${siteConfig.name}`,
+  },
   description: siteConfig.description,
   alternates: {
     canonical: '/',

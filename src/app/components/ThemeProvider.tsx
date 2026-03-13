@@ -1,6 +1,7 @@
 'use client'
 
 import { ThemeProvider as NextThemesProvider } from 'next-themes'
+import { THEME_STORAGE_KEY } from './themeConstants'
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
@@ -9,7 +10,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
       defaultTheme="light"
       enableSystem={false}
       disableTransitionOnChange
-      storageKey="blog-theme-v1"
+      storageKey={THEME_STORAGE_KEY}
     >
       {children}
     </NextThemesProvider>

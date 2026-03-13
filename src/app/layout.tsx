@@ -3,12 +3,21 @@ import dynamic from 'next/dynamic'
 import './globals.css'
 import Nav from '@/app/components/Nav'
 import ThemeProvider from '@/app/components/ThemeProvider'
+import DynamicFavicon from '@/app/components/DynamicFavicon'
+import { THEME_STORAGE_KEY } from '@/app/components/themeConstants'
+import {
+  createFaviconBootScript,
+  FAVICON_LINKS,
+  FAVICON_TYPE,
+  LIGHT_FAVICON_HREF,
+} from '@/lib/favicon'
 import { getSiteUrl, siteConfig, withSiteUrl } from '@/lib/site'
 
 const PageTransition = dynamic(() => import('@/app/components/PageTransition'))
 const CustomCursor = dynamic(() => import('@/app/components/CustomCursor'))
 
 const siteUrl = getSiteUrl()
+const faviconBootScript = createFaviconBootScript(THEME_STORAGE_KEY)
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -45,21 +54,12 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     url: siteUrl,
     locale: 'en_US',
-    images: [
-      {
-        url: withSiteUrl('/posts/img1.jpg'),
-        width: 1200,
-        height: 630,
-        alt: `${siteConfig.name} cover`,
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: siteConfig.name,
     description: siteConfig.description,
     creator: siteConfig.creatorHandle,
-    images: [withSiteUrl('/posts/img1.jpg')],
   },
   robots: {
     index: true,
@@ -73,7 +73,6 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/favicon.png',
     apple: '/icons/icon-192.png',
   },
 }
@@ -115,11 +114,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {FAVICON_LINKS.map(({ id, rel }) => (
+          <link key={id} id={id} rel={rel} type={FAVICON_TYPE} href={LIGHT_FAVICON_HREF} />
+        ))}
+        <script dangerouslySetInnerHTML={{ __html: faviconBootScript.replaceAll('</script>', '<\\/script>') }} />
         <link rel="preconnect" href="https://imgbed.lemonadec.cc" />
         <link rel="dns-prefetch" href="https://imgbed.lemonadec.cc" />
       </head>
       <body>
         <ThemeProvider>
+          <DynamicFavicon />
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd).replaceAll('</script>', '<\\/script>') }}

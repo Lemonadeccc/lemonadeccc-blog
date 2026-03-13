@@ -11,6 +11,7 @@ import { getAllPostSlugs, getPostBySlug } from '@/lib/posts'
 import { getPostTranslator } from '@/lib/postMessages'
 import { getPostDateLocale, resolvePostLocale, withPostLocale } from '@/lib/postLocale'
 import { siteConfig, withSiteUrl } from '@/lib/site'
+import { getDefaultSocialImageUrl } from '@/lib/socialImage'
 import BackToPostsButton from './BackToPostsButton'
 
 function isExternalUrl(href: string) {
@@ -66,7 +67,7 @@ export async function generateMetadata({ params, searchParams }: PostDetailPageP
 
   const postPath = withPostLocale(`/posts/${slug}`, locale)
   const description = post.summary || post.project
-  const imageUrl = withSiteUrl(post.image ?? '/posts/img1.jpg')
+  const imageUrl = post.image ? withSiteUrl(post.image) : getDefaultSocialImageUrl()
   const publishedTime = toIsoDate(post.date)
 
   return {
@@ -167,7 +168,7 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
       name: siteConfig.authorName,
       url: siteConfig.authorUrl,
     },
-    image: [withSiteUrl(post.image ?? '/posts/img1.jpg')],
+    image: [post.image ? withSiteUrl(post.image) : getDefaultSocialImageUrl()],
     keywords: [post.type, post.project].filter(Boolean).join(', '),
   }
 
