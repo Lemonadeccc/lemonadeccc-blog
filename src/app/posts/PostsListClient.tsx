@@ -361,26 +361,26 @@ export default function PostsListClient({
   return (
     <section className="w-full flex-1 bg-bg py-5 text-text md:py-10">
       <div className="app-container px-4 sm:px-8 md:px-10">
-        <div className="mb-4 flex flex-col gap-3 md:mb-6 md:flex-row md:items-center md:justify-between md:gap-4">
+        <div className="mb-4 flex items-center justify-between gap-2 md:mb-6 md:gap-4">
           <h1 className="sr-only">{title}</h1>
-          <div className="flex flex-wrap items-center gap-3 md:gap-4">
+          <div className="flex min-w-0 items-center gap-2 whitespace-nowrap sm:gap-3 md:gap-4">
             <Link
               href={postsViewHref}
               onClick={() => setOptimisticView('posts')}
-              className={`hover-wipe inline-flex items-center justify-center text-[30px] md:text-[36px] uppercase tracking-[0.08em] font-medium transition-opacity ${isPostsView ? 'opacity-100' : 'opacity-[0.55]'}`}
+              className={`hover-wipe inline-flex items-center justify-center text-[17px] font-medium uppercase tracking-[0.06em] transition-opacity sm:text-[22px] md:text-[36px] ${isPostsView ? 'opacity-100' : 'opacity-[0.55]'}`}
             >
               {viewPostsLabel}
             </Link>
             <Link
               href={resourcesViewHref}
               onClick={() => setOptimisticView('resources')}
-              className={`hover-wipe inline-flex items-center justify-center text-[30px] md:text-[36px] uppercase tracking-[0.08em] font-medium transition-opacity ${isResourcesView ? 'opacity-100' : 'opacity-[0.55]'}`}
+              className={`hover-wipe inline-flex items-center justify-center text-[17px] font-medium uppercase tracking-[0.06em] transition-opacity sm:text-[22px] md:text-[36px] ${isResourcesView ? 'opacity-100' : 'opacity-[0.55]'}`}
             >
               {viewResourcesLabel}
             </Link>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 text-[12px] uppercase tracking-[0.08em] text-text-secondary md:text-[13px]">
+          <div className="flex shrink-0 items-center gap-1.5 text-[10px] uppercase tracking-[0.06em] text-text-secondary sm:gap-2 sm:text-[11px] md:text-[13px]">
             <span>{languageLabel}</span>
             <Link
               href={englishHref}
@@ -407,7 +407,7 @@ export default function PostsListClient({
               postRefs.current[index] = element
             }}
             data-cursor-fast
-            className="group relative block h-20 overflow-hidden select-none"
+            className="group relative block overflow-hidden select-none md:h-20"
           >
             {index === 0 && (
               <motion.div
@@ -425,32 +425,52 @@ export default function PostsListClient({
               transition={lineTransition}
             />
 
-            <div className="post-wrapper relative h-60 will-change-transform -translate-y-40">
-              <div className="flex h-20 items-center justify-between gap-3 bg-bg px-3 sm:px-4 md:gap-5 md:px-6" aria-hidden="true">
-                <h2 className="min-w-0 flex-1 truncate text-[16px] sm:text-[22px] md:text-[clamp(28px,4.5vw,54px)] uppercase tracking-[-0.02em] leading-[0.9]">
-                  {post.title}
-                </h2>
-                <h2 className="ml-2 shrink-0 whitespace-nowrap text-right text-[12px] sm:text-[18px] md:text-[clamp(16px,3.2vw,42px)] uppercase tracking-[-0.02em] leading-[0.9]">
-                  {post.type}
-                </h2>
-              </div>
+            <div className="hidden md:block">
+              <div className="post-wrapper relative h-60 will-change-transform -translate-y-40">
+                <div className="flex h-20 items-center justify-between gap-3 bg-bg px-3 sm:px-4 md:gap-5 md:px-6" aria-hidden="true">
+                  <h2 className="min-w-0 flex-1 truncate text-[16px] sm:text-[22px] md:text-[clamp(28px,4.5vw,54px)] uppercase tracking-[-0.02em] leading-[0.9]">
+                    {post.title}
+                  </h2>
+                  <h2 className="ml-2 shrink-0 whitespace-nowrap text-right text-[12px] sm:text-[18px] md:text-[clamp(16px,3.2vw,42px)] uppercase tracking-[-0.02em] leading-[0.9]">
+                    {post.type}
+                  </h2>
+                </div>
 
-              <div className="flex h-20 items-center justify-between gap-3 bg-surface-inverse px-3 text-text-inverse sm:px-4 md:gap-5 md:px-6">
-                <span className="min-w-0 flex-1 truncate text-[16px] sm:text-[22px] md:text-[clamp(28px,4.5vw,54px)] uppercase tracking-[-0.02em] leading-[0.9]">
-                  {post.project}
-                </span>
-                <span className="ml-2 shrink-0 whitespace-nowrap text-right text-[12px] sm:text-[18px] md:text-[clamp(16px,3.2vw,42px)] uppercase tracking-[-0.02em] leading-[0.9]">
-                  {post.label}
-                </span>
-              </div>
+                <div className="flex h-20 items-center justify-between gap-3 bg-surface-inverse px-3 text-text-inverse sm:px-4 md:gap-5 md:px-6">
+                  <span className="min-w-0 flex-1 truncate text-[16px] sm:text-[22px] md:text-[clamp(28px,4.5vw,54px)] uppercase tracking-[-0.02em] leading-[0.9]">
+                    {post.project}
+                  </span>
+                  <span className="ml-2 shrink-0 whitespace-nowrap text-right text-[12px] sm:text-[18px] md:text-[clamp(16px,3.2vw,42px)] uppercase tracking-[-0.02em] leading-[0.9]">
+                    {post.label}
+                  </span>
+                </div>
 
-              <div className="flex h-20 items-center justify-between gap-3 bg-bg px-3 sm:px-4 md:gap-5 md:px-6" aria-hidden="true">
-                <h2 className="min-w-0 flex-1 truncate text-[16px] sm:text-[22px] md:text-[clamp(28px,4.5vw,54px)] uppercase tracking-[-0.02em] leading-[0.9]">
-                  {post.title}
-                </h2>
-                <h2 className="ml-2 shrink-0 whitespace-nowrap text-right text-[12px] sm:text-[18px] md:text-[clamp(16px,3.2vw,42px)] uppercase tracking-[-0.02em] leading-[0.9]">
-                  {post.type}
-                </h2>
+                <div className="flex h-20 items-center justify-between gap-3 bg-bg px-3 sm:px-4 md:gap-5 md:px-6" aria-hidden="true">
+                  <h2 className="min-w-0 flex-1 truncate text-[16px] sm:text-[22px] md:text-[clamp(28px,4.5vw,54px)] uppercase tracking-[-0.02em] leading-[0.9]">
+                    {post.title}
+                  </h2>
+                  <h2 className="ml-2 shrink-0 whitespace-nowrap text-right text-[12px] sm:text-[18px] md:text-[clamp(16px,3.2vw,42px)] uppercase tracking-[-0.02em] leading-[0.9]">
+                    {post.type}
+                  </h2>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex min-h-[96px] items-center px-4 py-3 sm:px-8 md:hidden">
+              <div className="flex min-h-12 min-w-0 flex-1 flex-col justify-center">
+                <div className="flex items-center justify-between gap-3">
+                  <h2 className="min-w-0 flex-1 text-[16px] leading-tight uppercase tracking-[-0.02em]">
+                    {post.title}
+                  </h2>
+                  <span className="shrink-0 pt-0.5 text-[11px] uppercase tracking-[0.08em] text-text-secondary">
+                    {post.type}
+                  </span>
+                </div>
+
+                <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] uppercase tracking-[0.08em] text-text-secondary">
+                  <span className="min-w-0 flex-1 leading-tight">{post.project}</span>
+                  <span className="shrink-0">{post.label}</span>
+                </div>
               </div>
             </div>
           </Link>
@@ -515,7 +535,7 @@ export default function PostsListClient({
                     </div>
 
                     {resource.sourceUrl ? (
-                      <h2 className="truncate text-[16px] leading-tight sm:text-[18px]">
+                      <h2 className="text-[16px] leading-tight sm:truncate sm:text-[18px]">
                         <a
                           href={resource.sourceUrl}
                           target="_blank"
@@ -527,12 +547,12 @@ export default function PostsListClient({
                         </a>
                       </h2>
                     ) : (
-                      <h2 className="truncate text-[16px] leading-tight sm:text-[18px]" title={resource.title}>
+                      <h2 className="text-[16px] leading-tight sm:truncate sm:text-[18px]" title={resource.title}>
                         {resource.title}
                       </h2>
                     )}
 
-                    <div className="flex items-center justify-between gap-4 text-[11px] uppercase tracking-[0.08em] text-text-secondary sm:text-[12px]">
+                    <div className="flex flex-col items-start gap-1.5 text-[11px] uppercase tracking-[0.08em] text-text-secondary sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:text-[12px]">
                       <span className="min-w-0 flex-1 truncate" title={`${authorLabel}: ${resource.author}`}>
                         {authorLabel}: {resource.author}
                       </span>
@@ -540,7 +560,7 @@ export default function PostsListClient({
                     </div>
 
                     {resource.summary && (
-                      <p className="truncate text-[13px] leading-[1.65] text-text-secondary sm:text-[14px]" title={resource.summary}>
+                      <p className="text-[13px] leading-[1.65] text-text-secondary sm:truncate sm:text-[14px]" title={resource.summary}>
                         {resource.summary}
                       </p>
                     )}

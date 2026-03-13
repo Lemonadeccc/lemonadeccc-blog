@@ -129,7 +129,7 @@ export default function RootLayout({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replaceAll('</script>', '<\\/script>') }}
           />
           <CustomCursor />
-          <div className="h-screen flex flex-col overflow-hidden">
+          <div className="flex h-dvh min-h-dvh flex-col overflow-hidden">
             <Nav />
             <div id="page-scroll-root" className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
               <PageTransition>

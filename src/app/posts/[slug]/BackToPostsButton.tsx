@@ -67,7 +67,7 @@ export default function BackToPostsButton({
       <AnimatePresence>
         {showFloating && (
           <motion.div
-            className="pointer-events-none fixed inset-x-4 bottom-4 z-40 flex gap-2 md:inset-x-auto md:right-[max(1rem,calc((100vw-1100px)/4))] md:bottom-auto md:top-[calc(var(--nav-height,0px)+((100vh-var(--nav-height,0px))/2))] md:-translate-y-1/2 md:flex-col md:gap-3"
+            className="pointer-events-none fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 flex gap-2 md:inset-x-auto md:right-[max(1rem,calc((100vw-1100px)/4))] md:bottom-auto md:top-[calc(var(--nav-height,0px)+((100vh-var(--nav-height,0px))/2))] md:-translate-y-1/2 md:flex-col md:gap-3"
             initial={{ opacity: 0, x: -42 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 26 }}

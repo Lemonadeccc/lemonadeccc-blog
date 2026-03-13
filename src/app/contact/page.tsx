@@ -80,10 +80,7 @@ export default function ContactPage() {
       <div className="app-container h-full px-4 py-5 sm:px-8 md:px-10 md:py-8 lg:py-6">
         <div className="flex h-full min-h-0 flex-col">
           <div className="shrink-0">
-            <h1 className="text-[30px] md:text-[36px] uppercase tracking-[0.08em] font-medium mb-3">Contact</h1>
-            <p className="w-full text-[16px] md:text-[20px] leading-[1.6] text-text-secondary">
-              Reach me through the channels below. Every link opens in a new tab.
-            </p>
+            <h1 className="mb-3 text-[30px] font-medium uppercase tracking-[0.08em] md:text-[36px]">Contact</h1>
           </div>
 
           <div className="mt-8 grid gap-10 lg:mt-6 lg:min-h-0 lg:flex-1 lg:grid-cols-[1fr_1fr]">
@@ -102,7 +99,7 @@ export default function ContactPage() {
                     <span className="text-[13px] md:text-[14px] uppercase tracking-[0.08em] text-text-secondary">
                       {item.label}
                     </span>
-                    <span className="hover-wipe text-[22px] md:text-[46px] uppercase leading-[0.95] md:text-right">
+                    <span className="hover-wipe text-[20px] uppercase leading-[0.95] sm:text-[22px] md:text-[46px] md:text-right">
                       {item.value}
                     </span>
                   </a>
@@ -117,18 +114,18 @@ export default function ContactPage() {
                 {friendSeeds.map((friend) => (
                   <article
                     key={friend.github}
-                    className="group flex items-center gap-4 border border-[var(--theme-border)] bg-transparent p-4 transition-colors duration-300 hover:bg-[var(--theme-surface-hover)]"
+                    className="group flex flex-col items-start gap-3 border border-[var(--theme-border)] bg-transparent p-4 transition-colors duration-300 hover:bg-[var(--theme-surface-hover)] sm:flex-row sm:items-center sm:gap-4"
                   >
                     <Image
                       src={friend.avatar}
                       alt={`${friend.name} avatar`}
                       width={64}
                       height={64}
-                      className="h-16 w-16 rounded-full border border-[var(--theme-border)] object-cover"
+                      className="h-14 w-14 rounded-full border border-[var(--theme-border)] object-cover sm:h-16 sm:w-16"
                     />
-                    <div className="min-w-0">
-                      <p className="text-[20px] leading-none uppercase">{friend.name}</p>
-                      <p className="mt-2 text-[13px] uppercase tracking-[0.08em] text-text-secondary">
+                    <div className="min-w-0 flex-1">
+                      <p className="break-words text-[18px] leading-none uppercase sm:text-[20px]">{friend.name}</p>
+                      <p className="mt-2 break-words text-[13px] leading-[1.55] uppercase tracking-[0.08em] text-text-secondary">
                         {friend.description}
                       </p>
                       <p className="mt-3 flex flex-wrap items-center gap-3 text-[14px]">

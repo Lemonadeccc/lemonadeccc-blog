@@ -177,8 +177,8 @@ export default async function PostDetailPage({ params, searchParams }: PostDetai
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd).replaceAll('</script>', '<\\/script>') }}
       />
-      <div className="app-container w-full max-w-[1100px] px-4 py-8 sm:px-6 md:px-10 md:py-12">
-        <div className="mb-6 flex flex-wrap items-center justify-start gap-2 text-[12px] uppercase tracking-[0.08em] text-text-secondary md:justify-end md:text-[13px]">
+      <div className="app-container w-full max-w-[1100px] px-4 pt-8 pb-24 sm:px-6 md:px-10 md:pt-12 md:pb-12">
+        <div className="mb-6 flex flex-wrap items-center justify-end gap-2 text-[12px] uppercase tracking-[0.08em] text-text-secondary md:text-[13px]">
           <span>{t('posts.language')}</span>
           <Link
             href={englishHref}

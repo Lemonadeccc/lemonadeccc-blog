@@ -233,7 +233,7 @@ export default function PortfolioClient() {
       />
 
       <div className="app-container px-4 sm:px-8 md:px-10">
-        <h1 className="text-[30px] md:text-[36px] uppercase tracking-[0.08em] font-medium mb-8 md:mb-10">
+        <h1 className="mb-5 text-[17px] font-medium uppercase tracking-[0.06em] sm:text-[22px] md:mb-10 md:text-[36px]">
           Featured Work
         </h1>
       </div>
@@ -246,7 +246,7 @@ export default function PortfolioClient() {
             href={item.href}
             target="_blank"
             rel="noreferrer noopener"
-            className="group relative block h-24 md:h-20 overflow-hidden select-none"
+            className="group relative block overflow-hidden select-none md:h-20"
           >
             {index === 0 && (
               <motion.div
@@ -303,33 +303,36 @@ export default function PortfolioClient() {
             </div>
 
             {/* ── Mobile: flat single row with inline thumbnail ── */}
-            <div className="flex h-20 items-center gap-3 px-3 sm:px-4 md:hidden">
-              <div className="relative h-12 w-[72px] shrink-0 overflow-hidden bg-surface-inverse">
+            <div className="flex min-h-[104px] items-center gap-3 px-4 py-3 sm:px-8 md:hidden">
+              <div className="relative h-14 w-20 shrink-0 overflow-hidden bg-surface-inverse">
                 <Image
                   src={item.image}
                   alt={`${item.left} ${item.right}`}
                   fill
-                  sizes="72px"
+                  sizes="80px"
                   className="object-cover"
                   priority={index === 0}
                 />
               </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-baseline justify-between gap-2">
-                  <span className="truncate text-[18px] uppercase tracking-[-0.02em] leading-none">
+              <div className="flex min-h-14 min-w-0 flex-1 flex-col justify-center">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="min-w-0 flex-1 text-[16px] uppercase tracking-[-0.02em] leading-tight">
                     {item.left}
                   </span>
-                  <span className="shrink-0 text-[13px] uppercase tracking-[-0.01em] opacity-60">
-                    {item.right}
-                  </span>
-                </div>
-                <div className="mt-1 flex items-baseline justify-between gap-2">
-                  <span className="truncate text-[13px] uppercase tracking-[0.04em] opacity-60">
-                    {item.project}
-                  </span>
-                  <span className="shrink-0 text-[11px] uppercase tracking-[0.04em] opacity-50">
+                  <span className="shrink-0 pt-0.5 text-[11px] uppercase tracking-[0.08em] text-text-secondary">
                     {item.label}
                   </span>
+                </div>
+                <div className="mt-1 text-[12px] uppercase tracking-[0.08em] text-text-secondary">
+                  <span className="block leading-tight">
+                    {item.project}
+                  </span>
+                </div>
+                <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] uppercase tracking-[0.08em] text-text-secondary">
+                  <span className="leading-tight">
+                    {item.right}
+                  </span>
+                  <span className="opacity-60">View Project</span>
                 </div>
               </div>
             </div>
