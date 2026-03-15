@@ -1,125 +1,97 @@
 ---
-title: AI Workflow Summary
+title: AI Workflow Summary in Practice
 type: Article
-project: Summary of My Personal AI Workflow Tools
+project: A Summary of the AI Workflow Tools I Use
 date: 2026-03-01
-summary: From wireframe design to multi-agent acceleration, this is the AI toolchain and execution workflow I currently use.
+summary: From wireframe design to more efficient multi-agent development, this is the AI toolchain and execution workflow I currently use.
 ---
 
-This post is not a tool list. It is the workflow I distilled after repeated iteration in real projects.  
-The process is straightforward: define constraints first, execute in parallel with multiple models, then converge with a unified review gate.
+This article is not a tool list, but a working method I distilled through repeated iteration in real projects.  
+The process is to define the constraints clearly first, let multiple models execute in parallel, and then converge everything through a unified review.
 
-## 1. Design Stage
+## I. Design Stage
 
-In the design stage, I align information architecture and produce an iteratable first draft as quickly as possible.
+There are several possible routes in the design stage right now. Here I will only cover the stable ones.
 
 ### 1) Wireframe Sketches
 
-- [wiretext](https://wiretext.app/): Quickly turns page structure into wireframes, useful for confirming information hierarchy first.
-- [mockdown](https://www.mockdown.design/): Expresses page block layout in text, useful for early discussion and requirement clarification.
+- [wiretext](https://wiretext.app/): Quickly turns page structure into wireframes, which is useful for confirming the information hierarchy first.
+- [mockdown](https://www.mockdown.design/): Uses text to express block-level page layout, which works well for early discussion and requirement clarification.
 
-### 2) UI Shell and Variants
+### 2) AI-Generated UI
 
 - [Pencil](https://www.pencil.dev/): Generates editable UI drafts through prompts.
-- [variant ai](https://www.variant.ai/): Start from a close style, refine with prompts, then export `.js` and continue structural refinement with Claude Code or Codex.
+- [variant ai](https://www.variant.ai/): First find a style that is close, then adjust it with prompts; after exporting `.js`, continue refining the structure with Claude Code or Codex.
 
-## 2. Development Stage
+### 4) Common Skills
+frontend-design(https://skills.sh/anthropics/skills/frontend-design): fairly general-purpose
+ui-ux-pro-max(https://skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-max): multiple style sets, with automatic selection of the style that fits the scenario.
+tailwind-design-system(https://skills.sh/wshobson/agents/tailwind-design-system): used when working with Tailwind
+reponsive-design(https://github.com/wshobson/agents/tree/main/plugins/ui-design/skills/responsive-design): responsive design
+[Copy UI styles from websites](https://github.com/Lucent-Snow/style-extractor): useful for copying styles.
 
-### 1) Baseline: Multi-Agent + Git Worktree
+## II. Development Stage
 
-My current approach for simpler requirements:
+### 1) Baseline approach with Multiple Agents + Git Worktree
 
-1. Split one requirement into 2-4 relatively independent subtasks.
-2. Bind each subtask to an isolated worktree and session.
-3. Merge small verifiable increments first, then converge cross-module changes.
+For simple requirements, my current way of splitting work is:
 
-This significantly reduces context pollution and task interference.  
-There is a boundary, though: when task coupling is high, over-splitting worktrees can increase integration cost.
+1. Break one requirement into 2-4 relatively independent subtasks.
+2. Bind each subtask to its own worktree and its own session.
+3. Merge small, verifiable increments first, then converge across modules.
 
-### 2) Third-Party Tooling Landscape
+This can significantly reduce context pollution and task interference.  
+But it also has a boundary: when task coupling is too high, over-splitting worktrees amplifies integration cost.
 
-I used to rely on:
+### 2) Third-party tools
 
 - [superset](https://github.com/superset-sh/superset): a parallel worktree orchestration tool.
-- [happy](https://github.com/slopus/happy): remote control for Claude Code.
+- [happy](https://github.com/slopus/happy): remote control for cc.
 
-Now that Claude officially covers multi-worktree workflows and part of remote capabilities, these tools are better used as optional CLI enhancers.
+Claude now officially covers multiple worktrees and part of the remote-control capability, so tools like these are better positioned as enhancement tools around other CLIs.
 
-## 3. CCG Workflow: Turning Multi-Model Collaboration into Process
+## III. CCG Workflow for Multi-Model Collaboration
 
-In my stack, `ccg-workflow` acts as the orchestration layer: Claude Code coordinates, frontend tasks are routed to Gemini first, backend tasks to Codex first, then Claude performs unified review and lands patches.
-
-### 1) Installation and Prerequisites
-
-```bash
-npx ccg-workflow
-```
-
-- Requires `Node.js 20+`.
-- Optionally install `Codex CLI` (backend-focused) and `Gemini CLI` (frontend-focused).
-
-### 2) Common Commands
+`ccg-workflow` is responsible for process-oriented multi-model collaboration in this setup: Claude Code handles orchestration, frontend tasks are routed to Gemini first, backend tasks are routed to Codex first, and Claude performs the final unified review and lands the patch.
 
 - Full workflow: `/ccg:workflow`
 - Planning + execution split: `/ccg:plan` + `/ccg:execute`
 - Task-oriented: `/ccg:frontend`, `/ccg:backend`, `/ccg:debug`, `/ccg:optimize`, `/ccg:review`
 
-Plan first, then execute:
+This approach can reduce the overhead caused by session switching and also reduce goal drift during implementation.
 
-```bash
-/ccg:plan 实现用户认证功能
-/ccg:execute .claude/plan/user-auth.md
-```
-
-This pattern reduces context loss from session switching and minimizes goal drift during implementation.
-
-### 3) Built-in CCG Capabilities
-
+Built into ccg:
 - Spec-driven (`/ccg:spec-*`):
-  - Suitable for complex requirements with many constraints and high drift risk.
-  - Value: it compresses "free generation" into "constraint-driven execution".
+  - Suitable for complex requirements with many constraints and a high chance of drifting off topic.
+  - The value is turning "free-form generation" into "constraint-driven execution."
 - Parallel implementation (`/ccg:team-*`):
-  - Suitable for tasks that can be split into 3+ independent modules.
-  - Value: reduces context cross-talk via `/clear` + file-state passing.
+  - Suitable for tasks that can be split into more than three independent modules.
+  - The value is reducing context cross-talk through `/clear` + file-state handoff.
 
-### 4) Configuration and Pitfalls
+Configuration
+- Adjust timeout parameters in `~/.claude/settings.json` (such as `CODEX_TIMEOUT` and `BASH_DEFAULT_TIMEOUT_MS`).
+- Choose MCP tools based on complexity: ContextWeaver + Context7 / Playwright / DeepWiki / Exa.
 
-- Tune timeout parameters in `~/.claude/settings.json` (such as `CODEX_TIMEOUT`, `BASH_DEFAULT_TIMEOUT_MS`).
-- Choose MCP tools by complexity: ContextWeaver + Context7 / Playwright / DeepWiki / Exa.
+## IV. Reusable Skills Workflows
 
-## 4. Skills as Reusable Process
-
-Common skills resources:
+Common workflow and tool skills:
 
 - [skills official](https://skills.sh/)
 - [superpowers](https://github.com/obra/superpowers)
 - [claude-mem](https://github.com/thedotmack/claude-mem/tree/main)
 - [react-best-practices](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices)
 
-How I use them:
+Their roles are:
 
-- `superpowers`: process orchestration (automatic planning, staged execution, completion checks).
-- `claude-mem`: context compression and memory management (useful for long-running workflows).
+- `superpowers`: process orchestration (automatic planning, staged execution, and final verification).
+- `claude-mem`: context compression and memory management (useful for long-running tasks).
 - `react-best-practices`: performance and code quality constraints during implementation.
 
-## 5. MCP Capability Expansion
+## V. Testing and Review Pipeline
 
-I currently use Lighthouse MCP primarily:
+### 1) State the three-layer testing requirement clearly in the prompt
 
-- `@danielsogl/lighthouse-mcp`: full-featured, with support for Core Web Vitals, budgets, and more.
-
-Two recurring pitfalls:
-
-1. When running Lighthouse, explicitly ask the LLM to test both desktop and mobile. Otherwise, many automated flows run mobile-only.
-2. Automated scores can differ from manual DevTools runs. Use trends and bottleneck localization as the main signal, not a single absolute score.
-
-If your site is hosted on Cloudflare and crawler/audit access fails, check `robots.txt` and caching policy first, then purge `robots.txt`-related cache if needed.
-
-## 6. Testing and Review Pipeline
-
-### 1) Explicitly Require Three Test Layers in Prompt
-
-After implementation, I use this reusable instruction:
+After implementation, I directly use this reusable instruction:
 
 ```text
 请基于当前变更补齐并执行测试，要求：
@@ -133,44 +105,44 @@ After implementation, I use this reusable instruction:
 - 标注当前未覆盖风险点和建议补测项。
 ```
 
-### 2) Cross-Model Code Review
+### 2) Cross-model code review
 
-After tests pass, I run review with different models and focus on:
+After the tests pass, I ask different models to do review separately, focusing on:
 
-1. Potential bugs and boundary failures.
+1. Potential bugs and edge-case issues.
 2. Readability and maintainability.
 3. Performance, complexity, and scalability risks.
 4. Whether test coverage matches business risk.
 
-The key gain of multi-model review is reducing single-model blind spots.
+The core benefit of multi-model review is reducing the blind spots of any single model.
 
-### 3) Human Review
+### 3) Manual review
 
-After AI review, I run a manual review pass to verify:
+After AI review, I do one round of manual review, mainly to confirm:
 
-1. The requirement is truly closed-loop, not just textually satisfied.
-2. No obvious regression risk is introduced.
-3. Naming, boundary handling, and error handling align with team conventions.
-4. Tests cover the highest-risk paths.
+1. Whether the requirement is actually closed-loop, rather than only satisfying the literal description.
+2. Whether the changes introduce potential regressions.
+3. Whether naming, boundaries, and error handling match team conventions.
+4. Whether the tests cover the highest-risk paths.
 
-The role of human review is not to repeat AI output; it is to provide business-context judgment and final risk containment.
+The purpose of manual review is not to repeat AI conclusions, but to make business-context judgments and provide the final layer of risk control.
 
-### 4) GitHub App Auto Review After CI
+### 4) GitHub App automated review after CI
 
-After PR submission and CI pass, I run another automated review round with GitHub Apps, usually including:
+After a PR is submitted and CI passes, I add one more round of automated review with GitHub Apps. Common choices include:
 
 - [Coderabbit](https://coderabbit.ai/)
 - [Gemini Code Assist](https://codeassist.google/)
 - [qodo](https://www.qodo.ai/)
 
-I am also vibe-building a testing-focused [pr-agent](https://github.com/condevtools/pr-agent) to automatically summarize "test results + risk points + review suggestions" into PRs/Issues and improve review decisions.
+I am also currently vibe-building a testing-focused [pr-agent](https://github.com/condevtools/pr-agent), which automatically summarizes "test results + risk points + review suggestions" into the PR or Issue to improve review and decision efficiency.
 
-## 7. Current Reusable End-to-End Workflow
+## VI. The current reusable end-to-end workflow
 
-1. Use wireframe tools to define information hierarchy and page structure.
-2. Use UI generation tools to get an editable first draft quickly.
-3. Prioritize MVP in development, then parallelize independent subtasks through worktrees.
-4. For complex requirements, lock constraints with `/ccg:plan` or `/ccg:spec-*` before implementation.
-5. Before merge, run unified review (`/ccg:review` + manual spot checks), then do stabilization refactoring (robustness, maintainability, edge handling).
+1. Use wireframe tools to clarify the information hierarchy and page structure.
+2. Use UI generation tools to quickly get an editable first draft.
+3. In development, prioritize the MVP first and push forward independent subtasks in parallel through worktrees.
+4. For complex requirements, use `/ccg:plan` or `/ccg:spec-*` to lock down constraints before implementation.
+5. Before merging, run a unified review (`/ccg:review` + manual spot checks), then do stabilization refactoring for robustness, maintainability, and boundary handling.
 
-The core benefit of this workflow: high early velocity, stable mid-stage quality, and lower long-term maintenance cost.
+This workflow is fast in the early stage, stable in the middle stage, and keeps maintenance costs under control later on.

@@ -11,21 +11,28 @@ summary: 从线框设计到多 Agent 提效开发，我当前在用的一套 AI 
 
 ## 一、设计阶段
 
-设计阶段对齐信息架构，快速产出可迭代初稿。
+设计现在有有多种路线，目前只介绍稳定
 
 ### 1) 线框草图
 
 - [wiretext](https://wiretext.app/)：快速把页面结构写成线框，适合先确认信息层级。
 - [mockdown](https://www.mockdown.design/)：用文本表达页面块级布局，适合早期讨论和需求澄清。
 
-### 2) UI 套壳与变体
+### 2) AI 生成 UI 
 
 - [Pencil](https://www.pencil.dev/)：通过 prompt 生成可编辑界面稿。
 - [variant ai](https://www.variant.ai/)：先找接近风格，再用 prompt 调整；导出 `.js` 后继续用 Claude Code 或 Codex 做结构细化。
 
+### 4) 常用 skills
+frontend-design(https://skills.sh/anthropics/skills/frontend-design): 比较通用
+ui-ux-pro-max(https://skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-max): 多套风格，自动选择符合场景的风格。
+tailwind-design-system(https://skills.sh/wshobson/agents/tailwind-design-system): tailwind 时会使用
+reponsive-design(https://github.com/wshobson/agents/tree/main/plugins/ui-design/skills/responsive-design): 响应式设计
+[对着网站抄UI风格](https://github.com/Lucent-Snow/style-extractor)：适合copy风格。
+
 ## 二、开发阶段
 
-### 1) 多 Agent + Git Worktree 的基线做法
+### 1) 多 Agent + Git Worktree 基线做法
 
 我当前面对简单需求拆分：
 
@@ -36,45 +43,24 @@ summary: 从线框设计到多 Agent 提效开发，我当前在用的一套 AI 
 这能显著降低上下文污染和任务互扰。  
 但也有边界：任务耦合度过高时，过度拆分 worktree 会放大集成成本。
 
-### 2) 第三方工具生态
-
-过去我常用：
+### 2) 三方工具
 
 - [superset](https://github.com/superset-sh/superset)：并行 worktree 编排工具。
 - [happy](https://github.com/slopus/happy)：远程控制 cc。
 
 现在 Claude 官方已经覆盖了多 worktree 和部分远程能力，这类工具更适合作为其他 CLI 增强工具。
 
-## 三、CCG Workflow：把多模型协作流程化
+## 三、CCG Workflow 多模型协作
 
-`ccg-workflow` 在我的体系里承担“调度层”角色：Claude Code 负责编排，前端任务优先路由给 Gemini，后端任务优先路由给 Codex，最后由 Claude 统一审核并落地 patch。
-
-### 1) 安装与前置
-
-```bash
-npx ccg-workflow
-```
-
-- 需要 `Node.js 20+`。
-- 可选安装 `Codex CLI`（偏后端）和 `Gemini CLI`（偏前端）。
-
-### 2) 常用命令
+`ccg-workflow` 在体系里负责多模型协作流程化：Claude Code 负责编排，前端任务优先路由给 Gemini，后端任务优先路由给 Codex，最后由 Claude 统一审核并落地 patch。
 
 - 全流程：`/ccg:workflow`
 - 规划 + 执行分离：`/ccg:plan` + `/ccg:execute`
 - 面向任务：`/ccg:frontend`、`/ccg:backend`、`/ccg:debug`、`/ccg:optimize`、`/ccg:review`
 
-先计划再执行：
-
-```bash
-/ccg:plan 实现用户认证功能
-/ccg:execute .claude/plan/user-auth.md
-```
-
 这种方式可以降低会话切换带来的损耗，并减少实现阶段的目标漂移。
 
-### 3) ccg 内置能力
-
+ccg 内置
 - 规范驱动（`/ccg:spec-*`）：
   - 适合约束多、容易偏题的复杂需求。
   - 价值是把“自由生成”收敛为“约束执行”。
@@ -82,14 +68,13 @@ npx ccg-workflow
   - 适合可拆成 3 个以上独立模块的任务。
   - 价值是通过 `/clear` + 文件状态传递减少上下文串扰。
 
-### 4) 配置与避坑
-
+配置
 - 在 `~/.claude/settings.json` 调整超时参数（如 `CODEX_TIMEOUT`、`BASH_DEFAULT_TIMEOUT_MS`）。
 - MCP 工具按复杂度选配：ContextWeaver + Context7 / Playwright / DeepWiki / Exa。
 
 ## 四、Skills 可复用流程
 
-常用 skills 资源：
+常用流程及工具 skills ：
 
 - [skills 官方](https://skills.sh/)
 - [superpowers](https://github.com/obra/superpowers)
@@ -102,20 +87,7 @@ npx ccg-workflow
 - `claude-mem`：上下文压缩与记忆管理（适合长链路任务）。
 - `react-best-practices`：实现阶段的性能与代码质量约束。
 
-## 五、MCP 能力拓展
-
-我目前主要使用 Lighthouse MCP：
-
-- `@danielsogl/lighthouse-mcp`：功能完整，支持 Core Web Vitals、budget 等。
-
-实践里有两个高频坑：
-
-1. 跑 Lighthouse 时要明确要求 LLM 同时测“桌面端 + 移动端”，否则很多自动化流程只测移动端。
-2. 自动化跑分和 DevTools 手动跑分会存在差异，建议以趋势和瓶颈定位为主，不要过度解读单次绝对分数。
-
-如果站点托管在 Cloudflare 且出现爬虫/审计访问异常，先检查 `robots.txt` 与缓存策略，必要时清理 `robots.txt` 相关缓存再重试。
-
-## 六、测试与评审流水线
+## 五、测试与评审流水线
 
 ### 1) 在 prompt 中明确三层测试要求
 
@@ -163,9 +135,9 @@ PR 提交并通过 CI 后，我会再接一轮 GitHub App 自动审查，常用�
 - [Gemini Code Assist](https://codeassist.google/)
 - [qodo](https://www.qodo.ai/)
 
-我自己也在 vibe 一个面向测试阶段的 [pr-agent](https://github.com/condevtools/pr-agent)，目标是把“测试结果 + 风险点 + review 建议”自动汇总到 PR/Issue，提升评审与决策效率。
+我自己也在 vibe 一个面向测试阶段的 [pr-agent](https://github.com/condevtools/pr-agent)，是把“测试结果 + 风险点 + review 建议”自动汇总到 PR/Issue，提升评审与决策效率。
 
-## 七、当前可复用的端到端流程
+## 六、当前可复用的端到端流程
 
 1. 用线框工具明确信息层级和页面结构。
 2. 用 UI 生成工具快速得到可编辑初稿。
@@ -173,4 +145,4 @@ PR 提交并通过 CI 后，我会再接一轮 GitHub App 自动审查，常用�
 4. 复杂需求先用 `/ccg:plan` 或 `/ccg:spec-*` 锁定约束，再进入实现。
 5. 合并前执行统一 review（`/ccg:review` + 人工抽检），最后做稳态重构（健壮性、可维护性、边界处理）。
 
-这套流程的核心收益是：前期速度快，中期质量稳，后期维护成本可控。
+这套流程前期速度快，中期质量稳，后期维护成本可控。
