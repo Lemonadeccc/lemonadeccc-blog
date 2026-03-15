@@ -364,7 +364,8 @@
   }
 
   .post-content {
-    max-width: 66ch;
+    width: 100%;
+    max-width: 100%;
     font-size: clamp(16px, 2.2vw, 18px);
     line-height: 1.8;
   }
