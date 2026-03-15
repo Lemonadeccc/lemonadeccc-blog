@@ -6,7 +6,8 @@ date: 2026-03-01
 summary: From wireframe design to more efficient multi-agent development, this is the AI toolchain and execution workflow I currently use.
 ---
 
-This article is not a tool list, but a working method I distilled through repeated iteration in real projects.  
+This article is not a tool list, but a working method I distilled through repeated iteration in real projects.
+
 The process is to define the constraints clearly first, let multiple models execute in parallel, and then converge everything through a unified review.
 
 ## I. Design Stage
@@ -23,12 +24,13 @@ There are several possible routes in the design stage right now. Here I will onl
 - [Pencil](https://www.pencil.dev/): Generates editable UI drafts through prompts.
 - [variant ai](https://www.variant.ai/): First find a style that is close, then adjust it with prompts; after exporting `.js`, continue refining the structure with Claude Code or Codex.
 
-### 4) Common Skills
-frontend-design(https://skills.sh/anthropics/skills/frontend-design): fairly general-purpose
-ui-ux-pro-max(https://skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-max): multiple style sets, with automatic selection of the style that fits the scenario.
-tailwind-design-system(https://skills.sh/wshobson/agents/tailwind-design-system): used when working with Tailwind
-reponsive-design(https://github.com/wshobson/agents/tree/main/plugins/ui-design/skills/responsive-design): responsive design
-[Copy UI styles from websites](https://github.com/Lucent-Snow/style-extractor): useful for copying styles.
+### 3) Common Skills
+
+- [frontend-design](https://skills.sh/anthropics/skills/frontend-design): fairly general-purpose.
+- [ui-ux-pro-max](https://skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-max): offers multiple style directions and can automatically choose one that fits the scenario.
+- [tailwind-design-system](https://skills.sh/wshobson/agents/tailwind-design-system): useful when working with Tailwind.
+- [responsive-design](https://github.com/wshobson/agents/tree/main/plugins/ui-design/skills/responsive-design): focused on responsive design.
+- [Copy UI styles from websites](https://github.com/Lucent-Snow/style-extractor): useful when you want to reference and extract an existing visual style.
 
 ## II. Development Stage
 
@@ -40,7 +42,8 @@ For simple requirements, my current way of splitting work is:
 2. Bind each subtask to its own worktree and its own session.
 3. Merge small, verifiable increments first, then converge across modules.
 
-This can significantly reduce context pollution and task interference.  
+This can significantly reduce context pollution and task interference.
+
 But it also has a boundary: when task coupling is too high, over-splitting worktrees amplifies integration cost.
 
 ### 2) Third-party tools
@@ -61,14 +64,12 @@ Claude now officially covers multiple worktrees and part of the remote-control c
 This approach can reduce the overhead caused by session switching and also reduce goal drift during implementation.
 
 Built into ccg:
-- Spec-driven (`/ccg:spec-*`):
-  - Suitable for complex requirements with many constraints and a high chance of drifting off topic.
-  - The value is turning "free-form generation" into "constraint-driven execution."
-- Parallel implementation (`/ccg:team-*`):
-  - Suitable for tasks that can be split into more than three independent modules.
-  - The value is reducing context cross-talk through `/clear` + file-state handoff.
 
-Configuration
+- Spec-driven (`/ccg:spec-*`): suitable for complex requirements with many constraints and a high chance of drifting off topic. The value is turning "free-form generation" into "constraint-driven execution."
+- Parallel implementation (`/ccg:team-*`): suitable for tasks that can be split into more than three independent modules. The value is reducing context cross-talk through `/clear` plus file-state handoff.
+
+Configuration:
+
 - Adjust timeout parameters in `~/.claude/settings.json` (such as `CODEX_TIMEOUT` and `BASH_DEFAULT_TIMEOUT_MS`).
 - Choose MCP tools based on complexity: ContextWeaver + Context7 / Playwright / DeepWiki / Exa.
 
@@ -94,15 +95,15 @@ Their roles are:
 After implementation, I directly use this reusable instruction:
 
 ```text
-请基于当前变更补齐并执行测试，要求：
-1) 单元测试（unit tests）：覆盖核心函数、边界条件、异常路径。
-2) 集成测试（integration tests）：覆盖模块间协作、数据流与接口契约。
-3) 端到端测试（e2e tests）：覆盖关键用户路径（成功流 + 失败流）。
+Please add and run tests for the current changes with the following requirements:
+1) Unit tests: cover core functions, edge cases, and failure paths.
+2) Integration tests: cover module collaboration, data flow, and interface contracts.
+3) End-to-end tests: cover critical user journeys (success paths + failure paths).
 
-执行要求：
-- 先写测试再修复实现，直到全部通过。
-- 输出每类测试的新增用例清单、执行命令和结果摘要。
-- 标注当前未覆盖风险点和建议补测项。
+Execution requirements:
+- Write the tests first, then fix the implementation until all tests pass.
+- Output the list of newly added test cases for each test type, the commands you ran, and a summary of the results.
+- Mark the currently uncovered risk areas and the recommended follow-up tests.
 ```
 
 ### 2) Cross-model code review
@@ -135,7 +136,7 @@ After a PR is submitted and CI passes, I add one more round of automated review 
 - [Gemini Code Assist](https://codeassist.google/)
 - [qodo](https://www.qodo.ai/)
 
-I am also currently vibe-building a testing-focused [pr-agent](https://github.com/condevtools/pr-agent), which automatically summarizes "test results + risk points + review suggestions" into the PR or Issue to improve review and decision efficiency.
+I am also building a testing-focused [pr-agent](https://github.com/condevtools/pr-agent) that automatically summarizes "test results + risk points + review suggestions" into the PR or issue to improve review and decision efficiency.
 
 ## VI. The current reusable end-to-end workflow
 

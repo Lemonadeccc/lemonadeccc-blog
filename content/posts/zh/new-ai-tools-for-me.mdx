@@ -6,29 +6,31 @@ date: 2026-03-01
 summary: 从线框设计到多 Agent 提效开发，我当前在用的一套 AI 工具链与落地流程。
 ---
 
-这篇文章不是工具清单，而是我在真实项目里反复迭代后沉淀下来的一套工作方法。  
+这篇文章不是工具清单，而是我在真实项目里反复迭代后沉淀下来的一套工作方法。
+
 流程是先把约束写清楚，再让多模型并行执行，最后通过统一审查收口。
 
 ## 一、设计阶段
 
-设计现在有有多种路线，目前只介绍稳定
+设计阶段现在有多种路线，这里只介绍相对稳定的做法。
 
 ### 1) 线框草图
 
 - [wiretext](https://wiretext.app/)：快速把页面结构写成线框，适合先确认信息层级。
 - [mockdown](https://www.mockdown.design/)：用文本表达页面块级布局，适合早期讨论和需求澄清。
 
-### 2) AI 生成 UI 
+### 2) AI 生成 UI
 
 - [Pencil](https://www.pencil.dev/)：通过 prompt 生成可编辑界面稿。
 - [variant ai](https://www.variant.ai/)：先找接近风格，再用 prompt 调整；导出 `.js` 后继续用 Claude Code 或 Codex 做结构细化。
 
-### 4) 常用 skills
-frontend-design(https://skills.sh/anthropics/skills/frontend-design): 比较通用
-ui-ux-pro-max(https://skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-max): 多套风格，自动选择符合场景的风格。
-tailwind-design-system(https://skills.sh/wshobson/agents/tailwind-design-system): tailwind 时会使用
-reponsive-design(https://github.com/wshobson/agents/tree/main/plugins/ui-design/skills/responsive-design): 响应式设计
-[对着网站抄UI风格](https://github.com/Lucent-Snow/style-extractor)：适合copy风格。
+### 3) 常用 Skills
+
+- [frontend-design](https://skills.sh/anthropics/skills/frontend-design)：比较通用。
+- [ui-ux-pro-max](https://skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-max)：多套风格，自动选择符合场景的风格。
+- [tailwind-design-system](https://skills.sh/wshobson/agents/tailwind-design-system)：使用 Tailwind 时会用到。
+- [responsive-design](https://github.com/wshobson/agents/tree/main/plugins/ui-design/skills/responsive-design)：响应式设计。
+- [对着网站抄 UI 风格](https://github.com/Lucent-Snow/style-extractor)：适合直接参考并提取现有网站风格。
 
 ## 二、开发阶段
 
@@ -40,7 +42,8 @@ reponsive-design(https://github.com/wshobson/agents/tree/main/plugins/ui-design/
 2. 每个子任务绑定独立 worktree 和独立会话。
 3. 先合并可验证的小增量，再做跨模块收敛。
 
-这能显著降低上下文污染和任务互扰。  
+这能显著降低上下文污染和任务互扰。
+
 但也有边界：任务耦合度过高时，过度拆分 worktree 会放大集成成本。
 
 ### 2) 三方工具
@@ -60,21 +63,19 @@ reponsive-design(https://github.com/wshobson/agents/tree/main/plugins/ui-design/
 
 这种方式可以降低会话切换带来的损耗，并减少实现阶段的目标漂移。
 
-ccg 内置
-- 规范驱动（`/ccg:spec-*`）：
-  - 适合约束多、容易偏题的复杂需求。
-  - 价值是把“自由生成”收敛为“约束执行”。
-- 并行实施（`/ccg:team-*`）：
-  - 适合可拆成 3 个以上独立模块的任务。
-  - 价值是通过 `/clear` + 文件状态传递减少上下文串扰。
+ccg 内置能力：
 
-配置
+- 规范驱动（`/ccg:spec-*`）：适合约束多、容易偏题的复杂需求，价值是把“自由生成”收敛为“约束执行”。
+- 并行实施（`/ccg:team-*`）：适合可拆成 3 个以上独立模块的任务，价值是通过 `/clear` + 文件状态传递减少上下文串扰。
+
+常用配置：
+
 - 在 `~/.claude/settings.json` 调整超时参数（如 `CODEX_TIMEOUT`、`BASH_DEFAULT_TIMEOUT_MS`）。
 - MCP 工具按复杂度选配：ContextWeaver + Context7 / Playwright / DeepWiki / Exa。
 
 ## 四、Skills 可复用流程
 
-常用流程及工具 skills ：
+常用流程与工具类 Skills：
 
 - [skills 官方](https://skills.sh/)
 - [superpowers](https://github.com/obra/superpowers)
@@ -116,7 +117,7 @@ ccg 内置
 
 多模型 review 的核心收益是降低单模型盲区。
 
-### 3) 人工 review 
+### 3) 人工 review
 
 AI review 之后，我会做一轮人工 review，主要确认：
 
