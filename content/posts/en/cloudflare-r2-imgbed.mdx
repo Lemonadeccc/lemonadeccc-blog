@@ -1,38 +1,49 @@
 ---
-title: Build an Image Hosting Setup with Cloudflare R2 + PicGo
+title: Cloudflare R2 + PicGo Image Hosting Setup
 type: Article
 project: Cloudflare R2 + PicGo Image Hosting Setup
 date: 2026-02-26
-summary: Deploy an R2-based image hosting setup from the Cloudflare dashboard.
+summary: A personal image host does not need a complex backend; R2 + PicGo is only worth using when you want low cost, a controllable domain, and S3-compatible uploads.
 ---
 
-Cloudflare R2's free plan includes 10GB per month, which is usually enough for a personal image host.
+A personal image host does not need a separately maintained backend. `Cloudflare R2 + PicGo` can stay usable for a long time on Cloudflare's free plan.
 
 ![free-tier](https://imgbed.lemonadec.cc/2026/02/blog-cloudflare-r2-imgbed-free-tier.png)
 
-### 1. Create an R2 Bucket
+## I. Scope
 
-1. Open the Cloudflare dashboard and go to `R2 -> Create bucket`.
-2. Enter a bucket name and create it.
-3. Open the bucket, then go to `Settings -> Add custom domain` and enter your domain.
-4. Confirm the setup, and the corresponding DNS record will be generated.
-5. Upload one file manually first to confirm the bucket can read and write normally.
+R2 fits personal blogs, documentation sites, and low-frequency asset uploads. It does not fit cases that require complex image processing, fine-grained access control, or multi-person approval flows.
 
-### 2. Create an API Token
+The free plan includes `10GB` per month, which is usually enough for a personal image host. If the core requirement is only stable hosting for static images, low-maintenance options like this should come first.
+
+## II. Bucket and Access Domain
+
+1. Open the Cloudflare dashboard and go to `R2 -> Create bucket`
+2. Enter a bucket name and create it
+3. Open the bucket, then go to `Settings -> Add custom domain`
+4. Enter the custom domain and confirm, letting Cloudflare generate the corresponding DNS record automatically
+5. Upload one file manually first to verify that the bucket can read and write normally
+
+PicGo integration only matters when both conditions hold: the bucket is writable and the domain is readable. Otherwise every upload test later becomes a false success.
+
+## III. API Permissions
 
 Path: `R2 -> Account Details -> Manage API Tokens -> Create token`
 
-1. Set token permission to `Object Read & Write`.
-2. Set scope to `Apply to specific bucket only`.
-3. After creation, save the following:
+1. Set token permission to `Object Read & Write`
+2. Set scope to `Apply to specific bucket only`
+3. After creation, keep the following values safe
+
 - `Access Key ID`
 - `Secret Access Key`
 
-### 3. PicGo Setup
+An image-hosting setup needs limited permissions. Binding the token to only the target bucket keeps later troubleshooting and migration clearer.
 
-1. Download and install [PicGo](https://github.com/Molunerfinn/PicGo).
-2. Install the `S3` plugin from the PicGo plugin marketplace.
-3. Open `PicGo -> Image Hosting Settings -> Amazon S3` and create a new config.
+## IV. Connect PicGo to R2
+
+1. Download and install [PicGo](https://github.com/Molunerfinn/PicGo)
+2. Install the `S3` plugin from the PicGo plugin marketplace
+3. Open `PicGo -> Image Hosting Settings -> Amazon S3` and create a new config
 
 Parameter mapping:
 
@@ -40,14 +51,19 @@ Parameter mapping:
 | --- | --- |
 | Access Key ID | R2 `Access Key ID` |
 | Secret Access Key | R2 `Secret Access Key` |
-| Bucket | Your bucket name shown in R2 |
+| Bucket | The bucket name shown in R2 |
 | File Path | `{year}/{month}/{fileName}.{extName}` |
-| Custom Endpoint | The S3 endpoint provided on the R2 page |
+| Custom Endpoint | The S3 endpoint shown on the R2 page |
 | Reject Unauthorized TLS | `yes` |
 | ACL | `public-read` |
 
-### 4. Upload Verification
+PicGo is only the uploader. It does not correct configuration on the R2 side. If the bucket name, `Endpoint`, or custom domain does not match, fix the Cloudflare configuration first.
 
-1. Select an image in PicGo and upload it.
-2. Confirm the file appears in the corresponding Cloudflare R2 bucket.
-3. Copy the uploaded link in PicGo and open it to test access.
+## V. Minimum Verification
+
+1. Select an image in PicGo and upload it
+2. Confirm the file appears in the corresponding Cloudflare R2 bucket
+3. Copy the uploaded link from PicGo and open it directly
+4. Reference the image once from an article or page and confirm the external link loads normally
+
+This setup optimizes for low cost, low maintenance, and portability. It is a good fit for a personal blog when the Cloudflare R2 free plan is enough.

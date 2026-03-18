@@ -3,42 +3,56 @@ title: GEN-3D-ASSETS 项目
 type: 想法
 project: GEN-3D-ASSETS
 date: 2025-08-08
-summary: GEN 3D ASSETS 项目想法和实践规划。
+summary: GEN-3D-ASSETS 作为陌生领域 vibe 用于测试 AI Coding 与自身能力边界
 ---
 
-### 项目地址
+`GEN-3D-ASSETS` 是我用来测试陌生领域 AI + 自我能力边界的项目。此项目作于 2025 年 8 月 26 日，现已不订阅 meshy API ，故项目已停止服务。
+
+## 项目地址
 
 https://github.com/Lemonadeccc/GEN-3D-ASSESTS
 
-实际应用过程中遇到了obj / fbx / gltf load的问题，不应该使用nextjs代理，也不应该使用blob去load模型或者纹理。其他部分要考虑用户使用逻辑。
-
-### 页面效果
+## 页面效果
 
 ![image.png](https://imgbed.lemonadec.cc/2026/02/3d-nft.webp)
 
 ![image1.png](https://imgbed.lemonadec.cc/2026/02/3d-nft-detail.webp)
 
-## 想法
+## 一、项目边界
 
-主要使用nextjs + r3f + deri? + solidy + vercel
+用于初步接触 web3 的 NFT 项目，项目通过“生成 -> 预览 -> 选择”形成完整 NFT 平台。
 
-## 工程
+技术方向选用 `Next.js + R3F + Solidity + Vercel + Claude`。
 
-1. 技术选型，solidy/foundry/harhat等其他合约选型，技术上使用没用过的nextjs的ssr渲染3d模型。短期mvp使用cc等其他工具实现单测
-2. commitlint/eslint/husky规范化
-3. CICD使用github actions，配合qodo实现pr审查等使用ai管理，PockeFlow去生成仓库文档，部署上nextjs及项目要求vercel部署
-4. load比较多3D模型的时候性能可能会捉急，如何优化充分利用API请求load返回时间及ssr,tubropack增量更新
-5. gsap动画优化，静态资源优化
+## 二、技术约束
 
-## 业务流程
+实际应用中 `obj` / `fbx` / `gltf` 的加载不应依赖 Next.js 代理，也不应通过 `blob` 去加载模型或纹理。
 
-1. 3D生成使用meshy.ai或者其他生成式API去实现
-   1. API 申请，使用时api轮训还是可供选择自配置
-   2. API 配置放在哪里，如何保证key的安全不被打野使用
-2. 根据prompt去请求API，请求后下载模型展示还是直接展示，等待动画需要美化有趣，返回数据及模型可供用户选择，展示时候需要autoRotate。
-3. 选择后请求合约实现链上
-4. 部署需要和工程方面耦合
+1. 模型资源应按适合浏览器消费的方式直接分发
+2. 完整的状态反馈、舒服交互支持
+3. 多3D 模型性能问题
 
-## 价值
+## 三、工程方面
 
-1. 拥有类似nft的个人资产，根据个人画像等资产及prompt喜好生成个性化非同质3D资产
+工程优先级可以先压成几项：
+
+1. 明确合约与链路技术选型，例如 `Solidity` / `Foundry` / `Hardhat`
+2. 用 `commitlint`、`eslint`、`husky` 先把提交和代码规范收紧
+3. 使用 GitHub Actions 做 CI/CD，结合 Qodo 做 PR 审查，使用 PocketFlow 生成仓库文档
+4. 预留性能优化空间，重点关注模型加载与 Turbopack 增量更新
+5. 优先 mvp ，后续迭代 GSAP 动画优化和静态资源优化
+
+## 四、业务流程
+
+1. 使用 `meshy.ai` 或其他生成式 API 生成 3D 资产
+2. 决定生成结果通过轮询还是其他方式返回
+3. 返回模型后，预览、选择和等待过程的交互设计
+4. 用户选择结果进入链上合约相关流程
+5. 部署方式需要和工程侧约束考虑
+6. 注意处理 API key 存储与安全
+
+## 五、项目价值
+
+平台目标是生成类似 NFT 的个性化 3D 资产：根据用户画像和 prompt 偏好，输出具备唯一性的非同质 3D 结果。或可上传 3D 资产上链，完成知识产权化管理。
+个人目标是在陌生领域探索 AI Coding 与自身能力边界。
+实践结论为：完全陌生领域使用 AI Coding 不太可行，以当前时间 AI 能力无法基于我自身储备指导完成可用于实际应用的上线项目。

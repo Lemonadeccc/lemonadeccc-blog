@@ -3,16 +3,18 @@ title: Cloudflare Tunnel + Zero Trust 稳定接入 Netcup VPS SSH
 type: 文章
 project: Cloudflare Tunnel + Zero Trust 稳定接入 Netcup VPS SSH
 date: 2026-02-25
-summary: 记录一次 Netcup 德国 VPS 在联通网络下 SSH 不稳定的排障过程，并给出 cloudflared 隧道接入方案。
+summary: “出站建隧道 + 边缘鉴权”的接入方式处理 `sshd` 正常而跨境链路不稳问题
 ---
 
-当我访问自己的 openclaw 时，飞书侧一直没有回复，于是排查了一轮服务器。
-最终发现问题不是 `sshd` 挂了，而是跨境链路（德国线路到联通）不稳定。
+德国 VPS 的 `sshd` 正常但跨境链路抖动，直连 `22` 端口无响应，排查过程：
+- VNC 能进，说明机器没有失联
+- SSH 服务 active 且 `22` 端口监听正常，说明服务本身没挂
+- UFW 未拦截但仍频繁断开，说明问题不在主机防火墙
+- `preauth reset` 反复出现，说明连接在认证前阶段就被链路重置
 
-最后采用的方案是：在服务器部署 `cloudflared`，把 `ssh-de.condevtools.com` 通过 Tunnel 映射到 `localhost:22`，本地使用 `cloudflared access ssh` 连接。
-这样 SSH 不再依赖直连 `22` 端口，稳定性和可控性都更好。
+最后采用的方案是：当无可用稳定优质节点时，在服务器部署 `cloudflared`，把 `ssh-de.condevtools.com` 通过 Tunnel 映射到 `localhost:22`，本地再使用 `cloudflared access ssh` 连接。这样 SSH 不再依赖直连 `22` 端口，稳定性和可控性都更好。
 
-### 现状确认
+## 一、现状确认
 
 服务器厂商 VNC 可进入，SSH 服务 active，`22` 端口监听正常，日志中有 `Connection reset by peer [preauth]`。
 
@@ -25,29 +27,18 @@ journalctl -u ssh -n 100 --no-pager
 
 检查要点：
 
-- `systemctl status ssh`：看 SSH 服务是否在运行。
-  - `Active: active (running)`：服务正常启动。
-  - `inactive/failed`：服务未启动，先修服务（配置、密钥、启动失败等）。
-- `ss -tlnp | grep sshd`：看 SSH 是否监听端口。
-  - `0.0.0.0:22` 和 `[::]:22`：监听所有 IPv4/IPv6 地址。
-  - 只有 `127.0.0.1:22`：只监听本机，外部无法连接。
-  - 无输出：未监听（服务没起或端口改了）。
-- `ufw status`：看系统防火墙是否拦截 SSH。
-  - `Status: inactive`：系统层未拦截。
-  - `active` 且没有 `22/tcp ALLOW`（或你改后的端口）会被拦。
-- `journalctl -u ssh -n 100 --no-pager`：看认证和连接日志。
-  - `Accepted publickey`：登录成功。
-  - `Failed password`：账号或密码问题。
-  - `Connection reset by peer [preauth]`：连接到达服务器，但认证前被链路或中间设备重置，常见于网络路径问题。
+- `systemctl status ssh` 确认 SSH 服务是否在运行，Active: active (running)
+- `ss -tlnp | grep sshd` 确认 SSH 监听端口，有输出则监听正常
+- `ufw status` 确认系统防火墙是否拦截 SSH，inactive未拦截
+- `journalctl -u ssh -n 100 --no-pager` 查看认证和连接日志，`Connection reset by peer [preauth]`：连接到达服务器，但认证前就被重置，常见于链路问题
 
-结论：服务正常 + 端口正常 + UFW 未拦 + 日志出现 `preauth reset`，说明更像链路问题，而不是服务器 SSH 配置故障。
+结论：服务正常、端口正常、防火墙未拦，但日志持续出现 `preauth reset`，应优先判断为网络路径问题，而不是 SSH 配置故障。
 
-### 方案
+## 二、可选接入方案
 
-#### 1. 通过香港机中转 SSH
+### 1) 买机中转
 
-先 SSH 到香港机，再从香港机连接德国机；或者在香港机上搭 WebSSH。
-注意：公共 WebSSH 不安全，可能泄露凭据并暴露攻击面。
+先 SSH 到香港机，再从香港机连接德国机；或者在香港机上搭 WebSSH。这个方案能绕开部分跨境问题，但会引入额外机器成本和运维点。
 
 ```sshconfig
 # ~/.ssh/config
@@ -69,39 +60,36 @@ Host de-via-hk
 ssh de-via-hk
 ```
 
-也可以参考这个教程：[加便宜香港机做中转](https://www.vircs.com/blogs/52)，由于成本问题转而搜寻其他方案。
+也可以参考这个教程：[买机做中转](https://www.vircs.com/blogs/52)。
 
-#### 2. 用 `sshx` 临时网页终端
+### 2) `sshx` 作为应急网页终端
 
-可通过 VNC 在服务器上安装并运行 [sshx](https://github.com/ekzhang/sshx)，再从本地浏览器打开生成的链接。
+可以通过 VNC 在服务器上安装并运行 [sshx](https://github.com/ekzhang/sshx)，再从本地浏览器打开生成的链接。
 
 ```bash
 curl -sSf https://sshx.io/get | sh
 sshx
 ```
+
 ![sshx](https://imgbed.lemonadec.cc/2026/02/sshx.png)
 
-这个方案可应急，但实际使用中可能出现断流，需重复开启 vnc 运行 sshx ，因此后续改为 Cloudflare Tunnel。
+实测使用中出现断流，往往还要重新打开 VNC 才能恢复，不适合作为长期入口。
 
-#### 3. Cloudflare Tunnel 与 cloudflared
+### 3) Cloudflare Tunnel + Zero Trust
 
-Cloudflare Tunnel 是“由源站主动发起”的反向隧道：
-服务器运行 `cloudflared` 后，会主动连接 Cloudflare 边缘，再把指定域名（如 `ssh-de.condevtools.com`）的流量转发到本机服务（如 `localhost:22`）。
+Cloudflare Tunnel 是“由源站主动发起”的反向隧道：服务器运行 `cloudflared` 后，会主动连接 Cloudflare 边缘，再把指定域名的流量转发到本机服务。
 
-它主要解决三类问题：
+通常解决三类问题：
 
 - 跨境直连不稳定
 - 端口被运营商或网络策略干扰
 - 公网暴露 SSH 端口的安全风险
 
-工作原理可概括为“出站建隧道 + 边缘鉴权 + 回源转发”：用户先访问 Cloudflare 边缘，经过 Zero Trust Access 身份校验后，再通过已建立的 Tunnel 到达源站。
-因此即使关闭源站公网 SSH 端口，也能保留稳定且更安全的远程运维通道。
+可以概括为“出站建隧道 + 边缘鉴权 + 回源转发”。`Cloudflare Tunnel` 是服务本身，`cloudflared` 是官方客户端；前者定义能力，后者负责建隧道、发起接入并转发流量。
 
-`Cloudflare Tunnel` 是服务本身，`cloudflared` 是官方客户端：前者定义能力，后者负责建隧道、发起接入并转发流量。
+## 三、服务器侧 Tunnel
 
-### 服务器端
-
-#### 1. 安装 cloudflared（Ubuntu 24.04）
+### 1) 安装 `cloudflared`
 
 ```bash
 sudo apt-get update
@@ -109,14 +97,14 @@ sudo apt-get install -y cloudflared
 cloudflared --version
 ```
 
-#### 2. 登录 Cloudflare 并生成 `/root/.cloudflared/cert.pem`
+### 2) 登录 Cloudflare 并生成 `cert.pem`
 
 ```bash
 cloudflared tunnel login
 ls -l /root/.cloudflared/cert.pem
 ```
 
-#### 3. 创建 Tunnel 并绑定 SSH 子域名
+### 3) 创建 Tunnel 并绑定 SSH 子域名
 
 ```bash
 cloudflared tunnel create de-ssh
@@ -124,7 +112,7 @@ cloudflared tunnel list
 cloudflared tunnel route dns de-ssh ssh-de.condevtools.com
 ```
 
-#### 4. 生成配置文件
+### 4) 生成配置文件
 
 ```bash
 TUNNEL_ID=$(cloudflared tunnel list | awk '$2=="de-ssh"{print $1}')
@@ -142,13 +130,15 @@ cat /root/.cloudflared/config.yml
 cloudflared tunnel ingress validate
 ```
 
-#### 5. 前台验证（成功后 `Ctrl+C`）
+### 5) 前台验证
 
 ```bash
 cloudflared tunnel run de-ssh
 ```
 
-#### 6. 安装为 systemd 服务并开机自启
+前台验证通过后再安装为系统服务，可以避免把错误直接带入开机自启。
+
+### 6) 安装为 systemd 服务并开机自启
 
 ```bash
 cloudflared service install
@@ -157,43 +147,42 @@ systemctl enable --now cloudflared
 systemctl status cloudflared --no-pager -l
 ```
 
-### Cloudflare 后台添加 Zero Trust Access 应用
+## 四、Zero Trust Access
 
-Zero Trust（零信任）不是“信任内网、怀疑外网”，而是默认都不信任，每次访问都先做身份和策略校验，再授予最小权限。
-在本场景里，`cloudflared tunnel` 只负责把 SSH 服务接到 Cloudflare 边缘；真正控制“谁能进”的是 Zero Trust Access。
+`cloudflared tunnel` 负责把 SSH 服务接到 Cloudflare 边缘，Zero Trust Access 负责鉴权。没有 Access，公网 hostname 依然可能被任何人尝试连接。
 
-不用 Access 的话，这个公网 hostname 可能被任何人尝试连接；用了 Access 后，只有符合策略（例如指定邮箱）的用户才能拿到访问令牌继续访问 SSH。
+工作流程如下：
 
-工作流程：
-
-1. 执行 `ssh`，其中 `ProxyCommand` 调用本地 `cloudflared access ssh --hostname ...`。
-2. 本地 `cloudflared` 拉起浏览器完成登录（OTP/IdP）。
-3. Cloudflare Access 按策略判断是否放行。
-4. 命中 Allow 才签发访问令牌；默认拒绝。
-5. 放行后流量进入 Tunnel，再转发到源站 `localhost:22`。
+1. 执行 `ssh`，其中 `ProxyCommand` 调用本地 `cloudflared access ssh --hostname ...`
+2. 本地 `cloudflared` 拉起浏览器完成登录
+3. Cloudflare Access 按策略判断是否放行
+4. 只有命中 Allow 的用户才会拿到访问令牌
+5. 放行后流量进入 Tunnel，再转发到源站 `localhost:22`
 
 配置步骤：
 
 1. `Zero Trust -> Access -> Applications -> Add application -> Self-hosted`
-2. `Domain` 填：`ssh-de.condevtools.com`
-3. `Policy` 仅允许你自己的邮箱/账号，建议开启 MFA
+2. `Domain` 填 `ssh-de.condevtools.com`
+3. `Policy` 只允许你自己的邮箱或账号，建议开启 MFA
 
-### 本地 Mac
+这套方法更适合长期运维和跨境不稳定场景。
 
-#### 1. 安装客户端
+## 五、本地接入
+
+### 1) 安装客户端
 
 ```bash
 brew install cloudflared
 cloudflared --version
 ```
 
-#### 2. 直接连接测试
+### 2) 直接连接测试
 
 ```bash
 ssh -o "ProxyCommand=$(which cloudflared) access ssh --hostname %h" root@ssh-de.condevtools.com
 ```
 
-#### 3. 可选：写入 `~/.ssh/config`，以后直接 `ssh de-cf`
+### 3) 可选：写入 `~/.ssh/config`
 
 ```sshconfig
 Host de-cf
@@ -205,3 +194,5 @@ Host de-cf
 ```bash
 ssh de-cf
 ```
+
+链路不稳时，先改接入方式，通常比反复重启 `sshd` 更有效。

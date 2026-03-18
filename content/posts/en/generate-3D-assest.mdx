@@ -3,42 +3,56 @@ title: GEN-3D-ASSETS Project
 type: Idea
 project: GEN-3D-ASSETS
 date: 2025-08-08
-summary: Project ideas and implementation planning for GEN-3D-ASSETS.
+summary: GEN-3D-ASSETS as a vibe project in an unfamiliar domain to test the limits of AI coding and my own ability
 ---
 
-### Project Repository
+`GEN-3D-ASSETS` was the project I used to test the limits of AI plus my own skills in an unfamiliar domain. It was created on August 26, 2025. I no longer subscribe to the Meshy API, so the project has been shut down.
+
+## Project Repository
 
 https://github.com/Lemonadeccc/GEN-3D-ASSESTS
 
-In practical implementation, I encountered loading issues with `obj` / `fbx` / `gltf`. A Next.js proxy should not be used, and models or textures should not be loaded through `blob`. Other parts also need to consider real user workflows.
-
-### Page Preview
+## Page Preview
 
 ![image.png](https://imgbed.lemonadec.cc/2026/02/3d-nft.webp)
 
 ![image1.png](https://imgbed.lemonadec.cc/2026/02/3d-nft-detail.webp)
 
-## Ideas
+## I. Project Boundaries
 
-Mainly using Next.js + R3F + deri? + solidity + Vercel.
+This was an NFT project used as a first pass at Web3. The intended product flow was "generate -> preview -> select", forming a complete NFT platform.
 
-## Engineering
+The technical direction was `Next.js + R3F + Solidity + Vercel + Claude`.
 
-1. Technology selection: evaluate contract stacks such as solidity/foundry/harhat. Technically, use Next.js SSR to render 3D models, which I had not used before. For short-term MVP, use CC and other tools for unit tests.
-2. Standardization with `commitlint` / `eslint` / `husky`.
-3. Use GitHub Actions for CI/CD, combine Qodo for PR review and AI-assisted management, use PockeFlow to generate repository docs, and deploy to Vercel according to Next.js and project requirements.
-4. Performance may become tight when loading many 3D models. Optimize by making full use of API request/response loading time, SSR, and Turbopack incremental updates.
-5. Optimize GSAP animations and static assets.
+## II. Technical Constraints
 
-## Business Flow
+In practical use, loading `obj` / `fbx` / `gltf` should not depend on a Next.js proxy, and models or textures should not be loaded through `blob`.
 
-1. Use `meshy.ai` or other generative APIs for 3D generation.
-   1. Apply for API access; decide whether to use polling or user-configurable strategies during usage.
-   2. Decide where API configuration should be stored and how to keep keys secure from abuse.
-2. Request the API based on prompts. Decide whether to download models before display or show directly. Waiting animations should be polished and interesting. Returned data/models should be selectable, and models should support `autoRotate` during display.
-3. After selection, request contracts to put assets on-chain.
-4. Deployment needs to be coupled with engineering considerations.
+1. Model assets should be distributed in a way browsers can consume directly
+2. Full state feedback and comfortable interaction support are required
+3. Multi-3D-model performance issues need to be handled
 
-## Value
+## III. Engineering
 
-1. Provide NFT-like personal assets: generate personalized non-fungible 3D assets based on user profile traits and prompt preferences.
+The engineering priorities can be compressed into a few points:
+
+1. Decide the contract and chain stack first, such as `Solidity` / `Foundry` / `Hardhat`
+2. Tighten commit and code conventions first with `commitlint`, `eslint`, and `husky`
+3. Use GitHub Actions for CI/CD, combine Qodo for PR review, and use PocketFlow to generate repository docs
+4. Leave room for performance optimization, focusing on model loading and Turbopack incremental updates
+5. Prioritize the MVP first, then iterate on GSAP animation and static asset optimization
+
+## IV. Business Flow
+
+1. Use `meshy.ai` or another generative API to create 3D assets
+2. Decide whether generation results come back through polling or some other mechanism
+3. Design the interaction around preview, selection, and waiting after the model is returned
+4. After the user picks a result, enter the on-chain contract flow
+5. The deployment approach has to be considered together with the engineering constraints
+6. Pay attention to API key storage and security
+
+## V. Project Value
+
+The platform goal was to generate NFT-like personalized 3D assets: based on a user's profile and prompt preferences, output unique non-fungible 3D results. Or upload 3D assets on-chain for intellectual property management.
+My personal goal was to explore the limits of AI coding and my own ability in an unfamiliar domain.
+The practical conclusion was that AI coding is not very workable in a completely unfamiliar domain. With the AI capability available at that time, it could not guide me from my own knowledge base all the way to a real production-ready launch.

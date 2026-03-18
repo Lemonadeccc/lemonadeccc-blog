@@ -1,55 +1,50 @@
 ---
-title: Vibe Practice Summary
+title: From LLM to Agent Skill
 type: Article
-project: Vibe Summary
-date: 2026-01-15
-summary: AI-related practice notes on MCP/Spec/Skills/Midscene.
+project: From LLM to Agent Skill
+date: 2026-02-28
+summary: LLM / Token / Context / Context Window / Prompt / Tool / MCP / Agent / Agent Skill
 ---
 
-This post summarizes my experience and lessons from using AI for coding over the past year.
+A linked walkthrough of the concepts LLM / Token / Context / Context Window / Prompt / Tool / MCP / Agent / Agent Skill
 
-Before DeepSeek's breakout in November-December 2025, I mostly used ChatGPT and through
+## Model Layer
 
-## MCP
+This line starts with `LLM`, `Token`, `Context`, and `Prompt`.
 
-MCP (Model Context Protocol) defines how applications and AI models exchange contextual information. This allows developers to connect different data sources, tools, and capabilities to AI models in a consistent way, similar to how USB-C lets different devices connect through the same interface. The goal of MCP is to create a universal standard that makes AI application development and integration simpler and more unified.
+- `LLM` is the underlying model. At its core it is a parameterized prediction system
+- `Token` is the basic unit the model processes. It is not the same as a single natural-language character
+- `Context` is the input material the model can actually see in the current inference
+- `Context Window` is the capacity limit of that material
 
-MCP is a product of prompt engineering. More structured context significantly improves model performance. So ecosystem providers usually offer ready-made scenarios that AI can directly use. MCP is also not tied to a specific AI model, and MCP-compatible models can be switched flexibly.
+`Prompt` is what packs the task, role, and other restrictions into the current context. `System Prompt` is where the developer sets preset boundaries, while `User Prompt` carries the user's current task.
 
-- Previously: every AI app integrating every tool required a separate "private integration" implementation (N×M integration hell).
-- Now: tool providers expose MCP Servers; AI apps implement MCP Clients; everyone interoperates by following the Spec.
+## Capability Layer
 
-Previously, if you wanted AI to "read local files + query databases + call GitHub + automate browsers", it basically meant building a plugin/SDK integration set for every AI client, with high maintenance and migration costs.
+When the model can only continue text, it is only an answer system, not an execution system.
 
-MCP standardizes this through a unified protocol: service providers implement MCP Servers; AI apps implement MCP Clients; they interact by protocol.
+- `Tool`: lets the model call external functions or services
+- `MCP`: standardizes tool and context integration, reducing the cost of every client having to write its own plugin. It is usually implemented by external service providers and installed by users for model use
+- `Agent`: not just a one-shot answer, but an abstract intelligent bundle that can make multi-step decisions around a goal, call tools, and collect results
+- `Agent Skill`: packages high-frequency task flows, constraints, and reference materials into a reusable entry point
 
-### Roles
+The easiest things to confuse here are `MCP`, `Agent`, and `Skill`. `MCP` solves integration, not intelligence. `Agent` solves execution. `Skill` solves reuse. They are not synonyms. They just sit on different layers of the same chain.
 
-- Host: the product you actually use, such as Claude Desktop or an IDE. The Host manages UX, permissions, and multiple connections.
-- Client: a connection instance created inside the Host; usually "one Server corresponds to one Client connection."
-- Server: a local or remote program that provides capabilities, exposing Tools/Resources/Prompts.
+## Layered Troubleshooting
 
-### Three Core Primitives
+When using AI, treating every problem as a prompt problem is usually wrong:
 
-- Tools: executable functions (for example, "read file", "send request", "query database").
-- Resources: readable contextual data (file content, records, API responses, etc.).
-- Prompts: reusable prompt templates (conversation structure/system prompt/examples).
+- Poor output quality is usually caused by `Context` or `Prompt` design
+- Tool integration problems make it impossible to read external information
+- Lack of closure at the `Agent` layer causes the model to answer but fail to complete tasks stably
+- Missing `Skill` means the same kind of task has to be re-explained every time
 
-### Transport
+Mapping the problem back to the right layer makes troubleshooting faster in development.
 
-- Common local transport: stdio (Host starts a subprocess and communicates through stdin/stdout).
-- Common remote transport: Streamable HTTP (optional SSE) (`HTTP POST + optional event stream`), supporting common auth methods (`Bearer token / API key / custom header`). OAuth is also officially recommended for token acquisition.
+## Concept Layers
 
-## Spec
+- Model understanding: `Token`, `Context`, `Context Window`, `Prompt`
+- What the model can do: `Tool`, `MCP`
+- Stable system execution and reuse: `Agent`, `Agent Skill`
 
-The Spec is the "protocol manual" of MCP: it defines handshake behavior, message formats, capability definitions, tool exposure, transport behavior, and more. MCP's data layer is based on JSON-RPC 2.0, and defines lifecycle management, capability negotiation, and the three core primitives: Tools / Resources / Prompts.
-
-Official articles: [**What are skills**](https://support.claude.com/en/articles/12512176-what-are-skills), [**Using skills in Claude**](https://support.claude.com/en/articles/12512180-using-skills-in-claude), and [**How to create custom skills**](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills). A more complete reference: [**Agent Skills - Claude Code Docs**](https://code.claude.com/docs/en/skills#create-a-skill)
-
-You can register a GitHub repository as a Claude Code plugin marketplace entry by running the following command in Claude Code.
-
-## Skills
-
-## Apifox CLI and Skills
-
-## Midscene
+This chain is pushing the model from a single "text generation" system toward a system shape that is integrable, executable, and reusable.

@@ -1,21 +1,73 @@
 ---
-title: condev-monitor Project Deployment Issues
+title: condev-monitor Deployment Problems
 type: Article
 project: condev-monitor Deployment
-date: 2025-01-11
-summary: First-time docker-compose deployment and server pitfalls.
+date: 2026-01-11
+summary: Deployment choices and troubleshooting for a complex monitoring system
 ---
 
-First, an introduction to the condev-monitor project. This project recreates a Sentry-like frontend monitoring system. It mainly consists of the following parts: an SDK for monitoring errors and performance, an `examples/vanilla` frontend project used to test SDK integration, a `dsn-server` backend service that receives error reports from the SDK, and the dashboard frontend `frontend/monitor` with its backend `backend/monitor`.
+`condev-monitor` is a full front-end monitoring stack. Deployment has to consider the database, SDK ingestion endpoint, dashboard frontend and backend, and email alerts. The following is the path I evaluated in practice.
 
-At the beginning, I planned to deploy with docker-compose on Coolify. After many attempts, the network kept being pruned by Coolify during deployment, and many issues appeared. It may have been a conflict between Caddy in docker-compose and Coolify's own Caddy service. After repeated failures, I bought a new server and switched to a direct docker-compose deployment.
+- During `Coolify + docker-compose` deployment, the network kept getting pruned
+- A mixed `pm2 + docker-compose` setup split the runtime model
+- A `2C2G` machine still hit OOM even after adding swap
+- `argon2` and `nest-modules/mailer` had too much maintenance cost in the target environment, so I replaced them
 
-The project is deployed with docker-compose and uses many images. In development, it uses two database images, ClickHouse and Postgres, while other parts are developed locally with `pnpm start:dev` and `pnpm dev`. In development, `.env` is maintained by each subproject. For production, the two mainstream deployment options for Next.js are Nixpacks and Docker. For self-hosting needs, Next.js can use the OpenNext adapter to deploy on Cloudflare, and the NestJS backend can be deployed on an internal enterprise host through a tunnel. Or both frontend and backend can be deployed on an internal host with docker-compose. For the two backends, NestJS cannot be deployed without `node_modules`, so backend deployment either needs PM2 on the server or needs `node_modules` bundled into Docker images. I tried running PM2 on the server, and also tried PM2 for the OpenNext project, but errors occurred. So I later chose full docker-compose deployment on the server. By this point, I had already run into pitfalls with both Coolify and the PM2 + docker-compose hybrid approach.
+## I. Deployment Constraints
 
-I used an Alibaba Cloud 2C2G machine with AliLinux for Docker image deployment, but OOM crashes kept happening. Swap was configured, but still not enough. So I later planned to run the backend with PM2 and containerize only ClickHouse and Postgres, but after trying it, the deployment steps were too cumbersome, so I dropped it and switched to full docker-compose deployment. In the dashboard NestJS backend, `argon2` failed to compile on Alibaba Cloud with the default Python 3.6. I tried switching to Python 3.7 and recompiling, but it still failed. Since this kept happening, I directly replaced that encryption dependency with `bcryptjs`.
+This project mainly includes:
 
-Another issue was during docker-compose deployment on Alibaba Cloud: when using the older `nest-modules/mailer` in the dashboard NestJS backend, it reported missing CSS-in-JS dependencies. I found a solution in GitHub issues, but it was not very standard and the process was tedious. Future maintenance would likely be even harder, so I switched to `nodemailer`.
+- An SDK for monitoring errors and performance
+- `examples/vanilla` for testing SDK integration
+- `dsn-server` for receiving reported data
+- Dashboard frontend `frontend/monitor`
+- Dashboard backend `backend/monitor`
 
-OOM issues kept happening on Alibaba Cloud, so I moved to an external Netcup 4C6G machine. This avoided complicated ICP filing and Docker image setup, and also avoided the issue of OpenAI services being unavailable in China during later development of other AI projects (the Cloudflare Worker workaround is no longer effective). Full docker-compose image deployment worked normally, but testing showed email sending and receiving did not work. After testing with machine scripts, I found the server did not support SMTP email sending. So based on the previous `nodemailer` setup that used 163 SMTP, I now prioritize Resend's HTTP email service, and fall back to SMTP when HTTP sending fails. This ensures email service keeps working when severe errors occur.
+In development, the database depends on two Docker images, `ClickHouse` and `Postgres`, while the other parts run locally through `pnpm start:dev` and `pnpm dev`. For production, it mattered more to collapse this multi-service chain into one stable runtime model.
 
-So far, these are the errors and pitfalls encountered in dependency replacement and deployment for this project.
+## II. Why I Dropped Coolify
+
+At first I planned to deploy with `docker-compose` on Coolify. After multiple attempts, the network kept getting pruned by Coolify itself during deployment, along with several other anomalies.
+
+The bigger problem was that the platform layer and the application stack could interfere with each other: the project's `caddy` might conflict with the `caddy` that Coolify itself depends on. Once the platform abstraction is already interfering with the Compose stack, it is not worth spending more time on platform compatibility. And if I remove the `caddy` image used in the project's development environment, later users lose the simplest deployment path. The project is also likely to be rewritten into a microservice architecture later, so keeping the reverse-proxy image makes sense.
+
+For a multi-container stack, dual databases, a proxy layer, future microservice plans, and a requirement that deployment stay simple for users, the first priority is keeping deployment straightforward.
+
+## III. Converging on Full `docker-compose`
+
+The project considered and tried several runtime models:
+
+1. Deploy Next.js to Cloudflare through the OpenNext adapter, while the NestJS backend stays on an internal host and is exposed through Tunnel. That way the frontend page can still open on Cloudflare even if the backend crashes.
+2. Put both frontend and backend on an internal host and manage everything with `docker-compose`, which is simpler to deploy.
+3. Run some services with `pm2` on the server while keeping the databases in containers, which is more cumbersome
+
+The problem with all of these hybrid combinations is that once the runtime model splits, deployment and troubleshooting costs go up. NestJS could not simply be deployed without `node_modules`, and the OpenNext project also threw errors under `pm2`, so mixed deployment kept getting heavier.
+
+I later collapsed the setup directly: put as many services as possible into `docker-compose`. First make startup, dependencies, and environment variable entry points consistent, then talk about finer-grained splitting.
+
+## IV. Dependencies and Resource Issues
+
+### 1) A China Mainland Host Hit a Wall
+
+I happened to have an Alibaba Cloud `2C2G + AliLinux` machine in mainland China, but it kept hitting OOM under the full Docker deployment even after adding swap.
+
+I later considered containerizing only `ClickHouse` and `Postgres` and running the other services with `pm2`, but the steps were too cumbersome, so I dropped it. When the machine does not have enough resources, switching to a more suitable instance is usually more direct than continuing to stitch together the runtime.
+
+### 2) Fragile Dependencies
+
+While packaging the services into Compose, `argon2` in the dashboard NestJS backend failed to compile under the server's default `Python 3.6` on Alibaba Cloud, and it still failed after switching to `Python 3.7`. When a dependency keeps amplifying deployment cost like that, it is better to replace it early, so I switched to `bcryptjs`.
+
+Another issue was the older `nest-modules/mailer`. Under Docker Compose deployment it reported missing CSS-in-JS related dependencies. There were fixes in GitHub issues, but they were not standard or easy to automate, so the maintenance cost was too high. I replaced it with `nodemailer`.
+
+### 3) Email Sending Needed a Fallback
+
+After moving to a Netcup `4C8G` machine, the full set of images could deploy normally, but testing showed the server did not support SMTP outbound mail. So the email path became:
+
+1. Use `Resend` HTTP delivery first
+2. Fall back to the original SMTP path if HTTP delivery fails
+
+The point of this downgrade path is to keep the alerting chain usable when severe errors happen. It also complements Cloudflare email receiving, which supports inbound mail but not outbound sending.
+
+## V. Final Tradeoff
+
+The final choice was an internet-facing Netcup `4C8G` machine plus full `docker-compose`. That avoids ICP filing and platform compatibility issues, and it also makes the deployment environment more consistent for later AI projects. I kept the `openNext` + Cloudflare deployment option in mind, and can later decide based on user needs whether to split frontend and backend through Tunnel.

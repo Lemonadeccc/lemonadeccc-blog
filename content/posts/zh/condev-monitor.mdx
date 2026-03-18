@@ -2,20 +2,72 @@
 title: condev-monitor 项目部署问题
 type: 文章
 project: condev-monitor 部署
-date: 2025-01-11
-summary: 初次使用 docker-compose 部署项目及服务器踩坑。
+date: 2026-01-11
+summary: 复杂监控系统部署方案选择与排错过程
 ---
 
-首先介绍一下condev-monitor项目，这个项目是用来复刻类似sentry的前端监控系统。主要分为以下几部分，监控错误、性能等的sdk。用于测试安装上述sdk的前端页面项目examples/vanilla项目。通过sdk上报错误的服务端dsn-server。以及用于dashboard展示的前端frontend/monitor以及其后端backend/monitor。
+`condev-monitor` 是一整套前端监控链路。部署需要考虑数据库、SDK 接收端、Dashboard 前后端和邮件告警等方面。以下为实践方案选择
 
-部署方式一开始想使用docker-compose部署在coolify上，尝试多次在部署过程中network被coolify内部prune掉，且出现很多问题，可能是在部署的时候docker-compose中的caddy和coolify服务本身的caddy冲突，尝试多次未果后购买新服务器选用docker-compose部署方案。
+- `Coolify + docker-compose` 部署过程网络反复被 prune
+- `pm2 + docker-compose` 混合部署运行方式割裂
+- `2C2G` 机器加 swap 后依然 OOM
+- `argon2` 和 `nest-modules/mailer` 在目标环境下维护成本过高而选择其他包
 
-项目采用docker-compose部署，整个项目使用了很多镜像。开发环境使用两个数据库clickhosue以及postgres两个dcoker镜像，其余部分在本地pnpm start:dev以及pnpm dev命令执行去本地开发。开发环境下.env由各自项目维护。而线上部署的时候，nextjs项目主流两种部署方式是nixpacks以及docker部署。项目根据自托管需求的时候，nextjs选用可以部署在cloudflare上的adapter方案opennext，后端nestjs可以部署在企业内网主机上，通过tunnel。或者使用docker-compose将前后端都部署在企业内网主机上。两个后端中nestjs不能去掉node_modules去部署，所以后端部署的时候要么在服务器上pm2启动要么把node_modules打进docker中。尝试在服务器上跑pm2的时候，opennext项目也尝试的pm2运行但是出现错误，因此后来选择docker-compose全量部署在服务器上。至此已经踩坑过了coolify以及pm2+docker-compose混合部署的方案。
+## 一、部署约束
 
-使用阿里云的2c2g+AliLinux系统作为部署docker镜像及其，遇到OOM总是崩溃，swap配置了但不够用。所以后面打算后端使用pm2，docker化数据库clickhosue以及pg，但是尝试过后部署步骤繁琐故舍弃，转而投入全docker-compose部署。后端dashboard的nestjs项目中使用argon2在阿里云服务器中默认py3.6编译报错崩溃，尝试换py3.7重新编译依然报错。总是会导致这种情况，后面加密依赖部分直接更换bcryptjs了
+这个项目主要包含几部分：
 
-另一个是在阿里云服务器中使用docker-compose部署的时候，dashboard的nestjs后端项目中使用比较旧的nest-modules/mailer的时候会报错css-in-js的依赖缺失。查看github issues时候有解决方案但是比较不标准导致步骤繁琐。未来维护可能更麻烦，所以换了nodemailer。
+- 监控错误与性能的 SDK
+- 用于测试 SDK 接入的 `examples/vanilla`
+- 接收上报数据的 `dsn-server`
+- Dashboard 前端 `frontend/monitor`
+- Dashboard 后端 `backend/monitor`
 
-总是在阿里云服务器中爆OOM，所以选用了外网的netcup的4c6g机器，避免了麻烦的备案以及docker镜像设置，而且后续开发其他ai项目的时候可以避免openai在中国地区不可用的麻烦(cfworker方案已失效)。使用docker-compose部署全量镜像过程中正常部署，但是在测试过程中发现收发不了邮件。经过测试机器脚本发现服务器不支持smtp发送邮件。所以在之前通过nodemailer通过smtp发送163邮箱的基础上，优先使用resend的http服务发送邮箱，当发送不了http的时候转而使用smtp去发送。这就保证出现严重错误时邮件服务正常运行。
+开发环境里，数据库依赖 `ClickHouse` 和 `Postgres` 两个 Docker 镜像，其他部分通过 `pnpm start:dev` 和 `pnpm dev` 本地运行。线上部署时简化流程，把多服务链路稳定收敛成一种运行方式比较重要。
 
-至此，本项目在依赖替换以及部署过程中的错误和坑
+## 二、放弃 Coolify
+
+一开始计划在 Coolify 上用 `docker-compose` 部署。实际尝试多次后，部署过程中 network 会被 Coolify 内部 prune 掉，并伴随多种异常。
+
+更大的问题是平台层和业务栈可能互相打架：项目里的 `caddy` 与 Coolify 自身依赖的 `caddy` 可能存在冲突。只要平台抽象本身已经干扰 Compose 栈，就不应继续把时间花在修平台兼容性上。而且如果去掉项目开发环境使用的 `caddy` 镜像，后续其他人使用无法简易部署。而且项目后续需要改写为微服务架构，保留用于反向代理的镜像。
+
+对于多容器、双数据库、带代理层、未来考虑微服务架构、用户部署简单等问题，保证部署简易
+
+## 三、收敛为全量 `docker-compose`
+
+项目曾考虑和尝试过几种运行方式：
+
+1. Next.js 走 OpenNext 适配器，部署到 Cloudflare，NestJS 后端走企业内网主机，通过 Tunnel 暴露。这样后端崩掉，前端页面托管在 Cloudflare 也能打开。
+2. 或者前后端都放在企业内网主机上，用 `docker-compose` 管理，这样方便简易部署
+3. 或者服务器上用 `pm2` 跑部分服务，数据库仍走容器，比较麻烦
+
+这些组合方式的问题：运行方式分裂后，部署和排障成本会上升。尤其是 NestJS 后端不能直接去掉 `node_modules` 部署，OpenNext 项目用 `pm2` 也出现错误，最终让混合部署变得越来越重。
+
+后面直接收敛：服务尽量统一放进 `docker-compose`。先保证启动方式、依赖和环境变量入口一致，再谈更细的拆分。
+
+## 四、依赖和资源问题
+
+### 1) 国内机器碰壁
+
+手里正好有一台国内的阿里云 `2C2G + AliLinux` 机器，但是在配置了 swap 并在全量 Docker 部署下频繁 OOM。
+
+后续想过只容器化 `ClickHouse` 和 `Postgres`，其余服务由 `pm2` 跑起来，但步骤过于繁琐，最终还是放弃。机器资源不够时，先换更合适的实例，往往比继续做运行时拼装更直接。
+
+### 2) 不稳定依赖
+
+在将服务打包成 compose 的时候， Dashboard中的 NestJS 后端里，`argon2` 在阿里云服务器默认 `Python 3.6` 环境下编译失败，切到 `Python 3.7` 后仍然报错。会持续放大部署成本的依赖问题，后面直接改成了 `bcryptjs`。
+
+另一个问题是较旧的 `nest-modules/mailer`。在 Docker Compose 部署中，它会报 CSS-in-JS 相关依赖缺失。虽然 GitHub issues 中有解决方案，但不够标准和自动化，维护成本也高，最后改为 `nodemailer`。
+
+### 3) 邮件发送要降级
+
+迁移到 Netcup `4C8G` 机器后，全量镜像可以正常部署，但在测试时发现服务器不支持 SMTP 发信。于是邮件发送链路改成：
+
+1. 优先使用 `Resend` 的 HTTP 服务发信
+2. HTTP 发信异常时，再回退到原有 SMTP 方案
+
+这样做的目的保证严重错误发生时，告警链路仍能尽量可用。而且 Resend 的 HTTP 方案和 Cloudflare 只支持接收邮件而不支持发送邮件做了互补。
+
+## 五、最终取舍
+
+最后采用的是外网 Netcup `4C8G` 机器 + 全量 `docker-compose`。这样避开了备案和平台兼容问题，也让后续其他 AI 项目的部署环境更统一。保留 `openNext` 的 Cloudlfare 部署，未来看使用者需求去选择使用 Tunnel 分开部署前后端。
