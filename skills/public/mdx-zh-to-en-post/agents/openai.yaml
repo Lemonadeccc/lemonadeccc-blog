@@ -1,4 +1,0 @@
-interface:
-  display_name: "MDX ZH to EN Post"
-  short_description: "Translate Chinese MDX posts to English safely"
-  default_prompt: "Translate one post from content/posts/zh to content/posts/en with the same slug and preserved MDX structure."

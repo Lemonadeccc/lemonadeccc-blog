@@ -1,0 +1,338 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #0d0d0d;
+  --color-bg-secondary: #111111;
+  --color-text-primary: #ffffff;
+  --color-text-dim: rgba(255, 255, 255, 0.75);
+  --color-text-muted: rgba(255, 255, 255, 0.5);
+  --color-border: rgba(255, 255, 255, 0.15);
+
+  --font-display: "Inter", system-ui, sans-serif;
+
+  --ease-gmunk: cubic-bezier(0.2, 0, 0, 1);
+
+  --surface-inverse: #ffffff;
+  --text-inverse: #0d0d0d;
+  --text-secondary: rgba(255, 255, 255, 0.55);
+  --border-subtle: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes fade-up {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+html {
+  background-color: #0d0d0d;
+  color: #ffffff;
+}
+
+body {
+  background-color: #0d0d0d;
+  color: #ffffff;
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  color: #000;
+  background: #f30;
+}
+
+::-moz-selection {
+  color: #000;
+  background: #f30;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.portfolio-wall {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin: -0.2rem;
+}
+
+.portfolio-thumbnail {
+  box-sizing: content-box;
+  display: block;
+  width: 100%;
+  padding: 0.1rem;
+  color: #fff;
+  text-decoration: none;
+  transition:
+    background-color 220ms var(--ease-gmunk),
+    color 220ms var(--ease-gmunk);
+}
+
+@media (min-width: 640px) {
+  .portfolio-thumbnail {
+    width: var(--portfolio-width-sm, calc(50% - 0.2rem));
+  }
+}
+
+@media (min-width: 1024px) {
+  .portfolio-thumbnail {
+    width: var(--portfolio-width-lg, var(--portfolio-width-sm, calc(50% - 0.2rem)));
+  }
+}
+
+.portfolio-thumbnail:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.portfolio-thumbnail-media {
+  position: relative;
+  aspect-ratio: var(--portfolio-aspect-ratio, 16 / 9);
+  overflow: hidden;
+  background: #111111;
+}
+
+.portfolio-thumbnail-scene {
+  height: 100%;
+  width: 100%;
+}
+
+.portfolio-thumbnail-copy {
+  padding-top: 0.55rem;
+}
+
+.portfolio-thumbnail-title {
+  color: currentColor;
+  font-size: clamp(0.88rem, 0.82rem + 0.16vw, 0.96rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.28;
+}
+
+.portfolio-thumbnail-meta {
+  margin-top: 0.22rem;
+  color: #5c5c5ce6;
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+  transition: color 220ms var(--ease-gmunk);
+}
+
+.portfolio-thumbnail:hover .portfolio-thumbnail-meta {
+  color: #000;
+}
+
+.liked-video-card {
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+.liked-video-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.liked-video-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.liked-video-chip {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  padding: 0.34rem 0.46rem;
+  text-transform: uppercase;
+  transition:
+    border-color 220ms var(--ease-gmunk),
+    color 220ms var(--ease-gmunk);
+}
+
+.liked-video-title {
+  font-size: clamp(1rem, 0.9rem + 0.34vw, 1.2rem);
+}
+
+.liked-video-summary {
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  display: -webkit-box;
+  min-height: calc(1.55em * 3);
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  transition: color 220ms var(--ease-gmunk);
+}
+
+.portfolio-thumbnail:hover .liked-video-chip {
+  border-color: rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0.56);
+}
+
+.portfolio-thumbnail:hover .liked-video-summary {
+  color: rgba(0, 0, 0, 0.68);
+}
+
+.post-content {
+  max-width: 75ch;
+  line-height: 1.65;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4 {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 2rem 0 0.75rem;
+}
+
+.post-content p {
+  margin: 1.25rem 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.post-content a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.post-content a:hover {
+  color: #ffffff;
+}
+
+.post-content pre {
+  overflow-x: auto;
+  padding: 1rem 1.25rem;
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  font-size: 0.875em;
+}
+
+.post-content code:not(pre code) {
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  font-size: 0.875em;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+}
+
+.post-content img {
+  max-width: 100%;
+  margin: 2rem 0;
+  border-radius: 4px;
+}
+
+.post-content ul,
+.post-content ol {
+  padding-left: 1.5rem;
+  margin: 1.25rem 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.post-content li {
+  margin: 0.4rem 0;
+}
+
+.post-content blockquote {
+  border-left: 3px solid rgba(255, 255, 255, 0.2);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-style: italic;
+}
+
+.post-content hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 2rem 0;
+}
+
+.post-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  margin: 1.5rem 0;
+}
+
+.post-content th,
+.post-content td {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.post-content th {
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 700;
+}
+
+.gmunk-detail {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.gmunk-detail .rich-copy {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(1rem, 0.92rem + 0.32vw, 1.2rem);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.gmunk-detail .rich-copy p,
+.gmunk-detail .rich-copy blockquote {
+  margin: 0;
+}
+
+.gmunk-detail .rich-copy p + p,
+.gmunk-detail .rich-copy p + .inline-quote,
+.gmunk-detail .rich-copy .inline-quote + p {
+  margin-top: 1.5rem;
+}
+
+.gmunk-detail .rich-copy a {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.gmunk-detail .rich-copy a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+.gmunk-detail .rich-copy strong {
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.gmunk-detail .rich-copy .inline-quote {
+  color: rgba(255, 255, 255, 0.9);
+  display: block;
+  font-size: clamp(1.6rem, 1.32rem + 0.85vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.2;
+}

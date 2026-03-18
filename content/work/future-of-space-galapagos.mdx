@@ -1,0 +1,98 @@
+import {
+  DetailChapterSection,
+  DetailCreditsColumns,
+  DetailTextSection,
+} from "@/components/work/detail/GmunkDetailText";
+import { DetailImageWall } from "@/components/work/detail/GmunkDetailMedia";
+import {
+  experienceGallery,
+  leadGalleryA,
+  leadGalleryB,
+  studyGallery,
+} from "@/content/work/future-of-space-galapagos.data";
+
+export const workPage = {
+  backgroundClassName: "bg-[#0d0d0d]",
+};
+
+<div className="space-y-14 pb-10">
+  <DetailTextSection
+    title="FUTURE of SPACE Galápagos"
+    meta="October 2025 - -"
+    variant="intro"
+    headingAs="h1"
+  >
+    FUTURE of SPACE invited GMUNK aboard its Galapagos voyage as resident
+    artist, building a temporary community of artists, scientists, explorers,
+    and cultural voices rather than a conventional cruise itinerary.
+
+    Inside that environment, GMUNK used photography, spectral studies, and
+    machine-assisted transformations to translate the islands into a body of
+    work about perception, ecology, and synthetic vision.
+  </DetailTextSection>
+
+  <DetailImageWall images={leadGalleryA} wallClassName="lg:columns-3" />
+  <DetailImageWall images={leadGalleryB} wallClassName="lg:columns-3" />
+
+  <div className="space-y-10">
+    <DetailChapterSection heading="InfraMunk vs Galapagos">
+      <p>
+        The islands registered as living geometry: light, lava, water, salt,
+        and wildlife all behaving like one responsive system. GMUNK approached
+        the landscape as something to collaborate with rather than document at
+        a distance.
+      </p>
+      <p>
+        Full-spectrum photography and a machine-learning process called
+        Breathing were used to push the material past straight capture. The
+        images move between observation and mutation, where natural structures
+        begin to feel cellular, atmospheric, and computational at the same
+        time.
+      </p>
+    </DetailChapterSection>
+
+    <DetailImageWall images={studyGallery} />
+  </div>
+
+  <div className="space-y-10">
+    <DetailChapterSection heading="The Experience">
+      <p>
+        The voyage was defined as much by conversation as by landscape. Meals,
+        landings, and long stretches on deck created a setting where artists
+        and scientists could exchange ideas without the usual conference
+        distance between disciplines.
+      </p>
+      <p>
+        That combination of proximity, comfort, and raw encounter shaped the
+        work. What came out of the trip feels less like a recap and more like
+        an afterimage of the community, the islands, and the altered pace in
+        which the work was made.
+      </p>
+    </DetailChapterSection>
+
+    <DetailImageWall images={experienceGallery} />
+  </div>
+
+  <DetailCreditsColumns
+    roleTitle="Photographer, Digital Artist"
+    roleChildren={
+      <>
+        <p>GMUNK Studio, Inc.</p>
+        <p>FUTURE of SPACE</p>
+      </>
+    }
+    creditsChildren={
+      <p>
+        Photographer: <strong>GMUNK</strong>
+        <br />
+        Digital Artist: <strong>GMUNK</strong>
+        <br />
+        Machine-Learning Support: <strong>PXLPSHR</strong>
+        <br />
+        Experience Photography: <strong>Erich Saide</strong>
+        <br />
+        Experience Photography: <strong>Marie Catafesta</strong>
+      </p>
+    }
+  />
+</div>

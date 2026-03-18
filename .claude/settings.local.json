@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Playwright__browser_evaluate",
+      "mcp__Playwright__browser_navigate",
+      "mcp__Playwright__browser_take_screenshot",
+      "mcp__Playwright__browser_click",
+      "mcp__Playwright__browser_run_code",
+      "mcp__Playwright__browser_resize",
+      "mcp__ide__getDiagnostics",
+      "mcp__Playwright__browser_snapshot",
+      "Bash(cp /Users/lemonade/Downloads/github/lemnoadeccc-blog/content/posts/en/*.mdx /Users/lemonade/Downloads/github/blog/content/posts/en/)",
+      "Bash(cp /Users/lemonade/Downloads/github/lemnoadeccc-blog/content/posts/zh/*.mdx /Users/lemonade/Downloads/github/blog/content/posts/zh/)",
+      "Bash(cp:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm build:*)",
+      "WebFetch(domain:gmunk.com)"
+    ]
+  }
+}

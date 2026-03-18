@@ -1,0 +1,17 @@
+{
+  "id": "cloudflare-nextjs-slop-fork-syntax",
+  "type": "video",
+  "provider": "youtube",
+  "title": {
+    "en": "Cloudflare's Next.js Slop Fork",
+    "zh": "Cloudflare 的 Next.js Slop Fork"
+  },
+  "summary": {
+    "en": "A short take on Cloudflare's Next.js fork and the surrounding discussion.",
+    "zh": "关于 Cloudflare 的 Next.js 分支以及相关讨论的一段短视频。"
+  },
+  "author": "Syntax",
+  "duration": "--",
+  "tags": ["Developer", "Cloudflare"],
+  "embedUrl": "https://www.youtube.com/embed/h39oZb2-7Xo"
+}

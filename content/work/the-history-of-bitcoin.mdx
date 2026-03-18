@@ -1,0 +1,144 @@
+import {
+  DetailCreditsColumns,
+  DetailLeadQuote,
+  DetailTextSection,
+} from "@/components/work/detail/GmunkDetailText";
+import {
+  DetailDivider,
+  DetailJustifiedGallery,
+  DetailMediaStrip,
+} from "@/components/work/detail/GmunkDetailMedia";
+import {
+  artifactGallery,
+  commissionGallery,
+  heroMedia,
+  visualLanguageGallery,
+} from "@/content/work/the-history-of-bitcoin.data";
+
+export const workPage = {
+  backgroundClassName: "bg-[#0d0d0d]",
+};
+
+<div className="pb-20 pt-28 sm:pt-32">
+  <DetailTextSection
+    title="The History of Bitcoin"
+    meta="November 2025 ––"
+    variant="intro"
+    headingAs="h1"
+  >
+    This project was created as a visual contribution for a collectors-focused
+    book on the history of Bitcoin. Rather than illustrating the subject as a
+    timeline of events, the goal was to build a body of images that could hold
+    the tension between code, belief, scarcity, and the strange cultural aura
+    that has formed around the network.
+
+    The work approaches Bitcoin less as a logo or infographic subject and more
+    as a symbolic system, part machine, part mythology, part collective
+    projection. Each image needed to feel precise enough for a book about
+    infrastructure, while still carrying the ambiguity and emotional charge
+    that has made the subject so culturally magnetic.
+  </DetailTextSection>
+
+  <DetailMediaStrip items={heroMedia} className="mt-12" />
+
+  <div className="mt-12 space-y-12 md:space-y-16">
+    <div>
+      <div className="mb-12">
+        <DetailLeadQuote align="intro">
+          The commission was less about explaining Bitcoin and more about
+          giving visual form to the atmosphere around it.
+        </DetailLeadQuote>
+      </div>
+
+      <DetailTextSection title="The Commission" meta="–– 02" variant="intro">
+        The brief centered on creating imagery that could live inside a serious
+        collectors publication without collapsing into cliché. That meant
+        avoiding obvious iconography and instead working with form, light,
+        texture, and composition to suggest systems of encryption, ritual,
+        volatility, and value.
+
+        The resulting images were designed to function as visual chapters.
+        Rather than serve as literal diagrams, they behave more like tonal
+        anchors inside the book, shaping how the reader feels the material as
+        much as how they understand it.
+      </DetailTextSection>
+
+      <DetailJustifiedGallery rows={commissionGallery} className="mt-12" />
+    </div>
+
+    <div>
+      <DetailDivider className="mt-12 md:mt-16" />
+
+      <div className="mt-12 mb-12">
+        <DetailLeadQuote align="section">
+          The visual language needed to feel engineered and mythic at the same
+          time.
+        </DetailLeadQuote>
+      </div>
+
+      <DetailTextSection title="The Visual Language" meta="–– 03">
+        The aesthetic direction draws from signal architectures, metallic
+        surfaces, black-box systems, and the ceremonial quality of rare
+        objects. Compositions were built to feel stable but slightly charged,
+        as if they were holding information just below the threshold of
+        legibility.
+
+        Color, contrast, and lighting were treated as narrative tools. Some
+        images lean into cold precision and numerical rigor, while others move
+        toward heat, glow, and the psychological intensity that surrounds
+        speculation, conviction, and digital wealth.
+
+        <blockquote className="inline-quote">
+          The aim was to make the images feel like artifacts from a financial
+          system that is still half emerging and half imagined.
+        </blockquote>
+
+        That balance between discipline and atmosphere helped the work sit in a
+        useful middle zone. It remains abstract enough to invite projection,
+        but grounded enough to support the editorial seriousness of the book.
+      </DetailTextSection>
+
+      <DetailJustifiedGallery rows={visualLanguageGallery} className="mt-12" />
+    </div>
+
+    <div>
+      <DetailDivider className="mt-12 md:mt-16" />
+
+      <DetailTextSection title="The Artifact" meta="–– 04">
+        Because the final destination was print, the images were developed with
+        material presence in mind. Scale, edge definition, surface richness,
+        and page rhythm all mattered. The work needed to retain density and
+        mystery when held in the hand, not just when viewed as isolated screens.
+
+        In that sense, the book format became part of the concept. Bitcoin is
+        often discussed as a purely digital abstraction, but this project gave
+        it a slower, more tactile frame. The images turn the subject into
+        something that can be collected, sequenced, and revisited like a set of
+        visual relics.
+      </DetailTextSection>
+
+      <DetailJustifiedGallery rows={artifactGallery} className="mt-12" />
+    </div>
+  </div>
+
+  <DetailCreditsColumns
+    roleTitle="Artwork, Visual Direction"
+    roleChildren={
+      <>
+        <p>Collectors Book Commission</p>
+        <p>The History of Bitcoin</p>
+      </>
+    }
+    creditsChildren={
+      <p>
+        Artwork: <strong>GMUNK</strong>
+        <br />
+        Visual Direction: <strong>GMUNK</strong>
+        <br />
+        Format: <strong>Collectors Edition Book</strong>
+        <br />
+        Category: <strong>Digital Art Contribution</strong>
+      </p>
+    }
+  />
+</div>

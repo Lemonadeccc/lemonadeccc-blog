@@ -1,0 +1,195 @@
+import {
+  DetailCreditsColumns,
+  DetailLeadQuote,
+  DetailTextSection,
+} from "@/components/work/detail/GmunkDetailText";
+import {
+  DetailDivider,
+  DetailJustifiedGallery,
+  DetailMediaStrip,
+} from "@/components/work/detail/GmunkDetailMedia";
+import {
+  concept02Gallery,
+  concept03Gallery,
+  heroMedia,
+  process04Gallery,
+} from "@/content/work/rivian-borealis-art-basel.data";
+
+export const workPage = {
+  backgroundClassName: "bg-[#111111]",
+};
+
+<div className="pb-20 pt-28 sm:pt-32">
+  <DetailTextSection
+    title="Borealis at Art Basel"
+    meta="December 2025 ––"
+    variant="intro"
+    headingAs="h1"
+  >
+    During [Miami Art Week 2025](https://www.artbasel.com/miami-beach?lang=en),
+    [Rivian](https://rivian.com/r2) and [Nylon](https://www.nylon.com/)
+    reached out to Munkowitz with an invitation to create a bold activation on
+    the beach for their prestigious
+    [Nylon House Party.](https://www.nylon.com/nylon-nights/everything-you-missed-from-nylon-house-miami)
+    The brief was simple and ambitious: design an immersive artwork that could
+    live outdoors, directly in the sand, surrounded by wind, tide, and a
+    constantly shifting crowd. The result was a live laser installation
+    inspired by the Aurora Borealis, transforming the shoreline into a drifting
+    light phenomenon during one of the most culturally charged weeks of the
+    year.
+
+    The installation imagines the [Rivian R1](https://rivian.com/r1s) as the
+    quiet center of that phenomenon. Set directly on the sand, the vehicle
+    becomes a kind of beacon, surrounded by soft dunes, rolling atmosphere, and
+    layered bands of teal and violet light that move like a grounded aurora.
+    The goal was to create a moment that felt suspended in time, where light
+    behaves like weather and gathers around the vehicle as if drawn to its
+    presence.
+  </DetailTextSection>
+
+  <DetailMediaStrip items={heroMedia} className="mt-12" />
+
+  <div className="mt-12 space-y-12 md:space-y-16">
+    <div>
+      <div className="mb-12">
+        <DetailLeadQuote align="intro">
+          At its core, the work is about translating invisible forces like
+          electricity, energy, and motion into something the audience can feel
+          in their body.
+        </DetailLeadQuote>
+      </div>
+
+      <DetailTextSection title="The Concept" meta="–– 02" variant="intro">
+        To achieve this, ten fifty-watt lasers were suspended around the
+        Rivian R1 and choreographed to sweep and fold through dense haze,
+        revealing crisp volumetric forms and a constantly evolving canopy of
+        light. The color palette pulls directly from the R1&apos;s Borealis purple
+        finish, allowing the light to feel native to the vehicle rather than
+        applied to it. Lasers were chosen for their intensity and clarity,
+        especially in an outdoor environment where wind and atmosphere are
+        always in motion. The dunes shape the air currents, the haze becomes
+        the medium, and the vehicle anchors the experience.
+      </DetailTextSection>
+
+      <DetailJustifiedGallery rows={concept02Gallery} className="mt-12" />
+    </div>
+
+    <div>
+      <DetailDivider className="mt-12 md:mt-16" />
+
+      <div className="mt-12 mb-12">
+        <DetailLeadQuote align="section">
+          The installation imagines the R1 as the quiet center of a drifting
+          light phenomenon.
+        </DetailLeadQuote>
+      </div>
+
+      <DetailTextSection title="The Concept" meta="–– 03">
+        On the shoreline in Miami, the vehicle becomes a kind of beacon,
+        surrounded by soft dunes, rolling atmosphere and a shifting field of
+        teal and violet that moves like a grounded aurora. The goal is to
+        create a moment that feels suspended, where light behaves almost like
+        tide or weather and gathers around the R1 as if drawn to its presence.
+
+        The R1 is positioned directly in the sand during Nylon&apos;s Art Basel
+        celebration, placed within a sculptural landscape of fog and
+        atmosphere. Around it we suspend ten 50W lasers that sweep and fold
+        through the haze, revealing crisp volumetric shapes and a constantly
+        evolving luminous canopy. The color palette comes from the R1&apos;s custom
+        paint finish, which helps the light feel native to the vehicle rather
+        than applied to it.
+
+        <blockquote className="inline-quote">
+          Lasers were chosen for their intensity and clarity. They maintain
+          sharpness outdoors, even with environmental drift, and allow the
+          light to feel physical and intentional.
+        </blockquote>
+
+        The dunes shape the air currents, the haze becomes the medium the beams
+        travel through, and the R1 acts as the anchor of the entire experience.
+        The inspiration is rooted in translating the invisible qualities of
+        electric power into something the audience can feel in their body. It
+        is about transforming the engineering spirit of Rivian into a living
+        moment of energy, atmosphere and motion.
+      </DetailTextSection>
+
+      <DetailJustifiedGallery rows={concept03Gallery} className="mt-12" />
+    </div>
+
+    <div>
+      <DetailDivider className="mt-12 md:mt-16 mb-12" />
+
+      <DetailTextSection title="The Process" meta="–– 04">
+        What inspired me most about the Aurora Borealis was its extraordinary
+        sense of depth. It stretched vertically into the sky in layered bands
+        of light that felt alive, dimensional, and constantly in motion. There
+        was a softness to it, but also a monumental presence that filled the
+        entire field of view and altered your perception of space. That
+        duality, delicate yet powerful, ephemeral yet overwhelming, was
+        endlessly compelling to me and became the emotional foundation of the
+        work.
+
+        Using lasers and fog allowed us to echo those qualities in a very
+        intentional and controlled way. Lasers created vertical architectures of
+        light that felt precise and sculptural, while the haze gave those
+        structures volume, texture, and breath. As the atmosphere shifted, the
+        light responded, revealing depth through overlap, translucency, and
+        movement. Together, they formed an environment where light was no
+        longer a point source or a surface treatment, but something spatial,
+        immersive, and bodily felt.
+
+        <blockquote className="inline-quote">
+          The beams could rise, drift, and overlap like auroral curtains,
+          revealing layers that appeared and disappeared depending on where you
+          stood.
+        </blockquote>
+
+        That idea of light as an environment became the foundation of the work.
+        Amid the intensity and momentum of Art Basel, the installation was
+        designed to offer a moment of suspension. Extensive previs, spatial
+        mapping, and choreography shaped a structure that could respond to
+        wind, tide, and human presence without losing coherence. The sequence
+        moved between surges of energy and moments of stillness, allowing the
+        piece to breathe and remain alive. In the end, it existed as a
+        temporary convergence of atmosphere, technology, and intuition, a
+        drifting phenomenon on the shoreline that resisted fixation, revealing
+        itself only in passing moments of alignment.
+      </DetailTextSection>
+
+      <DetailJustifiedGallery rows={process04Gallery} className="mt-12" />
+    </div>
+  </div>
+
+  <DetailCreditsColumns
+    roleTitle="Experential Director"
+    roleChildren={
+      <p>
+        at <a href="https://www.atrbute.com/" target="_blank" rel="noopener noreferrer">ATRBUTE</a>
+        <br />
+        for <a href="https://rivian.com/r2" target="_blank" rel="noopener noreferrer">Rivian</a> x{" "}
+        <a href="https://www.nylon.com/" target="_blank" rel="noopener noreferrer">Nylon</a>
+      </p>
+    }
+    creditsChildren={
+      <p>
+        Experiential Director: <strong>GMUNK</strong>
+        <br />
+        Production Company: <strong>ATRBUTE</strong>
+        <br />
+        Managing Partner: <strong>Aaron Barr</strong>
+        <br />
+        Creative Director: <strong>Peter Clark</strong>
+        <br />
+        Project Photographer: <strong>James Heredia</strong>
+        <br />
+        Laser Lead: <strong>Adam LaBay</strong>
+        <br />
+        Laser Operator: <strong>Taran Allen</strong>
+        <br />
+        Case Study Director: <strong>Lauren Sofair</strong>
+        <br />
+        Case Study Cinematographer: <strong>Florent Longetti</strong>
+      </p>
+    }
+  />
+</div>
