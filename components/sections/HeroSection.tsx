@@ -14,15 +14,15 @@ export function HeroSection({ locale = "en" }: { locale?: SiteLocale }) {
       <div className="absolute inset-0 flex items-center justify-center px-6">
         <div className="max-w-xl text-center">
           <p className="text-sm leading-relaxed text-white/70 sm:text-base">
-            A collection of the best resources for learning development
+            {copy.home.hero.introLineA}
             <br />
-            from the Internet, hand-picked and created by me
+            {copy.home.hero.introLineB}
           </p>
 
           <p className="mt-6 text-sm leading-relaxed text-white/70 sm:text-base">
-            Learning and sharing some articles about AI, development.
+            {copy.home.hero.subscribeLineA}
             <br />
-            If you like my project or ideas, you can subscribe to my
+            {copy.home.hero.subscribeLineB}
           </p>
 
           <div className="mt-4 flex flex-col items-center gap-2 text-sm sm:flex-row sm:justify-center sm:gap-4">
@@ -30,14 +30,14 @@ export function HeroSection({ locale = "en" }: { locale?: SiteLocale }) {
               href={rssEnHref}
               className="font-medium text-white underline underline-offset-4 transition-opacity hover:opacity-60"
             >
-              RSS feed
+              {copy.home.hero.rssFeedEnLabel}
             </Link>
-            <span className="text-white/30">or</span>
+            <span className="text-white/30">{copy.home.hero.rssDividerLabel}</span>
             <Link
               href={rssZhHref}
               className="font-medium text-white underline underline-offset-4 transition-opacity hover:opacity-60"
             >
-              RSS feed (zh-CN)
+              {copy.home.hero.rssFeedZhLabel}
             </Link>
           </div>
         </div>

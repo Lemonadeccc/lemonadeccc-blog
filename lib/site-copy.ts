@@ -6,7 +6,7 @@ const siteCopy = {
     metadata: {
       home: {
         title: "Lemonadeccc",
-        description: "My Blog — Developer",
+        description: "My Role — Developer",
       },
       archive: {
         title: "Archive | Lemonadeccc",
@@ -33,9 +33,19 @@ const siteCopy = {
       hero: {
         eyebrow: "Welcome to ——",
         title: "Lemonadeccc",
-        byline: "My Blog ——",
+        byline: "My Role ——",
         roleA: "Developer",
         roleB: "",
+        introLineA:
+          "A collection of the best resources for learning development",
+        introLineB: "from the Internet, hand-picked and created by me",
+        subscribeLineA:
+          "Learning and sharing some articles about AI, development.",
+        subscribeLineB:
+          "If you like my project or ideas, you can subscribe to my",
+        rssFeedEnLabel: "RSS feed",
+        rssDividerLabel: "or",
+        rssFeedZhLabel: "RSS feed (zh-CN)",
       },
       recentTitle: "Most Recent Works",
       featuredTitle: "Featured Works",
@@ -110,7 +120,7 @@ const siteCopy = {
     metadata: {
       home: {
         title: "Lemonadeccc",
-        description: "我的博客 —— Developer",
+        description: "我的角色 —— Developer",
       },
       archive: {
         title: "归档 | Lemonadeccc",
@@ -139,9 +149,16 @@ const siteCopy = {
       hero: {
         eyebrow: "欢迎来到 ——",
         title: "Lemonadeccc",
-        byline: "我的博客 ——",
+        byline: "我的角色 ——",
         roleA: "Developer",
         roleB: "",
+        introLineA: "这里收集了互联网上值得看的资源",
+        introLineB: "由我亲自挑选、整理并持续维护",
+        subscribeLineA: "也会分享一些关于 AI、设计与开发的文章。",
+        subscribeLineB: "如果你喜欢我的项目或想法，可以订阅我的",
+        rssFeedEnLabel: "RSS 订阅（英文）",
+        rssDividerLabel: "或",
+        rssFeedZhLabel: "RSS 订阅（中文）",
       },
       recentTitle: "最新作品",
       featuredTitle: "精选作品",
