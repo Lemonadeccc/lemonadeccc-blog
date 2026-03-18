@@ -23,7 +23,8 @@ export function ProjectCard({
               alt={project.title}
               width={800}
               height={600}
-              unoptimized
+              priority
+              sizes="(min-width: 640px) 50vw, 100vw"
               className="block h-auto w-full object-cover"
             />
           </div>

@@ -56,8 +56,7 @@ function DetailMedia({ item }: { item: DetailMediaItem }) {
           alt={item.alt}
           width={item.width}
           height={item.height}
-          unoptimized
-          sizes="100vw"
+          sizes="(min-width: 768px) 33vw, 100vw"
           className="block h-full w-full object-cover"
         />
       )}
@@ -153,8 +152,7 @@ export function DetailImageWall({
                 alt={image.alt}
                 width={size.width}
                 height={size.height}
-                unoptimized
-                sizes="100vw"
+                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                 className="block h-auto w-full object-cover"
               />
             </div>

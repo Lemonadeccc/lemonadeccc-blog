@@ -213,13 +213,6 @@ export async function PostDetailPageView({
       <Navbar locale={locale} />
       <main className="min-h-screen bg-bg-primary text-white">
         <div className="mx-auto max-w-5xl px-4 pb-20 pt-24 sm:px-10">
-          <Link
-            href={localizeHref("/archive", locale)}
-            className="inline-block text-xs uppercase tracking-[0.24em] text-white/45 transition-colors hover:text-white"
-          >
-            {copy.archive.backToArchive}
-          </Link>
-
           <header className="mt-10 border-b border-white/10 pb-8">
             <p className="text-xs uppercase tracking-[0.28em] text-white/40">
               {post.type}

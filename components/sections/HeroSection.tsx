@@ -51,8 +51,10 @@ export function HeroSection({ locale = "en" }: { locale?: SiteLocale }) {
             <p className="text-[10px] uppercase tracking-[0.3em] text-white/50">
               {copy.home.hero.eyebrow}
             </p>
-            <h1 className="text-5xl font-bold leading-none tracking-tighter text-white sm:text-7xl">
-              {copy.home.hero.title}
+            <h1 className="text-4xl font-medium leading-tight text-white lg:text-5xl">
+              <span className="cursor-pointer transition-opacity hover:opacity-70">
+                {copy.home.hero.title}
+              </span>
             </h1>
           </div>
 

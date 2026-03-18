@@ -65,7 +65,7 @@ function DetailImageWall({
               alt={image.alt}
               width={size.width}
               height={size.height}
-              unoptimized
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
               className="block h-auto w-full object-cover"
             />
           </div>
@@ -313,7 +313,8 @@ export function DefaultProjectPage({ project }: { project: Project }) {
               alt={project.title}
               width={1600}
               height={900}
-              unoptimized
+              priority
+              sizes="(min-width: 1024px) 58vw, 100vw"
               className="block h-auto w-full object-cover"
             />
           </div>
