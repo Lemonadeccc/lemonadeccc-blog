@@ -35,8 +35,8 @@ export function LikedList({ locale, videos }: Props) {
   const emptyLabel = locale === "zh" ? "暂时还没有视频" : "No liked videos yet";
 
   return (
-    <div className="py-5">
-      <div className="grid grid-cols-1 gap-y-8 lg:grid-cols-10 lg:gap-x-0">
+    <div>
+      <div className="grid grid-cols-1 gap-y-8 lg:grid-cols-10 lg:gap-x-0 mb-[20px]">
         <div className="hidden lg:block lg:col-span-5" />
         <div className="lg:col-span-5">
           <div className="flex flex-wrap gap-x-4 gap-y-2 font-bold leading-[1.4]">
@@ -74,7 +74,7 @@ export function LikedList({ locale, videos }: Props) {
           <p className="text-xs uppercase tracking-[0.3em] text-white/20">{emptyLabel}</p>
         </div>
       ) : (
-        <div className="portfolio-wall mt-5" data-thumbnails="justify">
+        <div className="portfolio-wall mt-0" data-thumbnails="justify">
           {filteredVideos.map((video) => {
             const style = {
               "--portfolio-aspect-ratio": video.aspectRatio,
