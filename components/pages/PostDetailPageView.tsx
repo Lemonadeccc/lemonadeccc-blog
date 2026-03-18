@@ -100,7 +100,7 @@ function getMdxComponents(locale: SiteLocale) {
       <th
         {...props}
         className={[
-          "border border-white/10 bg-white/[0.05] px-3 py-2 font-semibold text-white",
+          "border border-white/10 bg-white/5 px-3 py-2 font-semibold text-white",
           props.className,
         ]
           .filter(Boolean)
@@ -148,11 +148,11 @@ function getMdxComponents(locale: SiteLocale) {
     pre: (props: React.HTMLAttributes<HTMLPreElement>) => (
       <pre
         {...props}
-        className="my-8 overflow-x-auto rounded-sm border border-white/10 bg-white/[0.04] p-4 text-sm text-white/90"
+        className="my-8 overflow-x-auto rounded-sm border border-white/10 bg-white/4 p-4 text-sm text-white/90"
       />
     ),
     code: (props: React.HTMLAttributes<HTMLElement>) => (
-      <code {...props} className="rounded-sm bg-white/[0.08] px-1.5 py-0.5 text-[0.9em] text-white" />
+      <code {...props} className="rounded-sm bg-white/8 px-1.5 py-0.5 text-[0.9em] text-white" />
     ),
   };
 }
@@ -179,12 +179,12 @@ export async function generatePostMetadata(
   const post = await getPostBySlug(slug, locale);
   if (!post) {
     return {
-      title: locale === "zh" ? "未找到文章 | LEMONADE" : "Post Not Found | LEMONADE",
+      title: locale === "zh" ? "未找到文章 | Lemonadeccc" : "Post Not Found | Lemonadeccc",
     };
   }
 
   return {
-    title: `${post.title} | LEMONADE`,
+    title: `${post.title} | Lemonadeccc`,
     description: post.summary || `${post.type} — ${post.date}`,
   };
 }
@@ -211,7 +211,7 @@ export async function PostDetailPageView({
   return (
     <>
       <Navbar locale={locale} />
-      <main className="min-h-screen bg-[#0d0d0d] text-white">
+      <main className="min-h-screen bg-bg-primary text-white">
         <div className="mx-auto max-w-5xl px-4 pb-20 pt-24 sm:px-10">
           <Link
             href={localizeHref("/archive", locale)}

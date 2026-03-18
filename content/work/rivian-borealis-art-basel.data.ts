@@ -1,13 +1,13 @@
 import type {
   DetailGalleryRowItem,
   DetailMediaItem,
-} from "@/components/work/detail/GmunkDetailMedia";
+} from "@/components/work/detail/ProjectDetailMedia";
 
 export const heroMedia: DetailMediaItem[] = [
   {
     type: "video",
     src: "https://player.vimeo.com/video/1148174272?badge=0&autopause=0&player_id=0&app_id=58479",
-    title: "Rivian – Borealis Art Basel by GMUNK",
+    title: "Rivian – Borealis Art Basel by LEMONADE",
     width: 9,
     height: 16,
   },

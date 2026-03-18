@@ -1,4 +1,4 @@
-import type { Project, RepresentationColumn, SocialLink } from "@/lib/types";
+import type { Project, RepresentationColumn } from "@/lib/types";
 
 const placeholder = (seed: string) =>
   `https://picsum.photos/seed/${seed}/800/600`;
@@ -122,7 +122,8 @@ export const featuredProjects: Project[] = [
     category: "Live-Action Montage",
     dateLabel: "March 2024",
     year: 2024,
-    summary: "A live-action montage reel cut from more than a decade of GMUNK work.",
+    summary:
+      "A live-action montage reel cut from more than a decade of visual direction and motion work.",
     imageSeed: "sudden-rush-primary",
     hoverSeed: "sudden-rush-secondary",
     sections: ["featured"],
@@ -145,7 +146,8 @@ export const featuredProjects: Project[] = [
     category: "Digital Art Single Edition",
     dateLabel: "December 2023",
     year: 2023,
-    summary: "Single-edition digital artwork from the InfraMunk is Breathing body of work.",
+    summary:
+      "Single-edition digital artwork from the Infra Spectrum is Breathing body of work.",
     imageSeed: "bali-moon-primary",
     hoverSeed: "bali-moon-secondary",
     sections: ["featured"],
@@ -174,15 +176,15 @@ export const featuredProjects: Project[] = [
     sections: ["featured"],
   }),
   createProject({
-    slug: "inframunk-vol1",
-    title: "InfraMunk vol1",
+    slug: "infra-spectrum-vol1",
+    title: "Infra Spectrum vol1",
     category: "Digital Art Collection",
     dateLabel: "April 2021",
     year: 2021,
     summary:
       "Digital art collection built from full-spectrum landscape photography and time-based studies.",
-    imageSeed: "inframunk-vol1-primary",
-    hoverSeed: "inframunk-vol1-secondary",
+    imageSeed: "infra-spectrum-vol1-primary",
+    hoverSeed: "infra-spectrum-vol1-secondary",
     sections: ["featured"],
   }),
   createProject({
@@ -210,15 +212,15 @@ export const featuredProjects: Project[] = [
     sections: ["featured"],
   }),
   createProject({
-    slug: "the-munky-king",
-    title: "The Munky King",
+    slug: "the-mythic-king",
+    title: "The Mythic King",
     category: "Photography Series",
     dateLabel: "December 2017",
     year: 2017,
     summary:
       "Photography series exploring a surreal beast-and-beauty narrative in a studio setting.",
-    imageSeed: "the-munky-king-primary",
-    hoverSeed: "the-munky-king-secondary",
+    imageSeed: "the-mythic-king-primary",
+    hoverSeed: "the-mythic-king-secondary",
     sections: ["featured"],
   }),
   createProject({
@@ -274,7 +276,8 @@ export const featuredProjects: Project[] = [
     category: "Feature Film Hologram Design",
     dateLabel: "December 2010",
     year: 2010,
-    summary: "Feature film hologram design created during GMUNK's Digital Domain period.",
+    summary:
+      "Feature film hologram design developed during an earlier Digital Domain period.",
     imageSeed: "tron-legacy-primary",
     hoverSeed: "tron-legacy-secondary",
     sections: ["featured"],
@@ -288,109 +291,4 @@ const projectsBySlug = new Map(allProjects.map((p) => [p.slug, p]));
 export const getProjectBySlug = (slug: string): Project | undefined =>
   projectsBySlug.get(slug);
 
-export const representation: RepresentationColumn[] = [
-  {
-    title: "Live-Action",
-    regions: [
-      {
-        name: "North America",
-        contacts: [
-          {
-            agency: "Tool",
-            agencyUrl: "https://toolofna.com",
-            name: "Michelle Towse",
-            role: "Managing Director",
-            phone: "+1 (516) 652-7402",
-          },
-        ],
-      },
-      {
-        name: "Europe",
-        contacts: [
-          {
-            agency: "Partizan",
-            agencyUrl: "https://www.partizan.com",
-            name: "Duncan Gaman",
-            role: "EP London",
-            phone: "+44 (0) 788 697 2305",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Digital Art",
-    regions: [
-      {
-        name: "North America + Europe",
-        contacts: [
-          {
-            agency: "ATRBUTE",
-            agencyUrl: "https://www.atrbute.com",
-            name: "Ronnie K. Pirovino",
-            role: "Chief Curator",
-            phone: "+1 (310) 251-8831",
-          },
-        ],
-      },
-      {
-        name: "Asia + Middle East + Africa",
-        contacts: [
-          {
-            agency: "Triple X",
-            name: "Tung Yuk Li",
-            role: "Chief Curator",
-            phone: "+1 (917) 319-9085",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Experiential",
-    regions: [
-      {
-        name: "Global",
-        contacts: [
-          {
-            agency: "Tool",
-            agencyUrl: "https://toolofna.com",
-            name: "Dustin Callif",
-            role: "Managing Director",
-            phone: "+1 (310) 453-9244",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Entertainment",
-    regions: [
-      {
-        name: "Global",
-        contacts: [
-          {
-            agency: "RW Media",
-            agencyUrl: "https://rwmedia.tv",
-            name: "Randi Wilens",
-            role: "Managing Director",
-            phone: "+1 (310) 466-7508",
-          },
-        ],
-      },
-    ],
-  },
-];
-
-export const studioEmail = "gmunkowitz@gmail.com";
-
-export const socialLinks: SocialLink[] = [
-  { label: "Instagram", href: "https://www.instagram.com/gmunk/" },
-  { label: "Twitter", href: "https://twitter.com/gmunk" },
-  { label: "Behance", href: "https://www.behance.net/gmunk" },
-  { label: "Vimeo", href: "https://vimeo.com/gmunk" },
-  { label: "Spotify", href: "https://open.spotify.com/user/munkowitz" },
-  { label: "Pinterest", href: "https://www.pinterest.com/gmunk/" },
-  { label: "Facebook", href: "https://www.facebook.com/gmunkowitz" },
-  { label: "Collect", href: "/collect" },
-];
+export const representation: RepresentationColumn[] = [];

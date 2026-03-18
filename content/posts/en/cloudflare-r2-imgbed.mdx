@@ -1,20 +1,20 @@
 ---
-title: Cloudflare R2 + PicGo Image Hosting Setup
+title: Setting Up an Image Host with Cloudflare R2 + PicGo
 type: Article
-project: Cloudflare R2 + PicGo Image Hosting Setup
-date: 2026-02-26
-summary: A personal image host does not need a complex backend; R2 + PicGo is only worth using when you want low cost, a controllable domain, and S3-compatible uploads.
+project: Setting Up an Image Host with Cloudflare R2 + PicGo
+date: 2025-07-09
+summary: A low-cost personal image hosting setup with Cloudflare R2, PicGo, and a custom domain
 ---
 
-A personal image host does not need a separately maintained backend. `Cloudflare R2 + PicGo` can stay usable for a long time on Cloudflare's free plan.
+A personal image host does not need a separately maintained backend. `Cloudflare R2 + PicGo` can be kept long term on Cloudflare's free plan.
 
 ![free-tier](https://imgbed.lemonadec.cc/2026/02/blog-cloudflare-r2-imgbed-free-tier.png)
 
-## I. Scope
+## I. Where It Fits
 
-R2 fits personal blogs, documentation sites, and low-frequency asset uploads. It does not fit cases that require complex image processing, fine-grained access control, or multi-person approval flows.
+R2 works well for personal blogs, documentation sites, and low-frequency asset uploads. It is not a good fit for cases that require complex image processing, fine-grained access control, or multi-user approval workflows.
 
-The free plan includes `10GB` per month, which is usually enough for a personal image host. If the core requirement is only stable hosting for static images, low-maintenance options like this should come first.
+The free plan includes `10GB` per month, which is usually enough for a personal image host. If the core requirement is simply stable hosting for static images, this kind of low-maintenance option should come first.
 
 ## II. Bucket and Access Domain
 
@@ -22,9 +22,9 @@ The free plan includes `10GB` per month, which is usually enough for a personal 
 2. Enter a bucket name and create it
 3. Open the bucket, then go to `Settings -> Add custom domain`
 4. Enter the custom domain and confirm, letting Cloudflare generate the corresponding DNS record automatically
-5. Upload one file manually first to verify that the bucket can read and write normally
+5. Manually upload one file first to verify that the bucket can read and write normally
 
-PicGo integration only matters when both conditions hold: the bucket is writable and the domain is readable. Otherwise every upload test later becomes a false success.
+PicGo integration only matters when both conditions hold: the bucket is writable and the domain is readable. Otherwise, every upload test afterward is only a false success.
 
 ## III. API Permissions
 
@@ -37,7 +37,7 @@ Path: `R2 -> Account Details -> Manage API Tokens -> Create token`
 - `Access Key ID`
 - `Secret Access Key`
 
-An image-hosting setup needs limited permissions. Binding the token to only the target bucket keeps later troubleshooting and migration clearer.
+An image-hosting setup should keep permissions scoped down. Binding the token only to the target bucket makes later troubleshooting and migration cleaner.
 
 ## IV. Connect PicGo to R2
 
@@ -57,13 +57,13 @@ Parameter mapping:
 | Reject Unauthorized TLS | `yes` |
 | ACL | `public-read` |
 
-PicGo is only the uploader. It does not correct configuration on the R2 side. If the bucket name, `Endpoint`, or custom domain does not match, fix the Cloudflare configuration first.
+PicGo is only the uploader. It does not correct configuration on the R2 side. If the bucket name, `Endpoint`, or custom domain does not match, check the Cloudflare settings and fix them there.
 
 ## V. Minimum Verification
 
 1. Select an image in PicGo and upload it
 2. Confirm the file appears in the corresponding Cloudflare R2 bucket
 3. Copy the uploaded link from PicGo and open it directly
-4. Reference the image once from an article or page and confirm the external link loads normally
+4. Reference the image once in an article or page and confirm the external link loads correctly
 
-This setup optimizes for low cost, low maintenance, and portability. It is a good fit for a personal blog when the Cloudflare R2 free plan is enough.
+This setup is meant to stay low-cost, low-maintenance, and portable. It makes full use of the Cloudflare R2 free plan and is well suited to a personal blog.

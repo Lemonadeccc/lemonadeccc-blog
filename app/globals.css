@@ -10,7 +10,7 @@
 
   --font-display: "Inter", system-ui, sans-serif;
 
-  --ease-gmunk: cubic-bezier(0.2, 0, 0, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 
   --surface-inverse: #ffffff;
   --text-inverse: #0d0d0d;
@@ -79,8 +79,8 @@ body {
   color: #fff;
   text-decoration: none;
   transition:
-    background-color 220ms var(--ease-gmunk),
-    color 220ms var(--ease-gmunk);
+    background-color 220ms var(--ease-standard),
+    color 220ms var(--ease-standard);
 }
 
 @media (min-width: 640px) {
@@ -129,7 +129,7 @@ body {
   color: #5c5c5ce6;
   font-size: 0.78rem;
   letter-spacing: 0.01em;
-  transition: color 220ms var(--ease-gmunk);
+  transition: color 220ms var(--ease-standard);
 }
 
 .portfolio-thumbnail:hover .portfolio-thumbnail-meta {
@@ -164,24 +164,27 @@ body {
   padding: 0.34rem 0.46rem;
   text-transform: uppercase;
   transition:
-    border-color 220ms var(--ease-gmunk),
-    color 220ms var(--ease-gmunk);
+    border-color 220ms var(--ease-standard),
+    color 220ms var(--ease-standard);
 }
 
 .liked-video-title {
   font-size: clamp(1rem, 0.9rem + 0.34vw, 1.2rem);
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .liked-video-summary {
   color: rgba(255, 255, 255, 0.64);
   font-size: 0.84rem;
   line-height: 1.55;
-  display: -webkit-box;
-  min-height: calc(1.55em * 3);
+  display: block;
   overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  transition: color 220ms var(--ease-gmunk);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 220ms var(--ease-standard);
 }
 
 .portfolio-thumbnail:hover .liked-video-chip {
@@ -291,45 +294,45 @@ body {
   font-weight: 700;
 }
 
-.gmunk-detail {
+.project-detail {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.gmunk-detail .rich-copy {
+.project-detail .rich-copy {
   color: rgba(255, 255, 255, 0.9);
   font-size: clamp(1rem, 0.92rem + 0.32vw, 1.2rem);
   font-weight: 400;
   line-height: 1.5;
 }
 
-.gmunk-detail .rich-copy p,
-.gmunk-detail .rich-copy blockquote {
+.project-detail .rich-copy p,
+.project-detail .rich-copy blockquote {
   margin: 0;
 }
 
-.gmunk-detail .rich-copy p + p,
-.gmunk-detail .rich-copy p + .inline-quote,
-.gmunk-detail .rich-copy .inline-quote + p {
+.project-detail .rich-copy p + p,
+.project-detail .rich-copy p + .inline-quote,
+.project-detail .rich-copy .inline-quote + p {
   margin-top: 1.5rem;
 }
 
-.gmunk-detail .rich-copy a {
+.project-detail .rich-copy a {
   color: rgba(255, 255, 255, 0.9);
   font-weight: 700;
   text-decoration: none;
 }
 
-.gmunk-detail .rich-copy a:hover {
+.project-detail .rich-copy a:hover {
   text-decoration: underline;
   text-decoration-thickness: 2px;
 }
 
-.gmunk-detail .rich-copy strong {
+.project-detail .rich-copy strong {
   font-weight: 700;
   color: rgba(255, 255, 255, 0.9);
 }
 
-.gmunk-detail .rich-copy .inline-quote {
+.project-detail .rich-copy .inline-quote {
   color: rgba(255, 255, 255, 0.9);
   display: block;
   font-size: clamp(1.6rem, 1.32rem + 0.85vw, 2.2rem);

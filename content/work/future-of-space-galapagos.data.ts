@@ -1,7 +1,7 @@
 import type {
   DetailWallImage,
   DetailWallImageOrientation,
-} from "@/components/work/detail/GmunkDetailMedia";
+} from "@/components/work/detail/ProjectDetailMedia";
 
 const placeholder = (
   seed: string,

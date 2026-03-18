@@ -5,19 +5,19 @@ const siteCopy = {
   en: {
     metadata: {
       home: {
-        title: "GMUNK",
-        description: "My Orange Blog — Developer",
+        title: "Lemonadeccc",
+        description: "My Blog — Developer",
       },
       archive: {
-        title: "Archive | LEMONADE",
+        title: "Archive | Lemonadeccc",
         description: "Posts, portfolio, and more.",
       },
       info: {
-        title: "Info | GMUNK",
-        description: "About GMUNK — Director, Digital Artist.",
+        title: "Info | Lemonadeccc",
+        description: "About Lemonadeccc — Developer, Builder.",
       },
       contact: {
-        title: "Contact | GMUNK",
+        title: "Contact | Lemonadeccc",
         description: "Get in touch.",
       },
     },
@@ -27,15 +27,13 @@ const siteCopy = {
       contact: "Contact",
     },
     footer: {
-      studioName: "GMUNK Studio Inc.",
-      madeIn: "Made in",
-      madePlace: "San Francisco, California",
+      studioName: "Lemonadeccc",
     },
     home: {
       hero: {
         eyebrow: "Welcome to ——",
-        title: "LEMONADE",
-        byline: "My Orange Blog ——",
+        title: "Lemonadeccc",
+        byline: "My Blog ——",
         roleA: "Developer",
         roleB: "",
       },
@@ -65,10 +63,10 @@ const siteCopy = {
     },
     info: {
       paragraphs: [
-        "GMUNK is a globally renowned digital artist, live-action director and motion designer whose creativity and innovation span a unique range of mediums. The throughline in his work utilizes a fusion of psychedelic themes and richly textured palettes, and his signature lens-based style is enigmatic, atmospheric, and metaphysical — much like the Munky himself.",
-        "His ethos is driven by his desire to learn and be uncomfortable. He continuously seeks to apply his foundation in motion design to new mediums, with new collaborators. The results of these labors often take beautiful and unexpected forms as short films, installations, digital art, data visualizations, commercials, music videos, title sequences and various applications of motion design.",
-        "GMUNK's work has been exhibited and sold at Christie's, Sotheby's and in fine-art galleries around the world. His early Flash and Motion Design work set the bar for experimentation in the medium and has been studied in schools internationally for over two decades. His projection-mapping opus BOX is one of the most viral short films ever made and won prestigious awards including the Cannes Grand Prix and Siggraph's Best in Show.",
-        "His work often centers around themes of identity, the subconscious, and our human connection to technology.",
+        "Lemonadeccc is a developer and builder working across frontend systems, visual interfaces, and AI-assisted workflows. This site collects writing, portfolio fragments, experiments, and references that sit between engineering and design.",
+        "The practice is driven by learning in public and turning abstract ideas into usable systems. Most projects begin as notes, sketches, or references, then evolve into code, layouts, tooling, or longer-form documentation.",
+        "Rather than present a polished studio biography, this page functions as a working profile. It is a record of decisions, iterations, and the kinds of problems that keep showing up across product work, creative coding, and internet publishing.",
+        "The throughline is simple: make things that are clear, durable, and worth revisiting, whether they ship as a page, a component system, a prototype, or a written breakdown.",
       ],
     },
     contact: {
@@ -76,7 +74,7 @@ const siteCopy = {
       heroLead:
         "For product collaboration, frontend systems, AI tooling, and long-form engineering work, this is the direct point of contact.",
       heroBody:
-        "The layout follows the same editorial rhythm as Collect: denser information, stronger separators, and cleaner link treatment.",
+        "The layout keeps the same editorial rhythm as the rest of the site: denser information, stronger separators, and cleaner link treatment.",
       heroAsideLead:
         "GitHub is the best entry point for code and project context. X works better for short messages, links, and quick follow-ups.",
       heroAsideBody:
@@ -111,19 +109,19 @@ const siteCopy = {
   zh: {
     metadata: {
       home: {
-        title: "GMUNK",
-        description: "我的橘子博客 —— Developer",
+        title: "Lemonadeccc",
+        description: "我的博客 —— Developer",
       },
       archive: {
-        title: "归档 | LEMONADE",
+        title: "归档 | Lemonadeccc",
         description: "文章、作品与灵感归档。",
       },
       info: {
-        title: "信息 | GMUNK",
-        description: "关于 GMUNK —— 导演、数字艺术家。",
+        title: "信息 | Lemonadeccc",
+        description: "关于 Lemonadeccc —— 开发者、创作者。",
       },
       contact: {
-        title: "联系 | GMUNK",
+        title: "联系 | Lemonadeccc",
         description: "联系方式与链接。",
       },
     },
@@ -133,15 +131,15 @@ const siteCopy = {
       contact: "联系",
     },
     footer: {
-      studioName: "GMUNK Studio Inc.",
+      studioName: "Lemonadeccc",
       madeIn: "制作于",
       madePlace: "美国加州旧金山",
     },
     home: {
       hero: {
         eyebrow: "欢迎来到 ——",
-        title: "LEMONADE",
-        byline: "我的橘子博客 ——",
+        title: "Lemonadeccc",
+        byline: "我的博客 ——",
         roleA: "Developer",
         roleB: "",
       },
@@ -171,10 +169,10 @@ const siteCopy = {
     },
     info: {
       paragraphs: [
-        "GMUNK 是享誉全球的数字艺术家、实拍导演与动态设计师，创作横跨多种媒介。其作品持续以迷幻主题、浓郁肌理与标志性的镜头语言构建出神秘、氛围化且带有形而上气质的视觉世界。",
-        "他的创作方法始终围绕“主动走向不适与学习”展开，不断把动态设计的基础能力迁移到新的媒介、合作方式与技术语境中。因此，他的成果常以短片、装置、数字艺术、数据可视化、商业广告、音乐录像、片头序列等意想不到的形式出现。",
-        "GMUNK 的作品已在 Christie's、Sotheby's 及全球多家艺术机构展出和售卖。其早期 Flash 与动态图形作品长期被国际院校研究；而投影映射代表作 BOX 也成为极具传播力的短片之一，并获得戛纳大奖与 Siggraph Best in Show 等重要奖项。",
-        "他的作品常常围绕身份、潜意识，以及人类与技术之间的关系展开。",
+        "Lemonadeccc 是一名围绕前端系统、界面表达与 AI 辅助工作流展开实践的开发者与创作者。这个站点主要用来整理写作、作品碎片、实验记录与长期保留的参考资料。",
+        "整体方法更接近公开学习和持续迭代：把抽象想法逐步落成可用系统，让笔记、草图、参考和代码最终汇入真实可运行的页面、组件、工具或文章。",
+        "与其说这是传统意义上的个人简介页，不如说它更像一份持续更新的工作档案。这里记录的是判断过程、修改痕迹，以及在产品、创意编程和内容发布中反复出现的问题。",
+        "贯穿这些内容的标准很直接：做清晰、耐用、值得回看的东西，无论最后交付的是页面、组件系统、原型，还是一篇拆解文章。",
       ],
     },
     contact: {
@@ -182,7 +180,7 @@ const siteCopy = {
       heroLead:
         "如果你想聊产品合作、前端系统、AI 工具链或偏长期的工程项目，这里是最直接的入口。",
       heroBody:
-        "页面版式沿用了 Collect 的编辑式节奏：信息更密、分隔更明确、链接也更克制。",
+        "页面版式延续了站点整体的编辑式节奏：信息更密、分隔更明确、链接也更克制。",
       heroAsideLead:
         "GitHub 更适合查看代码与项目上下文；X 更适合短消息、链接和快速跟进。",
       heroAsideBody:
@@ -224,7 +222,7 @@ export function getSiteCopy(locale: SiteLocale): SiteCopy {
 
 export function getPageMetadata(
   locale: SiteLocale,
-  page: keyof SiteCopy["metadata"]
+  page: keyof SiteCopy["metadata"],
 ): Metadata {
   return siteCopy[locale].metadata[page];
 }

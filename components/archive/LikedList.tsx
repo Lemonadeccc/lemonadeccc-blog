@@ -36,7 +36,7 @@ export function LikedList({ locale, videos }: Props) {
 
   return (
     <div>
-      <div className="grid grid-cols-1 gap-y-8 lg:grid-cols-10 lg:gap-x-0 mb-[20px]">
+      <div className="grid grid-cols-1 gap-y-8 lg:grid-cols-10 lg:gap-x-0 mb-5">
         <div className="hidden lg:block lg:col-span-5" />
         <div className="lg:col-span-5">
           <div className="flex flex-wrap gap-x-4 gap-y-2 font-bold leading-[1.4]">

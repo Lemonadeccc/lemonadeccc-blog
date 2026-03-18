@@ -169,7 +169,7 @@ export function DetailChapterSection({
   );
 }
 
-export const gmunkDetailMdxComponents = {
+export const projectDetailMdxComponents = {
   DetailBodyCopy,
   DetailChapterSection,
   DetailLeadQuote,

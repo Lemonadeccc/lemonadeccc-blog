@@ -1,32 +1,57 @@
-import { DeferredVimeo } from "@/components/ui/DeferredVimeo";
+import Link from "next/link";
 import { getSiteCopy } from "@/lib/site-copy";
 import type { SiteLocale } from "@/lib/site-locale";
 
 export function HeroSection({ locale = "en" }: { locale?: SiteLocale }) {
   const copy = getSiteCopy(locale);
   const hasRoleB = Boolean(copy.home.hero.roleB.trim());
+  const rssZhHref = "/zh/rss.xml";
+  const rssEnHref = "/rss.xml";
 
   return (
-    <section className="relative h-screen w-full overflow-hidden">
-      <div
-        className="absolute inset-0"
-        style={{
-          background: "#333333",
-        }}
-      />
+    <section className="relative h-screen w-full overflow-hidden bg-[#1a1a1a]">
+      {/* Center content */}
+      <div className="absolute inset-0 flex items-center justify-center px-6">
+        <div className="max-w-xl text-center">
+          <p className="text-sm leading-relaxed text-white/70 sm:text-base">
+            A collection of the best resources for learning development
+            <br />
+            from the Internet, hand-picked and created by me
+          </p>
 
-      <DeferredVimeo videoId="916142886" />
+          <p className="mt-6 text-sm leading-relaxed text-white/70 sm:text-base">
+            Learning and sharing some articles about AI, development.
+            <br />
+            If you like my project or ideas, you can subscribe to my
+          </p>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+          <div className="mt-4 flex flex-col items-center gap-2 text-sm sm:flex-row sm:justify-center sm:gap-4">
+            <Link
+              href={rssEnHref}
+              className="font-medium text-white underline underline-offset-4 transition-opacity hover:opacity-60"
+            >
+              RSS feed
+            </Link>
+            <span className="text-white/30">or</span>
+            <Link
+              href={rssZhHref}
+              className="font-medium text-white underline underline-offset-4 transition-opacity hover:opacity-60"
+            >
+              RSS feed (zh-CN)
+            </Link>
+          </div>
+        </div>
+      </div>
 
-      <div className="absolute bottom-0 left-0 right-0 px-6 pb-10">
-        <div className="mx-auto grid max-w-[1200px] grid-cols-2 gap-10">
+      {/* Bottom corners */}
+      <div className="absolute bottom-0 left-0 right-0 px-6 pb-8 sm:pb-10">
+        <div className="mx-auto grid max-w-300 grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-10">
           <div className="flex flex-col gap-2">
             <div className="h-px w-full bg-white/25" />
             <p className="text-[10px] uppercase tracking-[0.3em] text-white/50">
               {copy.home.hero.eyebrow}
             </p>
-            <h1 className="text-7xl font-bold leading-none tracking-tighter text-white">
+            <h1 className="text-5xl font-bold leading-none tracking-tighter text-white sm:text-7xl">
               {copy.home.hero.title}
             </h1>
           </div>

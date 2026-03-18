@@ -15,14 +15,6 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "imgbed.lemonadec.cc" },
     ],
   },
-  async redirects() {
-    return [
-      { source: "/work", destination: "/archive", permanent: true },
-      { source: "/collect", destination: "/contact", permanent: true },
-      { source: "/zh/work", destination: "/zh/archive", permanent: true },
-      { source: "/zh/collect", destination: "/zh/contact", permanent: true },
-    ];
-  },
 };
 
 export default withMDX(nextConfig);

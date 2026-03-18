@@ -1,7 +1,7 @@
 import type {
   DetailGalleryRowItem,
   DetailMediaItem,
-} from "@/components/work/detail/GmunkDetailMedia";
+} from "@/components/work/detail/ProjectDetailMedia";
 
 const image = (
   seed: string,

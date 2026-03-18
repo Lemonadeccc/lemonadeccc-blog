@@ -23,10 +23,10 @@ export async function generateWorkDetailMetadata(
 ): Promise<Metadata> {
   const copy = getSiteCopy(locale);
   const project = getProjectBySlug(slug);
-  if (!project) return { title: `${copy.workDetail.projectNotFound} | GMUNK` };
+  if (!project) return { title: `${copy.workDetail.projectNotFound} | Lemonadeccc` };
 
   return {
-    title: `${project.title} | GMUNK`,
+    title: `${project.title} | Lemonadeccc`,
     description: `${project.category} — ${project.dateLabel}`,
   };
 }
@@ -49,7 +49,7 @@ export async function WorkDetailPageView({
 
     return (
       <>
-        <div className="gmunk-detail">
+        <div className="project-detail">
           <Navbar locale={locale} />
           <main className={`min-h-screen text-white ${backgroundClassName}`}>
             <Page />
@@ -65,7 +65,7 @@ export async function WorkDetailPageView({
   return (
     <>
       <Navbar locale={locale} />
-      <main className="min-h-screen bg-[#0d0d0d] text-white">
+      <main className="min-h-screen bg-bg-primary text-white">
         {detailTemplate?.layout === "narrative" && (
           <NarrativeProjectPage
             project={project}
