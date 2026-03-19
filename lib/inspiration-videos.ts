@@ -36,37 +36,18 @@ const inspirationVideos: Record<SiteLocale, LikedVideo[]> = {
       aspectRatio: "16 / 9",
     },
     {
-      id: "blender-ascii-video-geometry-nodes",
-      title: "Blender ASCII Video - Geometry Nodes",
+      id: "marathon-art-style-breakdown",
+      title: "Marathon Art Style Breakdown",
       summary:
-        "An ASCII-art video experiment in Blender, transforming footage into character-based motion using geometry nodes.",
-      author: "Ewan Qian",
-      duration: "00:11",
+        "A focused breakdown of Marathon's visual language, tracing how graphic realism, branding systems, and color discipline shape its world.",
+      author: "Jake The Alright",
+      duration: "15:30",
       tags: [
-        { key: "bilibili", label: "Bilibili" },
-        { key: "blender", label: "Blender" },
+        { key: "youtube", label: "YouTube" },
+        { key: "game-art", label: "Game Art" },
       ],
-      embedUrl:
-        "https://player.bilibili.com/player.html?bvid=BV1AMVnz1Ebx&page=1&high_quality=1&danmaku=0&autoplay=0&t=0&poster=0&fjw=0",
-      sourceUrl:
-        "https://www.bilibili.com/video/BV1AMVnz1Ebx/?spm_id_from=333.1387.upload.video_card.click&vd_source=396c5ae1f75ee6199b8320de985b0e70",
-      aspectRatio: "16 / 9",
-    },
-    {
-      id: "ether-fragments",
-      title: "Ether Fragments",
-      summary:
-        "A short visual piece focused on an intentional sense of destined fragmentation, rendered as a compact moving-image study.",
-      author: "Ewan Qian",
-      duration: "00:26",
-      tags: [
-        { key: "bilibili", label: "Bilibili" },
-        { key: "art-film", label: "Art Film" },
-      ],
-      embedUrl:
-        "https://player.bilibili.com/player.html?bvid=BV1j94y1h7m3&page=1&high_quality=1&danmaku=0&autoplay=0&t=0&poster=0&fjw=0",
-      sourceUrl:
-        "https://www.bilibili.com/video/BV1j94y1h7m3/?spm_id_from=333.1387.upload.video_card.click&vd_source=396c5ae1f75ee6199b8320de985b0e70",
+      embedUrl: "https://www.youtube.com/embed/JHApRRthYgQ",
+      sourceUrl: "https://www.youtube.com/watch?v=JHApRRthYgQ",
       aspectRatio: "16 / 9",
     },
     {
@@ -117,37 +98,18 @@ const inspirationVideos: Record<SiteLocale, LikedVideo[]> = {
       aspectRatio: "16 / 9",
     },
     {
-      id: "blender-ascii-video-geometry-nodes",
-      title: "Blender ASCII 字符视频 几何节点",
+      id: "marathon-art-style-breakdown",
+      title: "Marathon 美术风格拆解",
       summary:
-        "一个 Blender ASCII 艺术实验，把普通视频转成基于字符的动态画面，核心做法是几何节点驱动的视频变换。",
-      author: "钱誉文EwanQian",
-      duration: "00:11",
+        "一条围绕 Marathon 视觉语言的拆解视频，重点分析它如何通过 graphic realism、品牌系统和配色控制建立世界观。",
+      author: "Jake The Alright",
+      duration: "15:30",
       tags: [
-        { key: "bilibili", label: "Bilibili" },
-        { key: "blender", label: "Blender" },
+        { key: "youtube", label: "YouTube" },
+        { key: "game-art", label: "游戏美术" },
       ],
-      embedUrl:
-        "https://player.bilibili.com/player.html?bvid=BV1AMVnz1Ebx&page=1&high_quality=1&danmaku=0&autoplay=0&t=0&poster=0&fjw=0",
-      sourceUrl:
-        "https://www.bilibili.com/video/BV1AMVnz1Ebx/?spm_id_from=333.1387.upload.video_card.click&vd_source=396c5ae1f75ee6199b8320de985b0e70",
-      aspectRatio: "16 / 9",
-    },
-    {
-      id: "ether-fragments",
-      title: "Ether Fragments 以太碎片",
-      summary:
-        "一段强调“命中注定的破碎感”的短片视觉实验，作为 Inspiration 里的另一条 B 站动态影像参考。",
-      author: "钱誉文EwanQian",
-      duration: "00:26",
-      tags: [
-        { key: "bilibili", label: "Bilibili" },
-        { key: "art-film", label: "艺术短片" },
-      ],
-      embedUrl:
-        "https://player.bilibili.com/player.html?bvid=BV1j94y1h7m3&page=1&high_quality=1&danmaku=0&autoplay=0&t=0&poster=0&fjw=0",
-      sourceUrl:
-        "https://www.bilibili.com/video/BV1j94y1h7m3/?spm_id_from=333.1387.upload.video_card.click&vd_source=396c5ae1f75ee6199b8320de985b0e70",
+      embedUrl: "https://www.youtube.com/embed/JHApRRthYgQ",
+      sourceUrl: "https://www.youtube.com/watch?v=JHApRRthYgQ",
       aspectRatio: "16 / 9",
     },
     {
