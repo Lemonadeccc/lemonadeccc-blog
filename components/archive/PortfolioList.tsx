@@ -11,6 +11,7 @@ import {
 import type { PortfolioItem } from "@/lib/portfolio-items";
 
 type Props = { items: PortfolioItem[] };
+const SINGLE_PORTFOLIO_ITEM_WIDTH = "calc(50% - 0.2rem)";
 
 export function PortfolioList({ items }: Props) {
   const desktopRows = splitIntoRows(items, DESKTOP_ROW_LAYOUT);
@@ -22,9 +23,14 @@ export function PortfolioList({ items }: Props) {
       <div className="portfolio-wall" data-thumbnails="justify">
         {desktopRows.flatMap((row) =>
           row.map((item) => {
+            const isLoneItemRow = row.length === 1;
             const style = {
-              "--portfolio-width-sm": tabletWidthMap.get(item.href),
-              "--portfolio-width-lg": desktopWidthMap.get(item.href),
+              "--portfolio-width-sm": isLoneItemRow
+                ? SINGLE_PORTFOLIO_ITEM_WIDTH
+                : tabletWidthMap.get(item.href),
+              "--portfolio-width-lg": isLoneItemRow
+                ? SINGLE_PORTFOLIO_ITEM_WIDTH
+                : desktopWidthMap.get(item.href),
               "--portfolio-aspect-ratio": item.aspectRatio,
             } as CSSProperties;
 
@@ -42,6 +48,7 @@ export function PortfolioList({ items }: Props) {
                     src={item.image}
                     alt={item.project}
                     fill
+                    unoptimized
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-hover:scale-[1.02]"
                   />

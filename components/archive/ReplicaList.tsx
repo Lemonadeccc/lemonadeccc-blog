@@ -74,7 +74,12 @@ export function ReplicaList() {
               </>
             );
 
-            if (item.mediaType === "video" && item.href) {
+            const hasExternalHref =
+              item.mediaType === "video" &&
+              Boolean(item.href) &&
+              /^https?:\/\//.test(item.href);
+
+            if (hasExternalHref) {
               return (
                 <a
                   key={item.project}

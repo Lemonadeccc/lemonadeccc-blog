@@ -16,6 +16,7 @@ export type ReplicaItem = {
 
 const UNICORN_SDK_URL =
   "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@2.1.4/dist/unicornStudio.umd.js";
+const REPLICA_VIDEO_BASE_URL = "https://imgbed.lemonadec.cc";
 
 export const replicaItems: ReplicaItem[] = [
   {
@@ -60,10 +61,10 @@ export const replicaItems: ReplicaItem[] = [
   },
   {
     mediaType: "video",
-    href: "https://www.youtube.com/@TheDucky3D",
+    href: "#replica-ducky-3d",
     project: "Replica: Ducky 3D",
     label: "Ducky 3D / Blender",
     aspectRatio: "1920 / 1080",
-    videoSrc: "/replica/bkg.mp4",
+    videoSrc: `${REPLICA_VIDEO_BASE_URL}/bkg.mp4`,
   },
 ];
