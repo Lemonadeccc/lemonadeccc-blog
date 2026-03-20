@@ -16,6 +16,11 @@ export const metadata: Metadata = {
     default: "Lemonadeccc",
     template: "%s | Lemonadeccc",
   },
+  icons: {
+    icon: [{ url: "/favicon-256.png", type: "image/png", sizes: "256x256" }],
+    shortcut: [{ url: "/favicon-256.png", type: "image/png" }],
+    apple: [{ url: "/apple-touch-icon.png", type: "image/png", sizes: "180x180" }],
+  },
   description:
     "A collection of the best resources for learning development from the Internet, hand-picked and created by Lemonadeccc. Learning and sharing articles about AI and development.",
   keywords: ["AI", "development", "programming", "blog", "resources", "frontend", "Next.js"],
