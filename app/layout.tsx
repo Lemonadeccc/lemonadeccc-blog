@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { HomeBackgroundVideo } from "@/components/layout/HomeBackgroundVideo";
 import "./globals.css";
 
 const inter = Inter({
@@ -90,8 +91,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="bg-bg-primary text-white antialiased">
-        {children}
+      <body className="relative bg-bg-primary text-white antialiased">
+        <HomeBackgroundVideo />
+        <div className="relative z-10">{children}</div>
       </body>
     </html>
   );

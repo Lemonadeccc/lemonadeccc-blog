@@ -37,15 +37,6 @@ export const portfolioItems: PortfolioItem[] = [
     aspectRatio: "1920 / 918",
   },
   {
-    left: "lemonadeccc-blog",
-    right: "Blog",
-    project: "Blog",
-    label: "02/12/2026",
-    image: "/portfolio/img3.jpg",
-    href: "https://github.com/Lemonadeccc/lemonadeccc-blog",
-    aspectRatio: "3822 / 1826",
-  },
-  {
     left: "GEN 3D ASSETS",
     right: "Generate Platform",
     project: "3D Generation With AI",

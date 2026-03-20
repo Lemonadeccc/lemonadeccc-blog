@@ -153,7 +153,7 @@ const siteCopy = {
         roleA: "Developer",
         roleB: "",
         introLineA: "这里收集了互联网上值得看的资源",
-        introLineB: "由我亲自挑选、整理并持续维护",
+        introLineB: "挑选、整理并持续维护",
         subscribeLineA: "也会分享一些关于 AI、设计与开发的文章。",
         subscribeLineB: "如果你喜欢我的项目或想法，可以订阅我的",
         rssFeedEnLabel: "RSS 订阅（英文）",

@@ -9,9 +9,13 @@ export function HeroSection({ locale = "en" }: { locale?: SiteLocale }) {
   const rssEnHref = "/rss.xml";
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-[#1a1a1a]">
+    <section className="relative h-screen w-full overflow-hidden bg-[#050505] md:bg-transparent">
+      <div className="pointer-events-none absolute inset-0 bg-black/35" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/70 via-black/30 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black/78 via-black/35 to-transparent" />
+
       {/* Center content */}
-      <div className="absolute inset-0 flex items-center justify-center px-6">
+      <div className="absolute inset-0 z-10 flex items-center justify-center px-6">
         <div className="max-w-xl text-center">
           <p className="text-sm leading-relaxed text-white/70 sm:text-base">
             {copy.home.hero.introLineA}
@@ -44,7 +48,7 @@ export function HeroSection({ locale = "en" }: { locale?: SiteLocale }) {
       </div>
 
       {/* Bottom corners */}
-      <div className="absolute bottom-0 left-0 right-0 px-6 pb-8 sm:pb-10">
+      <div className="absolute bottom-0 left-0 right-0 z-10 px-6 pb-8 sm:pb-10">
         <div className="mx-auto grid max-w-300 grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-10">
           <div className="flex flex-col gap-2">
             <div className="h-px w-full bg-white/25" />
