@@ -1,0 +1,17 @@
+{
+  "id": "web-design-legends-six-things",
+  "type": "video",
+  "provider": "youtube",
+  "title": {
+    "en": "I studied 100's of web design legends. They all do these 6 things",
+    "zh": "我研究了上百位网页设计高手，他们都做这 6 件事"
+  },
+  "summary": {
+    "en": "A practical web design breakdown that distills repeated patterns from experienced web designers into six reusable principles.",
+    "zh": "一条网页设计拆解视频，把优秀网页设计师反复使用的模式总结成 6 个可复用原则。"
+  },
+  "author": "Self-Made Web Designer",
+  "duration": "--",
+  "tags": ["Design"],
+  "embedUrl": "https://www.youtube.com/embed/BZrqc3nr8wk"
+}

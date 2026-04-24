@@ -20,7 +20,7 @@ export function InspirationList({ locale, videos }: Props) {
         </div>
       ) : (
         <div className="portfolio-wall" data-thumbnails="justify">
-          {videos.map((video) => {
+          {videos.toReversed().map((video) => {
             const style = {
               "--portfolio-aspect-ratio": video.aspectRatio,
               "--portfolio-width-sm": "calc(50% - 0.2rem)",

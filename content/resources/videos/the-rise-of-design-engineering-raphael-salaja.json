@@ -1,0 +1,17 @@
+{
+  "id": "the-rise-of-design-engineering-raphael-salaja",
+  "type": "video",
+  "provider": "youtube",
+  "title": {
+    "en": "The Rise of Design Engineering | Raphael Salaja | MIT Startup Week",
+    "zh": "设计工程的兴起 | Raphael Salaja | MIT Startup Week"
+  },
+  "summary": {
+    "en": "Raphael Salaja talks about the rise of design engineering, taste, craft, and the role of engineers who work close to product interaction and visual quality.",
+    "zh": "Raphael Salaja 分享设计工程的兴起，以及品味、工艺和工程师如何参与产品交互与视觉质量。"
+  },
+  "author": "Warp",
+  "duration": "--",
+  "tags": ["Design", "Developer"],
+  "embedUrl": "https://www.youtube.com/embed/uEMEs499fUs"
+}

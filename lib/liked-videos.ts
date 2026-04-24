@@ -6,8 +6,8 @@ import type { SiteLocale } from "./site-locale";
 
 const LIKED_VIDEOS_DIR = path.join(process.cwd(), "content", "resources", "videos");
 const LIKED_VIDEO_ORDER = [
-  "cloudflare-nextjs-slop-fork-syntax",
-  "i-did-not-expect-this-theo",
+  "the-rise-of-design-engineering-raphael-salaja",
+  "web-design-legends-six-things",
   "webMCP",
   "cheat-code-for-design-codevolution",
   "AI-SDK-v5-Full-Course-Beginner-to-Advanced-Codevolution",

@@ -65,6 +65,21 @@ const inspirationVideos: Record<SiteLocale, LikedVideo[]> = {
       sourceUrl: "https://www.youtube.com/watch?v=tZt1SQUZl6U",
       aspectRatio: "16 / 9",
     },
+    {
+      id: "touchdesigner-parametric-metallic-spine",
+      title: "TouchDesigner POPs Tutorial: Create a Parametric Metallic Spine Using Just Revolve and Copy",
+      summary:
+        "A TouchDesigner POPs tutorial on building a parametric metallic spine form with revolve and copy operations.",
+      author: "Okamirufu Vizualizer",
+      duration: "--",
+      tags: [
+        { key: "youtube", label: "YouTube" },
+        { key: "touchdesigner", label: "TouchDesigner" },
+      ],
+      embedUrl: "https://www.youtube.com/embed/KtplxTpYcHQ",
+      sourceUrl: "https://www.youtube.com/watch?v=KtplxTpYcHQ",
+      aspectRatio: "16 / 9",
+    },
   ],
   zh: [
     {
@@ -125,6 +140,21 @@ const inspirationVideos: Record<SiteLocale, LikedVideo[]> = {
       ],
       embedUrl: "https://www.youtube.com/embed/tZt1SQUZl6U",
       sourceUrl: "https://www.youtube.com/watch?v=tZt1SQUZl6U",
+      aspectRatio: "16 / 9",
+    },
+    {
+      id: "touchdesigner-parametric-metallic-spine",
+      title: "TouchDesigner POPs 教程：用 Revolve 和 Copy 创建参数化金属脊柱",
+      summary:
+        "一个 TouchDesigner POPs 教程，演示如何通过 revolve 和 copy 操作构建参数化金属脊柱形态。",
+      author: "Okamirufu Vizualizer",
+      duration: "--",
+      tags: [
+        { key: "youtube", label: "YouTube" },
+        { key: "touchdesigner", label: "TouchDesigner" },
+      ],
+      embedUrl: "https://www.youtube.com/embed/KtplxTpYcHQ",
+      sourceUrl: "https://www.youtube.com/watch?v=KtplxTpYcHQ",
       aspectRatio: "16 / 9",
     },
   ],
