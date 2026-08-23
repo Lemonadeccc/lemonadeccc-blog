@@ -54,6 +54,29 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.home-video-effect-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 700ms ease-out;
+}
+
+.home-video-effect-canvas[data-ready="true"] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-video-effect-canvas {
+    display: none;
+    transition: none;
+  }
+}
+
 ::selection {
   color: #000;
   background: #f30;
