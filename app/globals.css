@@ -44,6 +44,7 @@ html {
   background-color: #0d0d0d;
   color: #ffffff;
   color-scheme: dark;
+  scrollbar-gutter: stable;
 }
 
 body {

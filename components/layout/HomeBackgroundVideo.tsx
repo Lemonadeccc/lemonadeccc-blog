@@ -20,8 +20,10 @@ export function HomeBackgroundVideo() {
   const [isReady, setIsReady] = useState(false);
 
   const isHome = stripLocalePrefix(pathname) === "/";
-  const shouldRenderVideo = isHome && isDesktop && allowsMotion;
-  const shouldRenderEffect = shouldRenderVideo && supportsHover && isReady;
+  const [hasVisitedHome, setHasVisitedHome] = useState(isHome);
+  const shouldMountVideo = hasVisitedHome && isDesktop && allowsMotion;
+  const shouldPlayVideo = isHome && shouldMountVideo;
+  const shouldRenderEffect = shouldPlayVideo && supportsHover && isReady;
 
   useEffect(() => {
     const desktopMedia = window.matchMedia(DESKTOP_MEDIA_QUERY);
@@ -50,19 +52,25 @@ export function HomeBackgroundVideo() {
     const video = videoRef.current;
     if (!video) return;
 
-    if (shouldRenderVideo) {
+    if (shouldPlayVideo) {
       void video.play().catch(() => {});
       return;
     }
 
     video.pause();
-  }, [shouldRenderVideo]);
+  }, [shouldPlayVideo]);
 
   useEffect(() => {
-    if (!isHome) {
-      setIsReady(false);
+    if (isHome) {
+      setHasVisitedHome(true);
     }
   }, [isHome]);
+
+  useEffect(() => {
+    if (!shouldMountVideo) {
+      setIsReady(false);
+    }
+  }, [shouldMountVideo]);
 
   useEffect(() => {
     if (!shouldRenderEffect) return;
@@ -89,7 +97,7 @@ export function HomeBackgroundVideo() {
     };
   }, [shouldRenderEffect]);
 
-  if (!isHome) {
+  if (!shouldMountVideo) {
     return null;
   }
 
@@ -97,34 +105,33 @@ export function HomeBackgroundVideo() {
     <div
       ref={containerRef}
       aria-hidden="true"
+      hidden={!isHome}
       className="pointer-events-none absolute inset-x-0 top-0 z-0 h-screen overflow-hidden bg-[#050505]"
     >
-      {shouldRenderVideo ? (
-        <video
-          ref={videoRef}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-            isReady ? "opacity-100" : "opacity-0"
-          }`}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          disablePictureInPicture
-          onLoadStart={() => {
-            setIsReady(false);
-          }}
-          onEmptied={() => {
-            setIsReady(false);
-          }}
-          onLoadedData={() => {
-            setIsReady(true);
-          }}
-        >
-          <source src={HOME_VIDEO_MP4_SRC} type="video/mp4" />
-          <source src={HOME_VIDEO_WEBM_SRC} type="video/webm" />
-        </video>
-      ) : null}
+      <video
+        ref={videoRef}
+        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+          isReady ? "opacity-100" : "opacity-0"
+        }`}
+        autoPlay={shouldPlayVideo}
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        disablePictureInPicture
+        onLoadStart={() => {
+          setIsReady(false);
+        }}
+        onEmptied={() => {
+          setIsReady(false);
+        }}
+        onLoadedData={() => {
+          setIsReady(true);
+        }}
+      >
+        <source src={HOME_VIDEO_MP4_SRC} type="video/mp4" />
+        <source src={HOME_VIDEO_WEBM_SRC} type="video/webm" />
+      </video>
     </div>
   );
 }
