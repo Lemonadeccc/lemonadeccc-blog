@@ -1,0 +1,196 @@
+---
+title: An Overview of Recursive Self-Improvement (RSI)
+type: Article
+project: RSI
+date: 2026-08-09
+updated: 2026-11-09
+summary: RSI
+---
+
+`RSI` (Recursive Self-Improvement) is a process in which a system modifies itself to improve its capabilities and continues to participate in subsequent improvements. The scope of these changes varies considerably, covering memory, model weights, tools, workflows, and search strategies.
+
+The early `Gödel Machine` proposed proving that a change would be beneficial before carrying out self-modification. Such proofs are difficult to obtain in practical systems. Engineering approaches typically evaluate changes by proposing a modification, running tasks, comparing results, and deciding whether to keep it.
+
+Determining whether an improvement is effective also requires examining the scope of the change, transfer across tasks, regressions, and execution costs.
+
+## I. Levels of RSI Capability
+
+Based on what a system actually modifies, we can distinguish four levels:
+
+| Level | What Changes | Model Training | Application Development |
+| --- | --- | --- | --- |
+| L1: Retaining experience | External memory and experience files | Summarizing failed examples, failure types, and data issues | Recording troubleshooting experience in `CLAUDE.md`, long-term memory, or a `Skill` |
+| L2: Updating from feedback | Weights or configurations within a fixed optimization process | `STaR`, RLVR (such as `DeepSeek-R1`) | Using `DSPy` to optimize prompts and save them as the default configuration |
+| L3: Modifying tools and workflows | Execution code, toolsets, and workflows | Automatically adjusting task and curriculum organization | `ADAS`, `DGM`, `DarwinX` |
+| L4: Improving optimization methods | Candidate generation, selection, and search processes | Improving training or experimental search strategies | `STOP`, closed loops that include updates to the optimizer itself |
+
+These levels distinguish the scope of modification. A single system may span multiple levels.
+
+Whether L1 persists across sessions depends on how information is stored and loaded. Experience written to a file and read during later tasks can continue to influence behavior.
+
+A `Skill` cannot be assigned to a fixed level either. Adding one lesson and rewriting an entire execution workflow change different amounts of the system.
+
+At L4, the optimizer itself needs to be evaluated: under the same budget and on new tasks, does it find effective changes more readily? Higher task scores alone do not establish this.
+
+## II. Experiments and Case Studies
+
+### DGM
+
+The `Darwin Gödel Machine` from Sakana AI and UBC allows an agent to modify its own implementation and maintains an archive of multiple versions.
+
+Its basic process is:
+
+1. Select an existing version from the archive
+2. Use source code and task feedback to generate changes to tools, prompts, or workflows
+3. Evaluate the changes in stages on coding tasks
+4. Save useful versions and continue selecting branches for further exploration
+
+The archive retains some versions that have not yet produced improvements, allowing them to be modified further. This makes it possible to explore paths that require several changes before yielding benefits.
+
+Changes made through this approach include patch verification, handling multiple solutions, and context management. One main SWE-bench experiment involved roughly 80 iterations over two weeks, with API costs of about $22,000.
+
+Benefits have been observed in transfer across benchmarks, but stability across broader task sets and different budgets still needs to be examined. Suitability for production also depends on how often the result will be reused, maintenance costs, and additional inference overhead.
+
+### AlphaEvolve
+
+DeepMind's `AlphaEvolve` uses Gemini to generate program modifications, then selects among them through automated evaluation and evolutionary search.
+
+Reported results include:
+
+- Multiplying 4×4 complex matrices using 48 scalar multiplications
+- Improving Google's data center scheduling policies to recover an average of roughly 0.7% of its global compute resources, with the resulting approach deployed in production
+
+This method suits problems whose correctness and performance can be checked automatically. Evaluation reliability, running costs, and throughput directly affect how many candidates can be tried.
+
+### STOP
+
+`STOP` (Self-Taught Optimizer) modifies the scaffolding used to improve programs.
+
+The initial version calls a model to generate multiple candidates, then selects a result using a utility function. The optimizer is subsequently asked to modify itself. Strategies such as beam search, genetic algorithms, and simulated annealing emerged during the search.
+
+The underlying language model remains unchanged, so the work does not describe this as full RSI. The optimizer's code does participate in self-modification, making it a useful case for examining the boundary between L3 and L4.
+
+## III. Implementation Approaches in Engineering
+
+### 1. Memory Updates: Reflexion and ExpeL
+
+`Reflexion` converts task feedback into textual reflections, saves them, and uses them in the next attempt. Feedback can come from unit tests, environment states, or model-generated evaluations.
+
+`ExpeL` compares successful and failed trajectories across multiple tasks, extracts general rules, and retrieves relevant experience for new tasks.
+
+Neither updates model weights. Reflexion focuses more on reviewing the current attempt, while ExpeL adds experience extraction and retrieval across tasks.
+
+In practice, the basis for each reflection needs to be checked. For example, a tool error caused by an authentication failure should not be recorded as a lesson to retry more often. Once an incorrect diagnosis enters long-term memory, it can affect later tasks.
+
+### 2. Parameter Updates: SPIN and SEED
+
+`SPIN` continues training with existing human responses:
+
+1. The model from the previous round generates responses to questions in the dataset
+2. Human and model responses are used to construct an optimization objective
+3. The generative model is updated, and the new model is used in the next round
+
+The paper's theoretical objective concerns bringing the model distribution closer to the target data distribution. This approach can make further use of existing data, but it introduces no additional independent source of correctness.
+
+`SEED` turns completed trajectories into textual experience, then distills the resulting behavioral changes into model weights. During initialization, an external model generates experience annotations. In the RL phase, the current policy handles both execution and trajectory analysis, with training also using rewards based on environment outcomes.
+
+This method updates weights, while data organization, training objectives, and the optimization process remain largely human-defined.
+
+### 3. Structural Search: ADAS
+
+`ADAS` uses a Meta Agent to generate agent programs, adjusting how reasoning is organized, how modules collaborate, and how feedback is used.
+
+It draws on archived designs and evaluation results to propose new approaches, write code, run evaluations, and add the results to the archive.
+
+Extending the search space to code allows combinations beyond predefined templates, though the search remains constrained by the underlying interfaces, runtime environment, and evaluation tasks.
+
+### 4. Harness Updates: DarwinX
+
+`DarwinX` freezes the model and modifies only the external harness, including prompts, tools, skills, and control flow.
+
+Continuously modifying only the current best version can lead to two problems:
+
+- Path dependence: early changes restrict the scope of later exploration
+- Interference across tasks: improvements on one type of task cause regressions on another
+
+The corresponding approach is to retain multiple branches and impose regression constraints on versions considered for promotion.
+
+`preserve-and-extend` requires modifications to produce a net benefit while keeping regressions within acceptable limits. Candidates must also pass stricter retesting. Branches with lower overall scores are retained for later combinations of complementary capabilities. Candidates are evaluated by each benchmark's own verifier, so the process still depends on explicit success criteria.
+
+Scores measured within the paper's optimization loop cannot be treated directly as evidence of generalization. Even with multiple branches retained, independent tasks are still needed to assess the final gains.
+
+### 5. Skill Updates: SkillEvo
+
+`SkillEvo` uses multi-turn user simulation to provide ongoing feedback for skill modifications.
+
+Single-turn QA can only reveal problems in the current question and answer. After a fix, evaluating similar one-turn exchanges may provide little new feedback. Multi-turn simulation uses interactions such as follow-up questions and additional constraints to reveal defects later in the workflow.
+
+Independent governance checks are added after modifications to maintain factual consistency and file structure. Alongside task success rate, two further metrics are tracked:
+
+- Regression rate between rounds: the proportion of tasks that passed in the previous round but fail in the current round, relative to all tasks that passed in the previous round
+- Content growth: the increase in the total line count of `SKILL.md` and reference files relative to the initial version
+
+Both SkillEvo and single-turn QA use a development set to select the best version from their candidate sets.
+
+### 6. Multi-Agent Optimization: MASS
+
+`MASS` (Multi-Agent System Search) considers both prompts and topology.
+
+Multi-agent systems have cascading dependencies: changes in earlier modules affect later outputs. When scoring relies only on final results, intermediate modules lack direct feedback, and the combinatorial space for joint search can become large.
+
+MASS addresses this in three steps:
+
+1. Optimize prompts for building blocks such as aggregation, reflection, debate, summarization, and tool use
+2. Fix the prompts, explore topologies, and select modules based on their contributions
+3. Jointly adjust prompts within the selected workflow to account for dependencies between modules
+
+In practice, prompt optimization is more token-efficient than simply increasing the number of samples under the default configuration. Developers can first tune existing building blocks, then add more collaboration structure.
+
+### 7. Joint Optimization: Self-HPO
+
+Optimizing only the harness or only the model weights can leave the two poorly matched. After a model update, a workflow designed for the previous version may no longer fit. A fixed workflow also limits the trajectories available during training.
+
+`Self-HPO` alternates between two steps:
+
+- H-step: the current policy reads failed trajectories, modifies prompts and runtime logic, and generates and evaluates harness candidates
+- P-step: RL is performed under the selected harness, using task test results as rewards
+
+Tasks that remain unsolved during training enter the next round's search set, keeping harness modifications focused on the current policy's failure modes.
+
+In experiments that cross-pair the components, the optimized harness with the original model and the optimized model with the original harness each still provide gains. Combining both optimized components produces a gain greater than the sum of their individual gains.
+
+The recursive relationship is that the policy proposing the next round of harness changes is itself the policy trained in the previous round. The outer RL algorithm, version selection rules, and verifiers remain human-defined.
+
+## IV. Bottlenecks and Progress
+
+Areas where gains are easier to achieve usually have relatively clear feedback. As the scope of tasks expands, the main challenges are:
+
+1. **Verification**: even code tests with clear feedback signals cover only part of a system's behavior. Writing, product design, and choosing research directions usually still require human judgment or feedback from longer-term outcomes.
+2. **Rewards**: the executor may exploit gaps in evaluation. Clear modification permissions should be defined for verification logic, evaluation data, and critical logs.
+3. **Generalization and regressions**: improvements on a fixed task set need to be retested on held-out tasks, other task types, and different models. Existing transfer results do not establish validity across every setting.
+4. **Costs and benefits**: search calls, evaluation environments, failed retries, and inference overhead in the final version all count toward the cost. Score improvements during research do not establish a project's return on investment.
+
+Using the levels above, progress can be summarized roughly as follows:
+
+- L1 and L2 have usable methods for memory, configuration optimization, and training. Stable gains still depend on the specific tasks and the quality of feedback
+- L3 has produced experimental results in coding, algorithms, and workflow optimization, with some search results already used in production
+- L4 has prototypes for optimizer self-modification and joint optimization. Sustained improvement over many rounds, across tasks, and within controlled budgets still requires more validation
+
+These levels do not prescribe an order of adoption. If a simple approach already solves a problem reliably, there is no need to expand directly to autonomous modification of the entire system.
+
+## V. Assessing Whether an Improvement Works
+
+An evaluation can consistently check four things:
+
+1. **What changed**: whether the modification affects memory, weights, configuration, tool code, or the search method
+2. **The basis for verification**: whether unit tests, environment outcomes, human review, or model evaluations are used, and whether they align with the actual goal
+3. **Transfer and regressions**: whether tasks outside the optimization process improve, and whether previously solvable tasks get worse
+4. **Cost and improvement efficiency**: how many effective changes can be found under the same budget, and whether the final execution cost is acceptable
+
+Model self-evaluation can suggest changes, but selecting versions solely through the same self-evaluation process makes mistakes difficult to uncover. Significant changes should receive independent verification.
+
+To assess L4, compare the old and new optimizers under the same budget on tasks that were not used for optimization. A higher score from one search is not enough to show that the ability to conduct future searches has improved.
+
+Application developers can limit modifications to parts that can be verified independently, such as prompts, tool calls, or failure recovery. Record the reason for each change, its version, and its evaluation results, then expand automation after confirming the benefits.
+
+Over time, failure examples still need to be added, evaluation sets updated, and outdated experience removed. Whether a self-improvement loop can keep running over the long term depends on how its changes perform on new tasks and whether regressions and maintenance costs remain manageable.
