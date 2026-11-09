@@ -1,12 +1,10 @@
 import Link from "next/link";
 import { getSiteCopy } from "@/lib/site-copy";
-import type { SiteLocale } from "@/lib/site-locale";
+import { localizeHref, type SiteLocale } from "@/lib/site-locale";
 
 export function HeroSection({ locale = "en" }: { locale?: SiteLocale }) {
   const copy = getSiteCopy(locale);
   const hasRoleB = Boolean(copy.home.hero.roleB.trim());
-  const rssZhHref = "/zh/rss.xml";
-  const rssEnHref = "/rss.xml";
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-[#050505] md:bg-transparent">
@@ -30,18 +28,21 @@ export function HeroSection({ locale = "en" }: { locale?: SiteLocale }) {
           </p>
 
           <div className="mt-4 flex flex-col items-center gap-2 text-sm sm:flex-row sm:justify-center sm:gap-4">
-            <Link
-              href={rssEnHref}
-              className="font-medium text-white underline underline-offset-4 transition-opacity hover:opacity-60"
-            >
+            <span className="font-medium text-white">
               {copy.home.hero.rssFeedEnLabel}
-            </Link>
+            </span>
             <span className="text-white/30">{copy.home.hero.rssDividerLabel}</span>
+            <span className="font-medium text-white">
+              {copy.home.hero.rssFeedZhLabel}
+            </span>
+          </div>
+
+          <div className="mt-4 text-sm">
             <Link
-              href={rssZhHref}
+              href={localizeHref("/archive", locale)}
               className="font-medium text-white underline underline-offset-4 transition-opacity hover:opacity-60"
             >
-              {copy.home.hero.rssFeedZhLabel}
+              {copy.home.hero.archiveLinkLabel}
             </Link>
           </div>
         </div>
