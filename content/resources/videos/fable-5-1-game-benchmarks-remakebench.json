@@ -1,0 +1,17 @@
+{
+  "id": "fable-5-1-game-benchmarks-remakebench",
+  "type": "video",
+  "provider": "youtube",
+  "title": {
+    "en": "Fable 5.1 vs GPT-5.6 Sol, Kimi K3, Grok 4.6: 6 Game Tests",
+    "zh": "Fable 5.1 对比 GPT-5.6 Sol、Kimi K3、Grok 4.6：六项游戏测试"
+  },
+  "summary": {
+    "en": "RemakeBench compares AI models across six game scene and main menu tests, examining visual detail and interaction mechanics.",
+    "zh": "RemakeBench 通过六项游戏场景与主菜单测试，对比 AI 模型的视觉细节和交互机制表现。"
+  },
+  "author": "RemakeBench",
+  "duration": "00:05:59",
+  "tags": ["AI", "Developer"],
+  "embedUrl": "https://www.youtube.com/embed/wHA7uAIkQTc"
+}

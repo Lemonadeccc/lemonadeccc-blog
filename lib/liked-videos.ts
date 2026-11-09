@@ -6,6 +6,8 @@ import type { SiteLocale } from "./site-locale";
 
 const LIKED_VIDEOS_DIR = path.join(process.cwd(), "content", "resources", "videos");
 const LIKED_VIDEO_ORDER = [
+  "red-bull-f1-commercial-ai-blender-kaye-creatives",
+  "fable-5-1-game-benchmarks-remakebench",
   "the-rise-of-design-engineering-raphael-salaja",
   "web-design-legends-six-things",
   "webMCP",

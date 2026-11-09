@@ -1,0 +1,17 @@
+{
+  "id": "red-bull-f1-commercial-ai-blender-kaye-creatives",
+  "type": "video",
+  "provider": "youtube",
+  "title": {
+    "en": "How I Made a $1M Red Bull F1 Commercial With AI + Blender",
+    "zh": "我如何用 AI + Blender 制作百万美元级的红牛 F1 广告"
+  },
+  "summary": {
+    "en": "kaye.creatives breaks down an unofficial Red Bull F1 spec ad, using Blender references and AI video generation to create and iterate on cinematic shots.",
+    "zh": "kaye.creatives 拆解一支非官方红牛 F1 概念广告的制作过程，结合 Blender 参考素材与 AI 视频生成，制作并迭代电影感镜头。"
+  },
+  "author": "kaye.creatives",
+  "duration": "00:18:00",
+  "tags": ["AI", "Design"],
+  "embedUrl": "https://www.youtube.com/embed/zZ1bgIaoPas"
+}
